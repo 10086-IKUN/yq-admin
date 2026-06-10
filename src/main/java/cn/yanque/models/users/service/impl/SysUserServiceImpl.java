@@ -150,69 +150,48 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public LoginRes LoginReq(LoginReq req) {
-
-        LoginRes loginRes = new LoginRes();
-
-        //1.查询用户
-        SysUserEntity sysUserEntity = sysUserMapper.selectByUsername(req.getUsername());
-
-        //2.判断是否存在
-        if (sysUserEntity == null || !sysUserEntity.getStatus().equals(ActiveEnum.ACTIVE.name())) {
-            throw BusinessException.UserNotExist.newInstance("用户不存在或已失效");
+        // 查询用户
+        SysUserEntity user = sysUserMapper.selectByUsername(req.getUsername());
+        // 用户不存在
+        if(user == null){
+            throw BusinessException.UserNotExist;
         }
-
-        // 判断密码
-        if (!req.getPassword().equals(sysUserEntity.getPassword())) {
+        // 密码错误
+        if(!user.getPassword().equals(req.getPassword())){
             throw BusinessException.PasswordError;
         }
-
-        UserDetailRes userDetailRes = new UserDetailRes();
-        BeanUtils.copyProperties(sysUserEntity, userDetailRes);
-        loginRes.setUserDetailRes(userDetailRes);
-
-        //3.生成token
-        String token = createToken(sysUserEntity);
-        loginRes.setToken(token);
-
-        //4.查询角色权限
-        List<Long> roleIds = sysUserMapper.selectRoleIdsByUserId(sysUserEntity.getId());
-
-        if (CollectionUtil.isEmpty(roleIds)) {
-            return loginRes;
+        // 生成token
+        String token = createToken(user);
+        LoginRes res = new LoginRes();
+        res.setToken(token);
+        res.setUserDetailRes(buildUserDetailRes(user));
+        // 查询用户角色id
+        List<Long> roleIds = sysUserMapper.selectRoleIdsByUserId(user.getId());
+        if (roleIds == null || roleIds.isEmpty()){
+            return res;
         }
-
+        // 查询用户角色
         QueryUserBo queryUserBo = new QueryUserBo();
         queryUserBo.setIds(roleIds);
-        List<SysRoleEntity> sysRoleEntityList = sysRoleMapper.selectList(queryUserBo);
-        List<RoleDetailRes> roleDetailResList = sysRoleEntityList.stream().map(sysRoleEntity -> {
+        List<SysRoleEntity> sysRoleEntities = sysRoleMapper.selectList(queryUserBo);
+        res.setRoleDetailResList(sysRoleEntities.stream().map(role -> {
             RoleDetailRes roleDetailRes = new RoleDetailRes();
-            BeanUtils.copyProperties(sysRoleEntity, roleDetailRes);
+            BeanUtils.copyProperties(role, roleDetailRes);
             return roleDetailRes;
-        }).toList();
-        loginRes.setRoleDetailResList(roleDetailResList);
-
-
-        List<Long> permissionIds = sysRoleMapper.selectPermissionIdsByRoleId(roleIds);
-        permissionIds = permissionIds.stream().distinct().toList();
-
-        if (CollectionUtil.isEmpty(permissionIds)) {
-            return loginRes;
-        }
-
+        }).toList());
+        // 查询用户权限
+        List<Long> longs = sysRoleMapper.selectPermissionIdsByRoleId(roleIds);
         QueryPermissionBo queryPermissionBo = new QueryPermissionBo();
-        queryPermissionBo.setIds(permissionIds);
-        List<SysPermissionEntity> sysPermissionEntityList = sysPermissionMapper.selectList(queryPermissionBo);
-
-
-        List<PermissionDetailRes> permissionDetailResList = sysPermissionEntityList.stream().map(sysPermissionEntity -> {
-            PermissionDetailRes permissionDetailRes = new PermissionDetailRes();
-            BeanUtils.copyProperties(sysPermissionEntity, permissionDetailRes);
-            return permissionDetailRes;
-        }).toList();
-
-        loginRes.setPermissionDetailResList(permissionDetailResList);
-        //5.组装信息返回
-        return loginRes;
+        queryPermissionBo.setIds(longs);
+        List<PermissionDetailRes> permissionDetailResList = sysPermissionMapper.selectList(queryPermissionBo)
+                .stream().map(permission -> {
+                    PermissionDetailRes permissionDetailRes = new PermissionDetailRes();
+                    BeanUtils.copyProperties(permission, permissionDetailRes);
+                    return permissionDetailRes;
+                }).toList();
+        res.setPermissionDetailResList(permissionDetailResList);
+        // 返回结果
+        return res;
     }
 
     private String createToken(SysUserEntity sysUserEntity) {

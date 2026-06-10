@@ -1,12 +1,12 @@
 spring:
   data:
     redis:
-      host: redis-shzl6tz4l7lst4rga.redis.volces.com
+      host: localhost
       port: 6379
-      password: QWer1234!!!   # 没密码可不写
-      database: 3
+      password: 123456   # 没密码可不写
+      database: 0
 
   datasource:
-    url: jdbc:mysql://mysql-02a756b9c0e4-public.rds.volces.com:3306/yanque-shiyi?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/yq?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: QWer1234!!!
+    password: 123456
