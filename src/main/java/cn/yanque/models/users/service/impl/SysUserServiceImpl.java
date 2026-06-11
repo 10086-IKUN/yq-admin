@@ -3,6 +3,8 @@ package cn.yanque.models.users.service.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.jwt.JWTUtil;
 import cn.yanque.common.api.PageResult;
+import cn.yanque.common.dataConfig.service.SysConfig;
+import cn.yanque.common.dataConfig.service.SysConfigService;
 import cn.yanque.common.exception.BusinessException;
 import cn.yanque.models.users.mapper.SysPermissionMapper;
 import cn.yanque.models.users.mapper.SysRoleMapper;
@@ -46,6 +48,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private SysConfigService sysConfigService;
 
 
     @Override
@@ -153,7 +158,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public LoginRes LoginReq(LoginReq req) {
+    public LoginRes loginReq(LoginReq req) {
         // 查询用户
         SysUserEntity user = sysUserMapper.selectByUsername(req.getUsername());
         // 用户不存在
@@ -234,7 +239,7 @@ public class SysUserServiceImpl implements SysUserService {
         Map<String, Object> map = new HashMap<>();
         map.put("uid", sysUserEntity.getId());
         map.put("expire_time", System.currentTimeMillis() + 1000 * 60 * 60);
-        return JWTUtil.createToken(map, "1234".getBytes());
+        return JWTUtil.createToken(map, sysConfigService.getConfig(SysConfig.jwtSecret).getBytes());
     }
 
     private UserDetailRes buildUserDetailRes(SysUserEntity user) {

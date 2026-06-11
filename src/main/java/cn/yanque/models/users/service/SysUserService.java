@@ -18,7 +18,7 @@ public interface SysUserService {
 
     UserRoleAssignRes assignUserRoles(Long userId, UserRoleAssignReq req);
 
-    LoginRes LoginReq(LoginReq req);
+    LoginRes loginReq(LoginReq req);
 
     UserInfo getUserInfo(Long userId);
 }

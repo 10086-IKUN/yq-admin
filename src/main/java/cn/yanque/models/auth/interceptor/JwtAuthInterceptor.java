@@ -1,15 +1,20 @@
 package cn.yanque.models.auth.interceptor;
 
 import cn.hutool.jwt.JWT;
+import cn.yanque.common.dataConfig.service.SysConfig;
+import cn.yanque.common.dataConfig.service.SysConfigService;
 import cn.yanque.common.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class JwtAuthInterceptor implements HandlerInterceptor {
+    @Autowired
+    private SysConfigService sysConfigService;
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
@@ -26,7 +31,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
         String token = authorization.substring(BEARER_PREFIX.length()).trim();
         try {
-            JWT jwt = JWT.of(token).setKey(JWT_KEY);
+            JWT jwt = JWT.of(token).setKey(sysConfigService.getConfig(SysConfig.jwtSecret).getBytes());
             if (!jwt.verify()) {
                 throw new BusinessException(401, "Token无效或已过期");
             }

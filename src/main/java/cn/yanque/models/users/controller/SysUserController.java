@@ -86,7 +86,7 @@ public class SysUserController {
     @PostMapping("/login")
     @Operation(description = "用户登录")
     public ApiResponse<LoginRes> login(@Valid @RequestBody LoginReq req){
-        return ApiResponse.success(sysUserService.LoginReq(req));
+        return ApiResponse.success(sysUserService.loginReq(req));
     }
 
 }
