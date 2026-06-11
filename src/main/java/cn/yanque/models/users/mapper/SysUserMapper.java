@@ -1,6 +1,6 @@
 package cn.yanque.models.users.mapper;
 
-import cn.yanque.models.users.pojo.entity.SysUserEntity;
+import cn.yanque.common.pojo.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

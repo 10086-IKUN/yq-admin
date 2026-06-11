@@ -1,15 +1,16 @@
 package cn.yanque.models.users.controller;
 
+import cn.yanque.common.annotation.RequirePermission;
 import cn.yanque.common.api.ApiResponse;
 import cn.yanque.common.api.PageResult;
-import cn.yanque.models.users.pojo.vo.req.PermissionCreateReq;
-import cn.yanque.models.users.pojo.vo.req.PermissionPageReq;
-import cn.yanque.models.users.pojo.vo.req.PermissionUpdateReq;
-import cn.yanque.models.users.pojo.vo.res.PermissionCreateRes;
-import cn.yanque.models.users.pojo.vo.res.PermissionDeleteRes;
-import cn.yanque.models.users.pojo.vo.res.PermissionDetailRes;
-import cn.yanque.models.users.pojo.vo.res.PermissionPageRes;
-import cn.yanque.models.users.pojo.vo.res.PermissionUpdateRes;
+import cn.yanque.common.pojo.vo.req.PermissionCreateReq;
+import cn.yanque.common.pojo.vo.req.PermissionPageReq;
+import cn.yanque.common.pojo.vo.req.PermissionUpdateReq;
+import cn.yanque.common.pojo.vo.res.PermissionCreateRes;
+import cn.yanque.common.pojo.vo.res.PermissionDeleteRes;
+import cn.yanque.common.pojo.vo.res.PermissionDetailRes;
+import cn.yanque.common.pojo.vo.res.PermissionPageRes;
+import cn.yanque.common.pojo.vo.res.PermissionUpdateRes;
 import cn.yanque.models.users.service.SysPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,6 +39,7 @@ public class SysPermissionController {
 
     @PostMapping
     @Operation(description = "添加权限")
+    @RequirePermission("permission:add")
     public ApiResponse<PermissionCreateRes> addPermission(@Valid @RequestBody PermissionCreateReq req) {
 
         return ApiResponse.success(sysPermissionService.addPermission(req));
@@ -45,6 +47,7 @@ public class SysPermissionController {
 
     @PutMapping("{id}")
     @Operation(description = "修改权限")
+    @RequirePermission("permission:update")
     public ApiResponse<PermissionUpdateRes> updatePermission(@Parameter(description = "权限ID") @PathVariable Long id,
                                                              @Valid @RequestBody PermissionUpdateReq req) {
 
@@ -54,6 +57,7 @@ public class SysPermissionController {
 
     @DeleteMapping("{id}")
     @Operation(description = "删除权限")
+    @RequirePermission("permission:delete")
     public ApiResponse<PermissionDeleteRes> deletePermission(@Parameter(description = "权限ID") @PathVariable Long id) {
 
         return ApiResponse.success(sysPermissionService.deletePermission(id));
@@ -61,6 +65,7 @@ public class SysPermissionController {
 
     @GetMapping("{id}")
     @Operation(description = "根据ID查询权限")
+    @RequirePermission("permission:view")
     public ApiResponse<PermissionDetailRes> getPermissionById(@Parameter(description = "权限ID") @PathVariable Long id) {
 
         return ApiResponse.success(sysPermissionService.getPermissionById(id));
@@ -68,6 +73,7 @@ public class SysPermissionController {
 
     @GetMapping
     @Operation(description = "分页查询权限")
+    @RequirePermission("permission:view")
     public ApiResponse<PageResult<PermissionPageRes>> pagePermission(@Valid @ModelAttribute PermissionPageReq req) {
 
         return ApiResponse.success(sysPermissionService.pagePermission(req));

@@ -1,17 +1,18 @@
 package cn.yanque.models.users.controller;
 
+import cn.yanque.common.annotation.RequirePermission;
 import cn.yanque.common.api.ApiResponse;
 import cn.yanque.common.api.PageResult;
-import cn.yanque.models.users.pojo.vo.req.RoleCreateReq;
-import cn.yanque.models.users.pojo.vo.req.RolePageReq;
-import cn.yanque.models.users.pojo.vo.req.RolePermissionAssignReq;
-import cn.yanque.models.users.pojo.vo.req.RoleUpdateReq;
-import cn.yanque.models.users.pojo.vo.res.RoleCreateRes;
-import cn.yanque.models.users.pojo.vo.res.RoleDeleteRes;
-import cn.yanque.models.users.pojo.vo.res.RoleDetailRes;
-import cn.yanque.models.users.pojo.vo.res.RolePageRes;
-import cn.yanque.models.users.pojo.vo.res.RolePermissionAssignRes;
-import cn.yanque.models.users.pojo.vo.res.RoleUpdateRes;
+import cn.yanque.common.pojo.vo.req.RoleCreateReq;
+import cn.yanque.common.pojo.vo.req.RolePageReq;
+import cn.yanque.common.pojo.vo.req.RolePermissionAssignReq;
+import cn.yanque.common.pojo.vo.req.RoleUpdateReq;
+import cn.yanque.common.pojo.vo.res.RoleCreateRes;
+import cn.yanque.common.pojo.vo.res.RoleDeleteRes;
+import cn.yanque.common.pojo.vo.res.RoleDetailRes;
+import cn.yanque.common.pojo.vo.res.RolePageRes;
+import cn.yanque.common.pojo.vo.res.RolePermissionAssignRes;
+import cn.yanque.common.pojo.vo.res.RoleUpdateRes;
 import cn.yanque.models.users.service.SysRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,6 +41,7 @@ public class SysRoleController {
 
     @PostMapping
     @Operation(description = "添加角色")
+    @RequirePermission("role:add")
     public ApiResponse<RoleCreateRes> addRole(@Valid @RequestBody RoleCreateReq req) {
 
         return ApiResponse.success(sysRoleService.addRole(req));
@@ -47,6 +49,7 @@ public class SysRoleController {
 
     @PutMapping("{id}")
     @Operation(description = "修改角色")
+    @RequirePermission("role:update")
     public ApiResponse<RoleUpdateRes> updateRole(@Parameter(description = "角色ID") @PathVariable Long id,
                                                  @Valid @RequestBody RoleUpdateReq req) {
 
@@ -56,6 +59,7 @@ public class SysRoleController {
 
     @DeleteMapping("{id}")
     @Operation(description = "删除角色")
+    @RequirePermission("role:delete")
     public ApiResponse<RoleDeleteRes> deleteRole(@Parameter(description = "角色ID") @PathVariable Long id) {
 
         return ApiResponse.success(sysRoleService.deleteRole(id));
@@ -63,6 +67,7 @@ public class SysRoleController {
 
     @GetMapping("{id}")
     @Operation(description = "根据ID查询角色")
+    @RequirePermission("role:view")
     public ApiResponse<RoleDetailRes> getRoleById(@Parameter(description = "角色ID") @PathVariable Long id) {
 
         return ApiResponse.success(sysRoleService.getRoleById(id));
@@ -70,6 +75,7 @@ public class SysRoleController {
 
     @GetMapping
     @Operation(description = "分页查询角色")
+    @RequirePermission("role:view")
     public ApiResponse<PageResult<RolePageRes>> pageRole(@Valid @ModelAttribute RolePageReq req) {
 
         return ApiResponse.success(sysRoleService.pageRole(req));
@@ -77,6 +83,7 @@ public class SysRoleController {
 
     @PutMapping("{id}/permissions")
     @Operation(description = "角色分配权限")
+    @RequirePermission("role:assign")
     public ApiResponse<RolePermissionAssignRes> assignRolePermissions(@Parameter(description = "角色ID") @PathVariable Long id,
                                                                       @Valid @RequestBody RolePermissionAssignReq req) {
 

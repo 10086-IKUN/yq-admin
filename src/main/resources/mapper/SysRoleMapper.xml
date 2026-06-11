@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.yanque.models.users.mapper.SysRoleMapper">
 
-    <resultMap id="SysRoleMap" type="cn.yanque.models.users.pojo.entity.SysRoleEntity">
+    <resultMap id="SysRoleMap" type="cn.yanque.common.pojo.entity.SysRoleEntity">
         <id property="id" column="id"/>
         <result property="roleCode" column="role_code"/>
         <result property="roleName" column="role_name"/>

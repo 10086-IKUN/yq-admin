@@ -1,0 +1,36 @@
+package cn.yanque.common.pojo.vo.req;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
+@Schema(description = "修改校区请求")
+public class CampusUpdateReq {
+
+    @Schema(description = "校区ID")
+    private Long id;
+
+    @NotBlank(message = "校区名称不能为空")
+    @Schema(description = "校区名称")
+    private String campusName;
+
+    @NotNull(message = "负责人用户ID不能为空")
+    @Schema(description = "负责人用户ID")
+    private Long principalUserId;
+
+    @NotBlank(message = "校区地址不能为空")
+    @Schema(description = "校区地址")
+    private String address;
+
+    @Schema(description = "联系电话")
+    private String contactPhone;
+
+    @Schema(description = "备注")
+    private String remark;
+
+    @NotNull(message = "状态不能为空")
+    @Schema(description = "状态，1启用，0禁用")
+    private Integer status;
+}

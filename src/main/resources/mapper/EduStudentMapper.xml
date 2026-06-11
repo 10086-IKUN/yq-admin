@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.edu.mapper.EduStudentMapper">
+
+    <resultMap id="EduStudentMap" type="cn.yanque.common.pojo.entity.EduStudentEntity">
+        <id property="id" column="id"/>
+        <result property="studentCode" column="student_code"/>
+        <result property="studentName" column="student_name"/>
+        <result property="phone" column="phone"/>
+        <result property="graduationSession" column="graduation_session"/>
+        <result property="school" column="school"/>
+        <result property="education" column="education"/>
+        <result property="studyMode" column="study_mode"/>
+        <result property="classId" column="class_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="joinTime" column="join_time"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, student_code, student_name, phone, graduation_session, school, education,
+        study_mode, class_id, product_id, join_time, created_at, updated_at
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into edu_student (student_code, student_name, phone, password, graduation_session,
+                                 school, education, study_mode, class_id, product_id, join_time)
+        values (#{studentCode}, #{studentName}, #{phone}, #{password}, #{graduationSession},
+                #{school}, #{education}, #{studyMode}, #{classId}, #{productId}, #{joinTime})
+    </insert>
+
+    <update id="updateById">
+        update edu_student
+        <set>
+            <if test="studentCode != null">student_code = #{studentCode},</if>
+            <if test="studentName != null">student_name = #{studentName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="graduationSession != null">graduation_session = #{graduationSession},</if>
+            <if test="school != null">school = #{school},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="studyMode != null">study_mode = #{studyMode},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="joinTime != null">join_time = #{joinTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectById" resultMap="EduStudentMap">
+        select <include refid="BaseColumns"/>
+        from edu_student
+        where id = #{id}
+    </select>
+
+    <select id="selectPage" resultMap="EduStudentMap">
+        select <include refid="BaseColumns"/>
+        from edu_student
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (student_name like concat('%', #{keyword}, '%')
+                    or student_code like concat('%', #{keyword}, '%')
+                    or phone like concat('%', #{keyword}, '%'))
+            </if>
+            <if test="studyMode != null and studyMode != ''">
+                and study_mode = #{studyMode}
+            </if>
+            <if test="classId != null">
+                and class_id = #{classId}
+            </if>
+            <if test="productId != null">
+                and product_id = #{productId}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <delete id="deleteById">
+        delete from edu_student where id = #{id}
+    </delete>
+
+</mapper>

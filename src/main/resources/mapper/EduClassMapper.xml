@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.edu.mapper.EduClassMapper">
+
+    <resultMap id="EduClassMap" type="cn.yanque.common.pojo.entity.EduClassEntity">
+        <id property="id" column="id"/>
+        <result property="classTerm" column="class_term"/>
+        <result property="campusId" column="campus_id"/>
+        <result property="headTeacherId" column="head_teacher_id"/>
+        <result property="classStatus" column="class_status"/>
+        <result property="startTime" column="start_time"/>
+        <result property="courseId" column="course_id"/>
+        <result property="studentCount" column="student_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, class_term, campus_id, head_teacher_id, class_status, start_time, course_id, student_count, created_at, updated_at
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into edu_class (class_term, campus_id, head_teacher_id, class_status, start_time, course_id, student_count)
+        values (#{classTerm}, #{campusId}, #{headTeacherId}, #{classStatus}, #{startTime}, #{courseId}, #{studentCount})
+    </insert>
+
+    <update id="updateById">
+        update edu_class
+        <set>
+            <if test="classTerm != null">class_term = #{classTerm},</if>
+            <if test="campusId != null">campus_id = #{campusId},</if>
+            <if test="headTeacherId != null">head_teacher_id = #{headTeacherId},</if>
+            <if test="classStatus != null">class_status = #{classStatus},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="studentCount != null">student_count = #{studentCount},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectById" resultMap="EduClassMap">
+        select <include refid="BaseColumns"/>
+        from edu_class
+        where id = #{id}
+    </select>
+
+    <select id="selectPage" resultMap="EduClassMap">
+        select <include refid="BaseColumns"/>
+        from edu_class
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (class_term like concat('%', #{keyword}, '%'))
+            </if>
+            <if test="classStatus != null and classStatus != ''">
+                and class_status = #{classStatus}
+            </if>
+            <if test="campusId != null">
+                and campus_id = #{campusId}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <delete id="deleteById">
+        delete from edu_class where id = #{id}
+    </delete>
+
+</mapper>

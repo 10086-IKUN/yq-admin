@@ -1,37 +1,38 @@
 package cn.yanque.models.users.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.jwt.JWTUtil;
 import cn.yanque.common.api.PageResult;
-import cn.yanque.common.enums.ActiveEnum;
 import cn.yanque.common.exception.BusinessException;
 import cn.yanque.models.users.mapper.SysPermissionMapper;
 import cn.yanque.models.users.mapper.SysRoleMapper;
 import cn.yanque.models.users.mapper.SysUserMapper;
-import cn.yanque.models.users.pojo.entity.SysPermissionEntity;
-import cn.yanque.models.users.pojo.entity.SysRoleEntity;
-import cn.yanque.models.users.pojo.entity.SysUserEntity;
-import cn.yanque.models.users.pojo.vo.bo.QueryPermissionBo;
-import cn.yanque.models.users.pojo.vo.bo.QueryUserBo;
-import cn.yanque.models.users.pojo.vo.req.*;
-import cn.yanque.models.users.pojo.vo.res.*;
+import cn.yanque.common.pojo.entity.SysPermissionEntity;
+import cn.yanque.common.pojo.entity.SysRoleEntity;
+import cn.yanque.common.pojo.entity.SysUserEntity;
+import cn.yanque.common.pojo.info.UserInfo;
+import cn.yanque.common.pojo.vo.bo.QueryPermissionBo;
+import cn.yanque.common.pojo.vo.bo.QueryUserBo;
+import cn.yanque.common.pojo.vo.req.*;
+import cn.yanque.common.pojo.vo.res.*;
 import cn.yanque.models.users.service.SysUserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.security.SecureRandom;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SysUserServiceImpl implements SysUserService {
+
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
 
     @Autowired
@@ -42,6 +43,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
 
     @Override
@@ -162,36 +166,68 @@ public class SysUserServiceImpl implements SysUserService {
         }
         // 生成token
         String token = createToken(user);
+
+        // 生成签名密钥并写入Redis
+        String signSecret = createSignSecret();
+        String signSecretKey = "yanque:sign:secret:" + user.getId();
+        stringRedisTemplate.opsForValue().set(signSecretKey, signSecret, 300, TimeUnit.SECONDS);
+
+
         LoginRes res = new LoginRes();
         res.setToken(token);
+        res.setSignSecret(signSecret);
         res.setUserDetailRes(buildUserDetailRes(user));
-        // 查询用户角色id
+
+        UserInfo userInfo = getUserInfo(user.getId());
+        // set用户角色
+        res.setRoleDetailResList(userInfo.getSysRoleEntities().stream().map(role -> {
+            RoleDetailRes roleDetailRes = new RoleDetailRes();
+            BeanUtils.copyProperties(role, roleDetailRes);
+            return roleDetailRes;
+        }).toList());
+        // set用户权限
+
+        res.setPermissionDetailResList(userInfo.getSysPermissionEntities().stream().map(permission -> {
+            PermissionDetailRes permissionDetailRes = new PermissionDetailRes();
+            BeanUtils.copyProperties(permission, permissionDetailRes);
+            return permissionDetailRes;
+        }).toList());
+        // 返回结果
+        return res;
+    }
+
+
+    @Override
+    public UserInfo getUserInfo(Long userId){
+        SysUserEntity user = sysUserMapper.selectById(userId);
+        if (user == null){
+            throw BusinessException.UserNotExist;
+        }
+        UserInfo userInfo = new UserInfo();
+
         List<Long> roleIds = sysUserMapper.selectRoleIdsByUserId(user.getId());
         if (roleIds == null || roleIds.isEmpty()){
-            return res;
+            return userInfo;
         }
         // 查询用户角色
         QueryUserBo queryUserBo = new QueryUserBo();
         queryUserBo.setIds(roleIds);
         List<SysRoleEntity> sysRoleEntities = sysRoleMapper.selectList(queryUserBo);
-        res.setRoleDetailResList(sysRoleEntities.stream().map(role -> {
-            RoleDetailRes roleDetailRes = new RoleDetailRes();
-            BeanUtils.copyProperties(role, roleDetailRes);
-            return roleDetailRes;
-        }).toList());
+        if (sysRoleEntities.isEmpty()){
+            return userInfo;
+        }
+        userInfo.setSysRoleEntities(sysRoleEntities);
+
         // 查询用户权限
-        List<Long> longs = sysRoleMapper.selectPermissionIdsByRoleId(roleIds);
+        List<Long> permissionIds = sysRoleMapper.selectPermissionIdsByRoleId(roleIds);
+        if (permissionIds.isEmpty()){
+            return userInfo;
+        }
         QueryPermissionBo queryPermissionBo = new QueryPermissionBo();
-        queryPermissionBo.setIds(longs);
-        List<PermissionDetailRes> permissionDetailResList = sysPermissionMapper.selectList(queryPermissionBo)
-                .stream().map(permission -> {
-                    PermissionDetailRes permissionDetailRes = new PermissionDetailRes();
-                    BeanUtils.copyProperties(permission, permissionDetailRes);
-                    return permissionDetailRes;
-                }).toList();
-        res.setPermissionDetailResList(permissionDetailResList);
-        // 返回结果
-        return res;
+        queryPermissionBo.setIds(permissionIds);
+        List<SysPermissionEntity> sysPermissionEntities = sysPermissionMapper.selectList(queryPermissionBo);
+        userInfo.setSysPermissionEntities(sysPermissionEntities);
+        return userInfo;
     }
 
     private String createToken(SysUserEntity sysUserEntity) {
@@ -211,5 +247,11 @@ public class SysUserServiceImpl implements SysUserService {
         UserPageRes res = new UserPageRes();
         BeanUtils.copyProperties(user, res);
         return res;
+    }
+
+    private String createSignSecret() {
+        byte[] bytes = new byte[32];
+        SECURE_RANDOM.nextBytes(bytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 }

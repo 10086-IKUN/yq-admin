@@ -1,9 +1,10 @@
 package cn.yanque.models.users.controller;
 
+import cn.yanque.common.annotation.RequirePermission;
 import cn.yanque.common.api.ApiResponse;
 import cn.yanque.common.api.PageResult;
-import cn.yanque.models.users.pojo.vo.req.*;
-import cn.yanque.models.users.pojo.vo.res.*;
+import cn.yanque.common.pojo.vo.req.*;
+import cn.yanque.common.pojo.vo.res.*;
 import cn.yanque.models.users.service.SysUserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,7 @@ public class SysUserController {
 
     @PostMapping
     @Operation(description = "添加用户")
+    @RequirePermission("user:create")
     public ApiResponse<UserCreateRes> addUser(@Valid @RequestBody UserCreateReq req){
 
         return ApiResponse.success(sysUserService.addUser(req));
@@ -40,6 +42,7 @@ public class SysUserController {
 
     @PutMapping("{id}")
     @Operation(description = "修改用户")
+    @RequirePermission("user:update")
     public ApiResponse<UserUpdateRes> updateUser(@Parameter(description = "用户ID") @PathVariable Long id,
                                                  @Valid @RequestBody UserUpdateReq req){
 
@@ -49,6 +52,7 @@ public class SysUserController {
 
     @DeleteMapping("{id}")
     @Operation(description = "删除用户")
+    @RequirePermission("user:delete")
     public ApiResponse<UserDeleteRes> deleteUser(@Parameter(description = "用户ID") @PathVariable Long id){
 
         return ApiResponse.success(sysUserService.deleteUser(id));
@@ -56,6 +60,7 @@ public class SysUserController {
 
     @GetMapping("{id}")
     @Operation(description = "根据ID查询用户")
+    @RequirePermission("user:view")
     public ApiResponse<UserDetailRes> getUserById(@Parameter(description = "用户ID") @PathVariable Long id){
 
         return ApiResponse.success(sysUserService.getUserById(id));
@@ -63,6 +68,7 @@ public class SysUserController {
 
     @GetMapping
     @Operation(description = "分页查询用户")
+    @RequirePermission("user:view")
     public ApiResponse<PageResult<UserPageRes>> pageUser(@Valid @ModelAttribute UserPageReq req){
 
         return ApiResponse.success(sysUserService.pageUser(req));
@@ -70,6 +76,7 @@ public class SysUserController {
 
     @PutMapping("{id}/roles")
     @Operation(description = "用户分配角色")
+    @RequirePermission("user:assign-role")
     public ApiResponse<UserRoleAssignRes> assignUserRoles(@Parameter(description = "用户ID") @PathVariable Long id,
                                                           @Valid @RequestBody UserRoleAssignReq req){
 

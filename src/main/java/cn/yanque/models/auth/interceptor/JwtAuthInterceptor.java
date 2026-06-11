@@ -4,6 +4,7 @@ import cn.hutool.jwt.JWT;
 import cn.yanque.common.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -42,6 +43,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
             }
 
             request.setAttribute("userId", Long.parseLong(String.valueOf(userId)));
+            MDC.put("userId", String.valueOf(userId));
             return true;
         } catch (BusinessException ex) {
             throw ex;
@@ -50,3 +52,8 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         }
     }
 }
+
+
+
+
+

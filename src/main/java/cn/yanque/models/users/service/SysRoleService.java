@@ -1,16 +1,16 @@
 package cn.yanque.models.users.service;
 
 import cn.yanque.common.api.PageResult;
-import cn.yanque.models.users.pojo.vo.req.RolePermissionAssignReq;
-import cn.yanque.models.users.pojo.vo.req.RoleCreateReq;
-import cn.yanque.models.users.pojo.vo.req.RolePageReq;
-import cn.yanque.models.users.pojo.vo.req.RoleUpdateReq;
-import cn.yanque.models.users.pojo.vo.res.RoleCreateRes;
-import cn.yanque.models.users.pojo.vo.res.RoleDeleteRes;
-import cn.yanque.models.users.pojo.vo.res.RoleDetailRes;
-import cn.yanque.models.users.pojo.vo.res.RolePageRes;
-import cn.yanque.models.users.pojo.vo.res.RolePermissionAssignRes;
-import cn.yanque.models.users.pojo.vo.res.RoleUpdateRes;
+import cn.yanque.common.pojo.vo.req.RolePermissionAssignReq;
+import cn.yanque.common.pojo.vo.req.RoleCreateReq;
+import cn.yanque.common.pojo.vo.req.RolePageReq;
+import cn.yanque.common.pojo.vo.req.RoleUpdateReq;
+import cn.yanque.common.pojo.vo.res.RoleCreateRes;
+import cn.yanque.common.pojo.vo.res.RoleDeleteRes;
+import cn.yanque.common.pojo.vo.res.RoleDetailRes;
+import cn.yanque.common.pojo.vo.res.RolePageRes;
+import cn.yanque.common.pojo.vo.res.RolePermissionAssignRes;
+import cn.yanque.common.pojo.vo.res.RoleUpdateRes;
 
 public interface SysRoleService {
 

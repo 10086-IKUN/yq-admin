@@ -1,7 +1,7 @@
 package cn.yanque.models.users.mapper;
 
-import cn.yanque.models.users.pojo.entity.SysRoleEntity;
-import cn.yanque.models.users.pojo.vo.bo.QueryUserBo;
+import cn.yanque.common.pojo.entity.SysRoleEntity;
+import cn.yanque.common.pojo.vo.bo.QueryUserBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

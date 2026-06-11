@@ -14,6 +14,12 @@ public class BusinessException extends RuntimeException {
     public static final BusinessException PasswordError = new BusinessException(11003, "密码错误");
     public static final BusinessException RoleExist = new BusinessException(12001, "角色已存在");
     public static final BusinessException RoleNotExist = new BusinessException(12002, "角色不存在");
+    public static final BusinessException ClassExist = new BusinessException(14001, "班级已存在");
+    public static final BusinessException ClassNotExist = new BusinessException(14002, "班级不存在");
+    public static final BusinessException CampusExist = new BusinessException(15001, "校区已存在");
+    public static final BusinessException CampusNotExist = new BusinessException(15002, "校区不存在");
+    public static final BusinessException StudentExist = new BusinessException(16001, "学员已存在");
+    public static final BusinessException StudentNotExist = new BusinessException(16002, "学员不存在");
 
 
 

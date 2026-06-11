@@ -1,7 +1,7 @@
 package cn.yanque.models.users.mapper;
 
-import cn.yanque.models.users.pojo.entity.SysPermissionEntity;
-import cn.yanque.models.users.pojo.vo.bo.QueryPermissionBo;
+import cn.yanque.common.pojo.entity.SysPermissionEntity;
+import cn.yanque.common.pojo.vo.bo.QueryPermissionBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
