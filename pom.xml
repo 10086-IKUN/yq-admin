@@ -118,6 +118,12 @@
       <optional>true</optional>
     </dependency>
 
+    <!--EasyExcel-->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>easyexcel</artifactId>
+      <version>3.3.2</version>
+    </dependency>
 
   </dependencies>
 

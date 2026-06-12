@@ -9,6 +9,9 @@ import cn.yanque.common.pojo.vo.res.CourseDetailDeleteRes;
 import cn.yanque.common.pojo.vo.res.CourseDetailDetailRes;
 import cn.yanque.common.pojo.vo.res.CourseDetailPageRes;
 import cn.yanque.common.pojo.vo.res.CourseDetailUpdateRes;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * 课程详情Service接口
@@ -57,4 +60,10 @@ public interface EduCourseDetailService {
      * @return 返回分页结果，包含总条数和当前页数据
      */
     PageResult<CourseDetailPageRes> pageCourseDetail(CourseDetailPageReq req);
+
+    /**
+     * 导入Excel数据
+     * @param file Excel文件
+     */
+    void importExcel(Long courseId,MultipartFile file);
 }

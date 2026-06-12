@@ -67,14 +67,14 @@
 
     <!--
         根据课程ID查询所有详情
-        ORDER BY day_num: 按天数从小到大排序
-        注意：这里不使用分页，因为一个课程的详情数量通常不多
+        先按stage_name分组，再按day_num排序
+        这样相同阶段的行会连续显示，便于前端合并单元格
     -->
     <select id="selectByCourseId" resultMap="EduCourseDetailMap">
         select <include refid="BaseColumns"/>
         from edu_course_detail
         where course_id = #{courseId}
-        order by day_num
+        order by stage_name, day_num
     </select>
 
     <!-- 根据ID删除单条记录 -->
@@ -89,5 +89,31 @@
     <delete id="deleteByCourseId">
         delete from edu_course_detail where course_id = #{courseId}
     </delete>
+
+    <!--
+        检查课程中是否已存在指定天数的记录
+        excludeId: 更新时排除自身（否则更新时会检测到自己）
+        用于保证整个课程中天数唯一
+    -->
+    <select id="countByCourseIdAndDayNum" resultType="int">
+        select count(*) from edu_course_detail
+        where course_id = #{courseId}
+          and day_num = #{dayNum}
+          <if test="excludeId != null">
+              and id != #{excludeId}
+          </if>
+    </select>
+
+    <!--
+        批量插入课程详情
+        用于Excel导入
+    -->
+    <insert id="insertBatch">
+        insert into edu_course_detail (course_id, stage_name, day_num, course_content, created_at, updated_at)
+        values
+        <foreach collection="entityList" item="entity" separator=",">
+            (#{entity.courseId}, #{entity.stageName}, #{entity.dayNum}, #{entity.courseContent}, #{entity.createdAt}, #{entity.updatedAt})
+        </foreach>
+    </insert>
 
 </mapper>

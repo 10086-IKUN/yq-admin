@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 课程详情Controller
@@ -106,5 +107,16 @@ public class EduCourseDetailController {
     @GetMapping
     public ApiResponse<PageResult<CourseDetailPageRes>> page(@ModelAttribute CourseDetailPageReq req) {
         return ApiResponse.success(eduCourseDetailService.pageCourseDetail(req));
+    }
+
+    /**
+     * 导入并解析excel表格
+     */
+    @Operation(summary = "导入并解析excel表格")
+    @RequirePermission("course:*")
+    @PostMapping("/import/{courseId}")
+    public ApiResponse importExcel(@PathVariable Long courseId, @RequestParam MultipartFile file) {
+        eduCourseDetailService.importExcel(courseId, file);
+        return ApiResponse.success();
     }
 }

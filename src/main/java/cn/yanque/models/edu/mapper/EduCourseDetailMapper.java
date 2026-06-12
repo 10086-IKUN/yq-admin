@@ -40,4 +40,17 @@ public interface EduCourseDetailMapper {
 
     /** 根据课程ID删除该课程的所有详情（用于删除课程时级联删除） */
     int deleteByCourseId(@Param("courseId") Long courseId);
+    /** 批量插入*/
+    void insertBatch(List<EduCourseDetailEntity> entityList);
+
+    /**
+     * 检查课程中是否已存在指定天数的记录
+     * @param courseId 课程ID
+     * @param dayNum 天数
+     * @param excludeId 排除的记录ID（更新时排除自身）
+     * @return 符合条件的记录数量
+     */
+    int countByCourseIdAndDayNum(@Param("courseId") Long courseId,
+                                  @Param("dayNum") Integer dayNum,
+                                  @Param("excludeId") Long excludeId);
 }
