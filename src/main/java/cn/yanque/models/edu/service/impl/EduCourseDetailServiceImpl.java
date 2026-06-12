@@ -320,16 +320,24 @@ public class EduCourseDetailServiceImpl implements EduCourseDetailService {
     private CourseDetailDetailRes buildCourseDetailDetailRes(EduCourseDetailEntity entity) {
         CourseDetailDetailRes res = new CourseDetailDetailRes();
         BeanUtils.copyProperties(entity, res);
+        // 处理空的阶段名称
+        if (res.getStageName() == null || res.getStageName().isEmpty()) {
+            res.setStageName("未分类");
+        }
         return res;
     }
 
     /**
      * 将Entity转换为PageRes VO
-     * 与上面方法类似，只是目标类型不同
+     * 处理空的stageName，替换为"未分类"
      */
     private CourseDetailPageRes buildCourseDetailPageRes(EduCourseDetailEntity entity) {
         CourseDetailPageRes res = new CourseDetailPageRes();
         BeanUtils.copyProperties(entity, res);
+        // 处理空的阶段名称
+        if (res.getStageName() == null || res.getStageName().isEmpty()) {
+            res.setStageName("未分类");
+        }
         return res;
     }
 }

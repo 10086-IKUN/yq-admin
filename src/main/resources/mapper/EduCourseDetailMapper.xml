@@ -67,14 +67,13 @@
 
     <!--
         根据课程ID查询所有详情
-        先按stage_name分组，再按day_num排序
-        这样相同阶段的行会连续显示，便于前端合并单元格
+        按天数从小到大排序
     -->
     <select id="selectByCourseId" resultMap="EduCourseDetailMap">
         select <include refid="BaseColumns"/>
         from edu_course_detail
         where course_id = #{courseId}
-        order by stage_name, day_num
+        order by day_num asc
     </select>
 
     <!-- 根据ID删除单条记录 -->
