@@ -18,23 +18,24 @@ public class SysConfigService {
             .build();
     @Autowired
     private SysConfigMapper sysConfigMapper;
+    
     public <T> T getConfig(SystemConfigItem<T> systemConfigItem) {
-        // 从缓存中获取
         Object value = cache.getIfPresent(systemConfigItem.getKey());
         if (value != null) {
             return Convert.convert(systemConfigItem.getClazz(), value);
         }
-        // 从数据库中获取
         SysConfigEntity sysConfigEntity = sysConfigMapper.selectByKey(systemConfigItem.getKey());
         if (sysConfigEntity != null && sysConfigEntity.getV() != null){
             T convert = Convert.convert(systemConfigItem.getClazz(), sysConfigEntity.getV());
-            // 放入缓存
             cache.put(systemConfigItem.getKey(), convert);
             return convert;
         }
 
-        // 返回默认值
         cache.put(systemConfigItem.getKey(), systemConfigItem.getDefaultValue());
         return systemConfigItem.getDefaultValue();
+    }
+
+    public void invalidateCache(String key) {
+        cache.invalidate(key);
     }
 }

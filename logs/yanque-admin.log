@@ -881,3 +881,316 @@
 2026-06-12 00:04:01.667 [http-nio-8080-exec-7] [ae50e596] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口结束: uri=/yq-admin/api/sysRole, controller=SysRoleController#pageRole, cost=7ms, result={"code":200,"message":"success","data":{"total":3,"pageNum":1,"pageSize":10,"records":[{"id":3,"roleCode":"head_teacher","roleName":"班主任","description":"班主任","status":"ACTIVE","createdAt":"Sat Apr 11 17:06:26 CST 2026"},{"id":2,"roleCode":"teacher","roleName":"讲师","status":"ACTIVE","createdAt":"Thu Apr 09 21:28:05 CST 2026"},{"id":1,"roleCode":"SUPER_ADMIN","roleName":"超级管理员","description":"拥有全部后台权限","status":"ACTIVE","createdAt":"Thu Apr 09 20:50:38 CST 2026"}]}}
 2026-06-12 00:05:18.868 [SpringApplicationShutdownHook] [] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2026-06-12 00:05:18.872 [SpringApplicationShutdownHook] [] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-06-12 09:08:24.403 [background-preinit] [] [] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-06-12 09:08:24.428 [main] [] [] INFO  cn.yanque.YanqueApplication - Starting YanqueApplication using Java 17.0.17 with PID 97048 (D:\Java\code\yq\YanQue-Admin\target\classes started by q1571 in D:\Java\code\yq\YanQue-Admin)
+2026-06-12 09:08:24.428 [main] [] [] INFO  cn.yanque.YanqueApplication - The following 1 profile is active: "dev"
+2026-06-12 09:08:25.743 [main] [] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-12 09:08:25.747 [main] [] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-06-12 09:08:25.774 [main] [] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 15 ms. Found 0 Redis repository interfaces.
+2026-06-12 09:08:26.291 [main] [] [] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-12 09:08:26.302 [main] [] [] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-12 09:08:26.303 [main] [] [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-12 09:08:26.303 [main] [] [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-06-12 09:08:26.347 [main] [] [] INFO  o.a.c.c.C.[.[localhost].[/yq-admin] - Initializing Spring embedded WebApplicationContext
+2026-06-12 09:08:26.347 [main] [] [] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1892 ms
+2026-06-12 09:08:27.338 [main] [] [] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-12 09:08:27.350 [main] [] [] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/yq-admin'
+2026-06-12 09:08:27.356 [main] [] [] INFO  cn.yanque.YanqueApplication - Started YanqueApplication in 3.287 seconds (process running for 6.628)
+2026-06-12 09:10:27.483 [background-preinit] [] [] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-06-12 09:10:27.503 [main] [] [] INFO  cn.yanque.YanqueApplication - Starting YanqueApplication using Java 17.0.17 with PID 186896 (D:\Java\code\yq\YanQue-Admin\target\classes started by q1571 in D:\Java\code\yq\YanQue-Admin)
+2026-06-12 09:10:27.504 [main] [] [] INFO  cn.yanque.YanqueApplication - The following 1 profile is active: "dev"
+2026-06-12 09:10:27.988 [main] [] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-12 09:10:27.990 [main] [] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-06-12 09:10:28.013 [main] [] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 15 ms. Found 0 Redis repository interfaces.
+2026-06-12 09:10:28.476 [main] [] [] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-06-12 09:10:28.481 [main] [] [] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-06-12 09:10:28.482 [main] [] [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-06-12 09:10:28.482 [main] [] [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-06-12 09:10:28.534 [main] [] [] INFO  o.a.c.c.C.[.[localhost].[/yq-admin] - Initializing Spring embedded WebApplicationContext
+2026-06-12 09:10:28.534 [main] [] [] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1007 ms
+2026-06-12 09:10:29.413 [main] [] [] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-06-12 09:10:29.425 [main] [] [] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/yq-admin'
+2026-06-12 09:10:29.430 [main] [] [] INFO  cn.yanque.YanqueApplication - Started YanqueApplication in 2.255 seconds (process running for 3.092)
+2026-06-12 09:10:33.433 [http-nio-8080-exec-1] [] [] INFO  o.a.c.c.C.[.[localhost].[/yq-admin] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-12 09:10:33.433 [http-nio-8080-exec-1] [] [] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-06-12 09:10:33.435 [http-nio-8080-exec-1] [] [] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-06-12 09:10:33.490 [http-nio-8080-exec-1] [d59b758f] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-12 09:10:33.637 [http-nio-8080-exec-1] [d59b758f] [] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@425e7015
+2026-06-12 09:10:33.638 [http-nio-8080-exec-1] [d59b758f] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-12 09:10:33.708 [http-nio-8080-exec-1] [d59b758f] [] ERROR c.y.c.e.GlobalExceptionHandler - 业务异常: code=401, message=Token无效或已过期
+cn.yanque.common.exception.BusinessException: Token无效或已过期
+	at cn.yanque.models.auth.interceptor.JwtAuthInterceptor.preHandle(JwtAuthInterceptor.java:47)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:146)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1084)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.MdcFilter.doFilterInternal(MdcFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-06-12 09:10:35.919 [http-nio-8080-exec-2] [7005323a] [] INFO  c.y.common.aop.ControllerLogAspect - 接口开始: uri=/yq-admin/api/sysUser/login, httpMethod=POST, controller=SysUserController#login, args=[{"name":"req","value":{"username":"admin","password":"****"}}]
+2026-06-12 09:10:35.921 [http-nio-8080-exec-2] [7005323a] [] DEBUG c.y.m.u.m.S.selectByUsername - ==>  Preparing: select id, username, password, nickname, real_name, phone, email, union_id, status, created_at, updated_at from sys_user where username = ?
+2026-06-12 09:10:35.930 [http-nio-8080-exec-2] [7005323a] [] DEBUG c.y.m.u.m.S.selectByUsername - ==> Parameters: admin(String)
+2026-06-12 09:10:35.939 [http-nio-8080-exec-2] [7005323a] [] DEBUG c.y.m.u.m.S.selectByUsername - <==      Total: 1
+2026-06-12 09:10:36.285 [http-nio-8080-exec-2] [7005323a] [] ERROR c.y.c.e.GlobalExceptionHandler - 系统异常
+org.springframework.data.redis.RedisConnectionFailureException: Unable to connect to Redis
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.translateException(LettuceConnectionFactory.java:1805)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1736)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getNativeConnection(LettuceConnectionFactory.java:1538)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.lambda$getConnection$0(LettuceConnectionFactory.java:1518)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.doInLock(LettuceConnectionFactory.java:1478)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getConnection(LettuceConnectionFactory.java:1515)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getSharedConnection(LettuceConnectionFactory.java:1199)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:1006)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.AbstractOperations.execute(AbstractOperations.java:97)
+	at org.springframework.data.redis.core.DefaultValueOperations.set(DefaultValueOperations.java:253)
+	at cn.yanque.models.users.service.impl.SysUserServiceImpl.loginReq(SysUserServiceImpl.java:178)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:352)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:713)
+	at cn.yanque.models.users.service.impl.SysUserServiceImpl$$SpringCGLIB$$0.loginReq(<generated>)
+	at cn.yanque.models.users.controller.SysUserController.login(SysUserController.java:89)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:352)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at cn.yanque.common.aop.ControllerLogAspect.logController(ControllerLogAspect.java:47)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:637)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:627)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:71)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at cn.yanque.models.users.controller.SysUserController$$SpringCGLIB$$0.login(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:254)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:182)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.MdcFilter.doFilterInternal(MdcFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.lettuce.core.RedisConnectionException: Unable to connect to localhost/<unresolved>:6379
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:78)
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:56)
+	at io.lettuce.core.AbstractRedisClient.getConnection(AbstractRedisClient.java:350)
+	at io.lettuce.core.RedisClient.connect(RedisClient.java:215)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.lambda$getConnection$1(StandaloneConnectionProvider.java:112)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.getConnection(StandaloneConnectionProvider.java:112)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1734)
+	... 100 common frames omitted
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:6379
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946)
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:334)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-06-12 09:10:55.240 [http-nio-8080-exec-3] [07c7caf8] [] INFO  c.y.common.aop.ControllerLogAspect - 接口开始: uri=/yq-admin/api/sysUser/login, httpMethod=POST, controller=SysUserController#login, args=[{"name":"req","value":{"username":"admin","password":"****"}}]
+2026-06-12 09:10:55.241 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectByUsername - ==>  Preparing: select id, username, password, nickname, real_name, phone, email, union_id, status, created_at, updated_at from sys_user where username = ?
+2026-06-12 09:10:55.242 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectByUsername - ==> Parameters: admin(String)
+2026-06-12 09:10:55.243 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectByUsername - <==      Total: 1
+2026-06-12 09:10:55.299 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==>  Preparing: select id, username, password, nickname, real_name, phone, email, union_id, status, created_at, updated_at from sys_user where id = ?
+2026-06-12 09:10:55.299 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==> Parameters: 1(Long)
+2026-06-12 09:10:55.302 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.SysUserMapper.selectById - <==      Total: 1
+2026-06-12 09:10:55.303 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==>  Preparing: select role_id from sys_user_role where user_id = ? order by role_id asc
+2026-06-12 09:10:55.303 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==> Parameters: 1(Long)
+2026-06-12 09:10:55.311 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - <==      Total: 1
+2026-06-12 09:10:55.339 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==>  Preparing: select id, role_code, role_name, description, status, created_at, updated_at from sys_role WHERE id in ( ? )
+2026-06-12 09:10:55.339 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==> Parameters: 1(Long)
+2026-06-12 09:10:55.342 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.SysRoleMapper.selectList - <==      Total: 1
+2026-06-12 09:10:55.342 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==>  Preparing: select permission_id from sys_role_permission where role_id in ( ? ) order by permission_id asc
+2026-06-12 09:10:55.343 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==> Parameters: 1(Long)
+2026-06-12 09:10:55.343 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - <==      Total: 4
+2026-06-12 09:10:55.345 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectList - ==>  Preparing: select id, parent_id, permission_code, permission_name, permission_type, api_path, sort_num, description, status, created_at, updated_at from sys_permission WHERE id in ( ? , ? , ? , ? )
+2026-06-12 09:10:55.345 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectList - ==> Parameters: 101(Long), 106(Long), 113(Long), 117(Long)
+2026-06-12 09:10:55.352 [http-nio-8080-exec-3] [07c7caf8] [] DEBUG c.y.m.u.m.S.selectList - <==      Total: 4
+2026-06-12 09:10:55.356 [http-nio-8080-exec-3] [07c7caf8] [] INFO  c.y.common.aop.ControllerLogAspect - 接口结束: uri=/yq-admin/api/sysUser/login, controller=SysUserController#login, cost=114ms, result={"code":200,"message":"success","data":{"token":"ey****vI","signSecret":"xc****3Q","userDetailRes":{"id":1,"username":"admin","nickname":"系统管理员","realName":"超级管理员","phone":"13800000000","email":"admin@yq.com","unionId":"on_8dc4e328a2870919088b018841458703","status":"ACTIVE","createdAt":"Thu Apr 09 20:50:39 CST 2026","updatedAt":"Wed Jun 10 20:14:33 CST 2026"},"roleDetailResList":[{"id":1,"roleCode":"SUPER_ADMIN","roleName":"超级管理员","description":"拥有全部后台权限","status":"ACTIVE","createdAt":"Thu Apr 09 20:50:38 CST 2026","updatedAt":"Wed Jun 10 20:13:59 CST 2026"}],"permissionDetailResList":[{"id":101,"parentId":0,"permissionName":"系统配置","permissionType":"MENU","permissionCode":"menu:system","sortNum":1,"status":"ACTIVE","description":"左侧导航中的系统配置父级菜单","createdAt":"Thu Apr 09 21:22:28 CST 2026","updatedAt":"Thu Jun 11 19:21:05 CST 2026"},{"id":106,"parentId":0,"permissionName":"教学管理","permissionType":"MENU","permissionCode":"menu:teaching","sortNum":2,"status":"ACTIVE","description":"左侧导航中的教学管理父级菜单","createdAt":"Sat Apr 11 15:49:16 CST 2026","updatedAt":"Thu Jun 11 19:21:10 CST 2026"},{"id":113,"parentId":0,"permissionName":"销售管理","permissionType":"MENU","permissionCode":"menu:sales","sortNum":3,"status":"ACTIVE","description":"左侧导航中的销售管理父级菜单","createdAt":"Sun Apr 12 14:19:04 CST 2026","updatedAt":"Thu Jun 11 19:21:13 CST 2026"},{"id":117,"parentId":0,"permissionName":"学员管理","permissionType":"MENU","permissionCode":"menu:student","sortNum":4,"status":"ACTIVE","description":"左侧导航中的学员管理父级菜单","createdAt":"Sun Apr 19 23:54:31 CST 2026","updatedAt":"Thu Jun 11 19:21:15 CST 2026"}]}}
+2026-06-12 09:10:55.469 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==>  Preparing: select id, username, password, nickname, real_name, phone, email, union_id, status, created_at, updated_at from sys_user where id = ?
+2026-06-12 09:10:55.470 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==> Parameters: 1(Long)
+2026-06-12 09:10:55.471 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - <==      Total: 1
+2026-06-12 09:10:55.471 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==>  Preparing: select role_id from sys_user_role where user_id = ? order by role_id asc
+2026-06-12 09:10:55.472 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==> Parameters: 1(Long)
+2026-06-12 09:10:55.472 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - <==      Total: 1
+2026-06-12 09:10:55.472 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==>  Preparing: select id, role_code, role_name, description, status, created_at, updated_at from sys_role WHERE id in ( ? )
+2026-06-12 09:10:55.472 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==> Parameters: 1(Long)
+2026-06-12 09:10:55.473 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - <==      Total: 1
+2026-06-12 09:10:55.473 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==>  Preparing: select permission_id from sys_role_permission where role_id in ( ? ) order by permission_id asc
+2026-06-12 09:10:55.473 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==> Parameters: 1(Long)
+2026-06-12 09:10:55.473 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - <==      Total: 4
+2026-06-12 09:10:55.475 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectList - ==>  Preparing: select id, parent_id, permission_code, permission_name, permission_type, api_path, sort_num, description, status, created_at, updated_at from sys_permission WHERE id in ( ? , ? , ? , ? )
+2026-06-12 09:10:55.475 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectList - ==> Parameters: 101(Long), 106(Long), 113(Long), 117(Long)
+2026-06-12 09:10:55.476 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectList - <==      Total: 4
+2026-06-12 09:10:55.485 [http-nio-8080-exec-4] [42338726] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口开始: uri=/yq-admin/api/sysUser, httpMethod=GET, controller=SysUserController#pageUser, args=[{"name":"req","value":{"pageNum":1,"pageSize":10}}]
+2026-06-12 09:10:55.536 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectPage_COUNT - ==>  Preparing: SELECT count(0) FROM sys_user
+2026-06-12 09:10:55.536 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectPage_COUNT - ==> Parameters: 
+2026-06-12 09:10:55.552 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.S.selectPage_COUNT - <==      Total: 1
+2026-06-12 09:10:55.554 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysUserMapper.selectPage - ==>  Preparing: select id, username, password, nickname, real_name, phone, email, union_id, status, created_at, updated_at from sys_user order by id desc LIMIT ?
+2026-06-12 09:10:55.554 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysUserMapper.selectPage - ==> Parameters: 10(Integer)
+2026-06-12 09:10:55.556 [http-nio-8080-exec-4] [42338726] [1] DEBUG c.y.m.u.m.SysUserMapper.selectPage - <==      Total: 6
+2026-06-12 09:10:55.559 [http-nio-8080-exec-4] [42338726] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口结束: uri=/yq-admin/api/sysUser, controller=SysUserController#pageUser, cost=73ms, result={"code":200,"message":"success","data":{"total":6,"pageNum":1,"pageSize":10,"records":[{"id":6,"username":"haha","nickname":"哈哈哈","realName":"哈哈","phone":"15118191032","email":"913038933@qq.com","status":"ACTIVE","createdAt":"Fri Apr 17 15:54:46 CST 2026"},{"id":5,"username":"laoshi2","nickname":"老师2","realName":"老师2","phone":"13762922584","status":"ACTIVE","createdAt":"Sun Apr 12 01:48:55 CST 2026"},{"id":4,"username":"laoshi1","nickname":"老师1","realName":"老师1","phone":"13273576020","status":"ACTIVE","createdAt":"Sun Apr 12 01:48:37 CST 2026"},{"id":3,"username":"banzhuren","nickname":"班主任老师","realName":"班主任老师","phone":"15118191032","status":"ACTIVE","createdAt":"Sat Apr 11 17:06:53 CST 2026"},{"id":2,"username":"huangjin","nickname":"黄瑾","realName":"黄瑾","phone":"13273672819","email":"913038933@qq.com","status":"ACTIVE","createdAt":"Thu Apr 09 22:04:43 CST 2026"},{"id":1,"username":"admin","nickname":"系统管理员","realName":"超级管理员","phone":"13800000000","email":"admin@yq.com","status":"ACTIVE","createdAt":"Thu Apr 09 20:50:39 CST 2026"}]}}
+2026-06-12 09:11:02.067 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==>  Preparing: select id, username, password, nickname, real_name, phone, email, union_id, status, created_at, updated_at from sys_user where id = ?
+2026-06-12 09:11:02.067 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==> Parameters: 1(Long)
+2026-06-12 09:11:02.068 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - <==      Total: 1
+2026-06-12 09:11:02.068 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==>  Preparing: select role_id from sys_user_role where user_id = ? order by role_id asc
+2026-06-12 09:11:02.069 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==> Parameters: 1(Long)
+2026-06-12 09:11:02.070 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - <==      Total: 1
+2026-06-12 09:11:02.072 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==>  Preparing: select id, role_code, role_name, description, status, created_at, updated_at from sys_role WHERE id in ( ? )
+2026-06-12 09:11:02.072 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==> Parameters: 1(Long)
+2026-06-12 09:11:02.072 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - <==      Total: 1
+2026-06-12 09:11:02.072 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==>  Preparing: select permission_id from sys_role_permission where role_id in ( ? ) order by permission_id asc
+2026-06-12 09:11:02.072 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==> Parameters: 1(Long)
+2026-06-12 09:11:02.073 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - <==      Total: 4
+2026-06-12 09:11:02.073 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectList - ==>  Preparing: select id, parent_id, permission_code, permission_name, permission_type, api_path, sort_num, description, status, created_at, updated_at from sys_permission WHERE id in ( ? , ? , ? , ? )
+2026-06-12 09:11:02.073 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectList - ==> Parameters: 101(Long), 106(Long), 113(Long), 117(Long)
+2026-06-12 09:11:02.074 [http-nio-8080-exec-10] [c97bd3b5] [1] DEBUG c.y.m.u.m.S.selectList - <==      Total: 4
+2026-06-12 09:11:02.074 [http-nio-8080-exec-10] [c97bd3b5] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口开始: uri=/yq-admin/api/sysConfig, httpMethod=GET, controller=SysConfigController#listAll, args=[]
+2026-06-12 09:11:02.076 [http-nio-8080-exec-10] [c97bd3b5] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口结束: uri=/yq-admin/api/sysConfig, controller=SysConfigController#listAll, cost=2ms, result={"code":200,"message":"success","data":[{"id":1,"k":"jwtSecretk","v":"yq-ai-admin-jwt-secret"},{"id":2,"k":"jwtExpireTime","v":"7200"},{"id":3,"k":"signSecretExpireSeconds","v":"7200"},{"id":4,"k":"signTimestampSkewSeconds","v":"300"},{"id":5,"k":"signNonceExpireSeconds","v":"300"},{"id":6,"k":"studentAiSummaryTriggerUncompressedCount","v":"6"},{"id":7,"k":"studentAiSummaryKeepRecentCount","v":"3"}]}
+2026-06-12 09:11:47.985 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==>  Preparing: select id, username, password, nickname, real_name, phone, email, union_id, status, created_at, updated_at from sys_user where id = ?
+2026-06-12 09:11:47.985 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==> Parameters: 1(Long)
+2026-06-12 09:11:47.986 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - <==      Total: 1
+2026-06-12 09:11:47.986 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==>  Preparing: select role_id from sys_user_role where user_id = ? order by role_id asc
+2026-06-12 09:11:47.986 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==> Parameters: 1(Long)
+2026-06-12 09:11:47.987 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - <==      Total: 1
+2026-06-12 09:11:47.989 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==>  Preparing: select id, role_code, role_name, description, status, created_at, updated_at from sys_role WHERE id in ( ? )
+2026-06-12 09:11:47.989 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==> Parameters: 1(Long)
+2026-06-12 09:11:47.989 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - <==      Total: 1
+2026-06-12 09:11:47.990 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==>  Preparing: select permission_id from sys_role_permission where role_id in ( ? ) order by permission_id asc
+2026-06-12 09:11:47.990 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==> Parameters: 1(Long)
+2026-06-12 09:11:47.990 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - <==      Total: 4
+2026-06-12 09:11:47.990 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectList - ==>  Preparing: select id, parent_id, permission_code, permission_name, permission_type, api_path, sort_num, description, status, created_at, updated_at from sys_permission WHERE id in ( ? , ? , ? , ? )
+2026-06-12 09:11:47.990 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectList - ==> Parameters: 101(Long), 106(Long), 113(Long), 117(Long)
+2026-06-12 09:11:47.992 [http-nio-8080-exec-6] [be130a1b] [1] DEBUG c.y.m.u.m.S.selectList - <==      Total: 4
+2026-06-12 09:11:48.003 [http-nio-8080-exec-6] [be130a1b] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口开始: uri=/yq-admin/api/sysConfig/1, httpMethod=PUT, controller=SysConfigController#updateConfig, args=[{"name":"id","value":1},{"name":"req","value":{"k":"jwtSecretk","v":"yq-ai-admin-jwt-secret1"}}]
+2026-06-12 09:11:48.029 [http-nio-8080-exec-6] [be130a1b] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口结束: uri=/yq-admin/api/sysConfig/1, controller=SysConfigController#updateConfig, cost=26ms, result={"code":200,"message":"success","data":{"id":1}}
+2026-06-12 09:11:48.041 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==>  Preparing: select id, username, password, nickname, real_name, phone, email, union_id, status, created_at, updated_at from sys_user where id = ?
+2026-06-12 09:11:48.041 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - ==> Parameters: 1(Long)
+2026-06-12 09:11:48.042 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.SysUserMapper.selectById - <==      Total: 1
+2026-06-12 09:11:48.042 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==>  Preparing: select role_id from sys_user_role where user_id = ? order by role_id asc
+2026-06-12 09:11:48.042 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - ==> Parameters: 1(Long)
+2026-06-12 09:11:48.043 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectRoleIdsByUserId - <==      Total: 1
+2026-06-12 09:11:48.043 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==>  Preparing: select id, role_code, role_name, description, status, created_at, updated_at from sys_role WHERE id in ( ? )
+2026-06-12 09:11:48.043 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - ==> Parameters: 1(Long)
+2026-06-12 09:11:48.043 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.SysRoleMapper.selectList - <==      Total: 1
+2026-06-12 09:11:48.045 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==>  Preparing: select permission_id from sys_role_permission where role_id in ( ? ) order by permission_id asc
+2026-06-12 09:11:48.045 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - ==> Parameters: 1(Long)
+2026-06-12 09:11:48.046 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectPermissionIdsByRoleId - <==      Total: 4
+2026-06-12 09:11:48.046 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectList - ==>  Preparing: select id, parent_id, permission_code, permission_name, permission_type, api_path, sort_num, description, status, created_at, updated_at from sys_permission WHERE id in ( ? , ? , ? , ? )
+2026-06-12 09:11:48.046 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectList - ==> Parameters: 101(Long), 106(Long), 113(Long), 117(Long)
+2026-06-12 09:11:48.047 [http-nio-8080-exec-7] [2a89d636] [1] DEBUG c.y.m.u.m.S.selectList - <==      Total: 4
+2026-06-12 09:11:48.048 [http-nio-8080-exec-7] [2a89d636] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口开始: uri=/yq-admin/api/sysConfig, httpMethod=GET, controller=SysConfigController#listAll, args=[]
+2026-06-12 09:11:48.049 [http-nio-8080-exec-7] [2a89d636] [1] INFO  c.y.common.aop.ControllerLogAspect - 接口结束: uri=/yq-admin/api/sysConfig, controller=SysConfigController#listAll, cost=1ms, result={"code":200,"message":"success","data":[{"id":1,"k":"jwtSecretk","v":"yq-ai-admin-jwt-secret1"},{"id":2,"k":"jwtExpireTime","v":"7200"},{"id":3,"k":"signSecretExpireSeconds","v":"7200"},{"id":4,"k":"signTimestampSkewSeconds","v":"300"},{"id":5,"k":"signNonceExpireSeconds","v":"300"},{"id":6,"k":"studentAiSummaryTriggerUncompressedCount","v":"6"},{"id":7,"k":"studentAiSummaryKeepRecentCount","v":"3"}]}
+2026-06-12 10:52:58.150 [SpringApplicationShutdownHook] [] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-06-12 10:52:58.157 [SpringApplicationShutdownHook] [] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

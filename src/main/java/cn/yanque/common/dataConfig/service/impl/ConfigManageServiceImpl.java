@@ -1,7 +1,9 @@
-package cn.yanque.common.dataConfig.service;
+package cn.yanque.common.dataConfig.service.impl;
 
 import cn.yanque.common.dataConfig.entity.SysConfigEntity;
 import cn.yanque.common.dataConfig.mapper.SysConfigMapper;
+import cn.yanque.common.dataConfig.service.ConfigManageService;
+import cn.yanque.common.dataConfig.service.SysConfigService;
 import cn.yanque.common.exception.BusinessException;
 import cn.yanque.common.pojo.vo.req.ConfigCreateReq;
 import cn.yanque.common.pojo.vo.req.ConfigUpdateReq;
@@ -22,6 +24,9 @@ public class ConfigManageServiceImpl implements ConfigManageService {
 
     @Autowired
     private SysConfigMapper sysConfigMapper;
+
+    @Autowired
+    private SysConfigService sysConfigService;
 
     @Override
     public ConfigCreateRes addConfig(ConfigCreateReq req) {
@@ -46,7 +51,8 @@ public class ConfigManageServiceImpl implements ConfigManageService {
         if (entity == null) {
             throw new BusinessException(404, "配置不存在");
         }
-        // 检查新的key是否与其他配置冲突
+        String oldKey = entity.getK();
+        
         if (!entity.getK().equals(req.getK())) {
             SysConfigEntity existing = sysConfigMapper.selectByKey(req.getK());
             if (existing != null) {
@@ -56,6 +62,11 @@ public class ConfigManageServiceImpl implements ConfigManageService {
         entity.setK(req.getK());
         entity.setV(req.getV());
         sysConfigMapper.updateById(entity);
+
+        sysConfigService.invalidateCache(oldKey);
+        if (!oldKey.equals(req.getK())) {
+            sysConfigService.invalidateCache(req.getK());
+        }
 
         ConfigUpdateRes res = new ConfigUpdateRes();
         res.setId(entity.getId());
@@ -68,7 +79,10 @@ public class ConfigManageServiceImpl implements ConfigManageService {
         if (entity == null) {
             throw new BusinessException(404, "配置不存在");
         }
+        String configKey = entity.getK();
         sysConfigMapper.deleteById(id);
+
+        sysConfigService.invalidateCache(configKey);
 
         ConfigDeleteRes res = new ConfigDeleteRes();
         res.setId(id);
