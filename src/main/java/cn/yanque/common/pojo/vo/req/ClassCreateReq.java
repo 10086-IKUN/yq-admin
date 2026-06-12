@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 创建班级请求参数
+ */
 @Data
 @Schema(description = "创建班级请求")
 public class ClassCreateReq {

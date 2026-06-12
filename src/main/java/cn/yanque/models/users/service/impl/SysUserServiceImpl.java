@@ -31,6 +31,10 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 系统用户服务实现类
+ * 实现用户管理、登录认证、角色分配、用户信息查询等业务逻辑
+ */
 @Service
 public class SysUserServiceImpl implements SysUserService {
 
@@ -53,6 +57,11 @@ public class SysUserServiceImpl implements SysUserService {
     private SysConfigService sysConfigService;
 
 
+    /**
+     * 添加用户
+     * @param req 创建用户请求参数
+     * @return 创建成功的用户ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserCreateRes addUser(UserCreateReq req) {
@@ -78,6 +87,11 @@ public class SysUserServiceImpl implements SysUserService {
         return res;
     }
 
+    /**
+     * 修改用户
+     * @param req 更新用户请求参数
+     * @return 更新后的用户ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserUpdateRes updateUser(UserUpdateReq req) {
@@ -105,6 +119,11 @@ public class SysUserServiceImpl implements SysUserService {
         return res;
     }
 
+    /**
+     * 删除用户（同时删除用户角色关联）
+     * @param id 用户ID
+     * @return 删除结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserDeleteRes deleteUser(Long id) {
@@ -118,6 +137,11 @@ public class SysUserServiceImpl implements SysUserService {
         return res;
     }
 
+    /**
+     * 根据ID查询用户详情（含角色ID列表）
+     * @param id 用户ID
+     * @return 用户详细信息
+     */
     @Override
     public UserDetailRes getUserById(Long id) {
         SysUserEntity user = sysUserMapper.selectById(id);
@@ -130,6 +154,11 @@ public class SysUserServiceImpl implements SysUserService {
         return res;
     }
 
+    /**
+     * 分页查询用户
+     * @param req 分页查询参数（关键词、状态、角色编码）
+     * @return 分页用户列表
+     */
     @Override
     public PageResult<UserPageRes> pageUser(UserPageReq req) {
         int pageNum = req.getPageNum() == null ? 1 : req.getPageNum();
@@ -137,10 +166,16 @@ public class SysUserServiceImpl implements SysUserService {
         PageHelper.startPage(pageNum, pageSize);
         List<SysUserEntity> list = sysUserMapper.selectPage(req.getKeyword(), req.getStatus(), req.getRoleCode());
         PageInfo<SysUserEntity> pageInfo = new PageInfo<>(list);
-        List<UserPageRes> records = list.stream().map(this::buildUserPageRes).toList();
+        List<UserPageRes> records = list.stream().map(user -> buildUserPageRes(user)).toList();
         return new PageResult<>(pageInfo.getTotal(), pageNum, pageSize, records);
     }
 
+    /**
+     * 分配用户角色（先删后插，全量替换）
+     * @param userId 用户ID
+     * @param req 角色分配请求参数
+     * @return 角色分配结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserRoleAssignRes assignUserRoles(Long userId, UserRoleAssignReq req) {
@@ -160,6 +195,12 @@ public class SysUserServiceImpl implements SysUserService {
         return res;
     }
 
+    /**
+     * 用户登录
+     * 验证用户名密码，生成JWT Token和签名密钥，返回用户信息、角色和权限
+     * @param req 登录请求参数
+     * @return 登录结果（含Token、用户信息、角色、权限）
+     */
     @Override
     public LoginRes loginReq(LoginReq req) {
         // 查询用户
@@ -205,6 +246,11 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
 
+    /**
+     * 获取用户完整信息（含角色列表和权限列表）
+     * @param userId 用户ID
+     * @return 用户信息（角色+权限）
+     */
     @Override
     public UserInfo getUserInfo(Long userId){
         SysUserEntity user = sysUserMapper.selectById(userId);
@@ -238,6 +284,11 @@ public class SysUserServiceImpl implements SysUserService {
         return userInfo;
     }
 
+    /**
+     * 创建JWT Token
+     * @param sysUserEntity 用户实体
+     * @return JWT Token字符串
+     */
     private String createToken(SysUserEntity sysUserEntity) {
         Map<String, Object> map = new HashMap<>();
         map.put("uid", sysUserEntity.getId());
@@ -247,18 +298,32 @@ public class SysUserServiceImpl implements SysUserService {
         return JWTUtil.createToken(map, sysConfigService.getConfig(SysConfig.jwtSecret).getBytes());
     }
 
+    /**
+     * 构建用户详情响应对象
+     * @param user 用户实体
+     * @return 用户详情
+     */
     private UserDetailRes buildUserDetailRes(SysUserEntity user) {
         UserDetailRes res = new UserDetailRes();
         BeanUtils.copyProperties(user, res);
         return res;
     }
 
+    /**
+     * 构建用户分页响应对象
+     * @param user 用户实体
+     * @return 用户分页信息
+     */
     private UserPageRes buildUserPageRes(SysUserEntity user) {
         UserPageRes res = new UserPageRes();
         BeanUtils.copyProperties(user, res);
         return res;
     }
 
+    /**
+     * 生成随机签名密钥（32字节Base64URL编码）
+     * @return 签名密钥字符串
+     */
     private String createSignSecret() {
         byte[] bytes = new byte[32];
         SECURE_RANDOM.nextBytes(bytes);

@@ -22,12 +22,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 课程服务实现类
+ * 实现课程管理的业务逻辑，包括增删改查
+ */
 @Service
 public class EduCourseServiceImpl implements EduCourseService {
 
     @Autowired
     private EduCourseMapper eduCourseMapper;
 
+    /**
+     * 添加课程
+     * @param req 创建课程请求参数
+     * @return 创建成功的课程ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CourseCreateRes addCourse(CourseCreateReq req) {
@@ -43,6 +52,11 @@ public class EduCourseServiceImpl implements EduCourseService {
         return res;
     }
 
+    /**
+     * 修改课程
+     * @param req 更新课程请求参数
+     * @return 更新后的课程ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CourseUpdateRes updateCourse(CourseUpdateReq req) {
@@ -66,6 +80,11 @@ public class EduCourseServiceImpl implements EduCourseService {
         return res;
     }
 
+    /**
+     * 删除课程
+     * @param id 课程ID
+     * @return 删除结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CourseDeleteRes deleteCourse(Long id) {
@@ -84,6 +103,11 @@ public class EduCourseServiceImpl implements EduCourseService {
         return res;
     }
 
+    /**
+     * 根据ID查询课程详情
+     * @param id 课程ID
+     * @return 课程详细信息
+     */
     @Override
     public CourseDetailRes getCourseById(Long id) {
         EduCourseEntity entity = eduCourseMapper.selectById(id);
@@ -93,6 +117,11 @@ public class EduCourseServiceImpl implements EduCourseService {
         return buildCourseDetailRes(entity);
     }
 
+    /**
+     * 分页查询课程
+     * @param req 分页查询参数（关键词、状态）
+     * @return 分页课程列表
+     */
     @Override
     public PageResult<CoursePageRes> pageCourse(CoursePageReq req) {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
@@ -106,12 +135,22 @@ public class EduCourseServiceImpl implements EduCourseService {
         return new PageResult<>(pageInfo.getTotal(), req.getPageNum(), req.getPageSize(), records);
     }
 
+    /**
+     * 构建课程详情响应对象
+     * @param entity 课程实体
+     * @return 课程详情
+     */
     private CourseDetailRes buildCourseDetailRes(EduCourseEntity entity) {
         CourseDetailRes res = new CourseDetailRes();
         BeanUtils.copyProperties(entity, res);
         return res;
     }
 
+    /**
+     * 构建课程分页响应对象
+     * @param entity 课程实体
+     * @return 课程分页信息
+     */
     private CoursePageRes buildCoursePageRes(EduCourseEntity entity) {
         CoursePageRes res = new CoursePageRes();
         BeanUtils.copyProperties(entity, res);

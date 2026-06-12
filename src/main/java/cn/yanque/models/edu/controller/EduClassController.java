@@ -28,6 +28,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 班级管理控制器
+ * 提供班级的增删改查接口
+ */
 @RestController
 @RequestMapping("/api/eduClass")
 @Slf4j
@@ -37,6 +41,11 @@ public class EduClassController {
     @Autowired
     private EduClassService eduClassService;
 
+    /**
+     * 添加班级
+     * @param req 创建班级请求参数
+     * @return 创建成功的班级信息
+     */
     @PostMapping
     @Operation(description = "添加班级")
     @RequirePermission("class:add")
@@ -44,6 +53,12 @@ public class EduClassController {
         return ApiResponse.success(eduClassService.addClass(req));
     }
 
+    /**
+     * 修改班级
+     * @param id 班级ID
+     * @param req 更新班级请求参数
+     * @return 更新后的班级信息
+     */
     @PutMapping("{id}")
     @Operation(description = "修改班级")
     @RequirePermission("class:update")
@@ -53,6 +68,11 @@ public class EduClassController {
         return ApiResponse.success(eduClassService.updateClass(req));
     }
 
+    /**
+     * 删除班级
+     * @param id 班级ID
+     * @return 删除结果
+     */
     @DeleteMapping("{id}")
     @Operation(description = "删除班级")
     @RequirePermission("class:delete")
@@ -60,6 +80,11 @@ public class EduClassController {
         return ApiResponse.success(eduClassService.deleteClass(id));
     }
 
+    /**
+     * 根据ID查询班级
+     * @param id 班级ID
+     * @return 班级详细信息
+     */
     @GetMapping("{id}")
     @Operation(description = "根据ID查询班级")
     @RequirePermission("class:view")
@@ -67,6 +92,11 @@ public class EduClassController {
         return ApiResponse.success(eduClassService.getClassById(id));
     }
 
+    /**
+     * 分页查询班级
+     * @param req 分页查询参数
+     * @return 分页班级列表
+     */
     @GetMapping
     @Operation(description = "分页查询班级")
     @RequirePermission("class:view")

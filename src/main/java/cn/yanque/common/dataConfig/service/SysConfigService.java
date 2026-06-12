@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 系统配置服务类
+ * 提供系统配置的读取和缓存管理
+ */
 @Component
 public class SysConfigService {
     private final Cache<String, Object> cache = CacheBuilder.newBuilder()
@@ -19,6 +23,11 @@ public class SysConfigService {
     @Autowired
     private SysConfigMapper sysConfigMapper;
     
+    /**
+     * 获取系统配置值
+     * @param systemConfigItem 系统配置项
+     * @return 配置值
+     */
     public <T> T getConfig(SystemConfigItem<T> systemConfigItem) {
         // 从缓存中获取
         Object value = cache.getIfPresent(systemConfigItem.getKey());
@@ -37,6 +46,10 @@ public class SysConfigService {
         return systemConfigItem.getDefaultValue();
     }
 
+    /**
+     * 清除指定配置的缓存
+     * @param key 配置键
+     */
     public void invalidateCache(String key) {
         cache.invalidate(key);
     }

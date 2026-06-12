@@ -23,12 +23,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 学生服务实现类
+ * 实现学生管理的业务逻辑，包括增删改查
+ */
 @Service
 public class EduStudentServiceImpl implements EduStudentService {
 
     @Autowired
     private EduStudentMapper eduStudentMapper;
 
+    /**
+     * 添加学生
+     * @param req 创建学生请求参数
+     * @return 创建成功的学生ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public StudentCreateRes addStudent(StudentCreateReq req) {
@@ -53,6 +62,11 @@ public class EduStudentServiceImpl implements EduStudentService {
         return res;
     }
 
+    /**
+     * 修改学生
+     * @param req 更新学生请求参数
+     * @return 更新后的学生ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public StudentUpdateRes updateStudent(StudentUpdateReq req) {
@@ -86,6 +100,11 @@ public class EduStudentServiceImpl implements EduStudentService {
         return res;
     }
 
+    /**
+     * 删除学生
+     * @param id 学生ID
+     * @return 删除结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public StudentDeleteRes deleteStudent(Long id) {
@@ -104,6 +123,11 @@ public class EduStudentServiceImpl implements EduStudentService {
         return res;
     }
 
+    /**
+     * 根据ID查询学生详情
+     * @param id 学生ID
+     * @return 学生详细信息
+     */
     @Override
     public StudentDetailRes getStudentById(Long id) {
         EduStudentEntity entity = eduStudentMapper.selectById(id);
@@ -113,6 +137,11 @@ public class EduStudentServiceImpl implements EduStudentService {
         return buildStudentDetailRes(entity);
     }
 
+    /**
+     * 分页查询学生
+     * @param req 分页查询参数（关键词、学习模式、班级ID、产品ID）
+     * @return 分页学生列表
+     */
     @Override
     public PageResult<StudentPageRes> pageStudent(StudentPageReq req) {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
@@ -128,12 +157,22 @@ public class EduStudentServiceImpl implements EduStudentService {
         return new PageResult<>(pageInfo.getTotal(), req.getPageNum(), req.getPageSize(), records);
     }
 
+    /**
+     * 构建学生详情响应对象
+     * @param entity 学生实体
+     * @return 学生详情
+     */
     private StudentDetailRes buildStudentDetailRes(EduStudentEntity entity) {
         StudentDetailRes res = new StudentDetailRes();
         BeanUtils.copyProperties(entity, res);
         return res;
     }
 
+    /**
+     * 构建学生分页响应对象
+     * @param entity 学生实体
+     * @return 学生分页信息
+     */
     private StudentPageRes buildStudentPageRes(EduStudentEntity entity) {
         StudentPageRes res = new StudentPageRes();
         BeanUtils.copyProperties(entity, res);

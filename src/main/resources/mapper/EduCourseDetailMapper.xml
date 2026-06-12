@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    MyBatis映射文件
+    namespace: 对应Mapper接口的全限定名
+    作用: 定义SQL语句，将数据库字段映射到Java实体属性
+-->
+<mapper namespace="cn.yanque.models.edu.mapper.EduCourseDetailMapper">
+
+    <!--
+        结果映射：定义数据库列名到Java属性的映射关系
+        当列名和属性名不一致时需要手动映射（如course_id -> courseId）
+        id: 唯一标识，其他SQL可以引用这个映射
+    -->
+    <resultMap id="EduCourseDetailMap" type="cn.yanque.common.pojo.entity.EduCourseDetailEntity">
+        <id property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="stageName" column="stage_name"/>
+        <result property="dayNum" column="day_num"/>
+        <result property="courseContent" column="course_content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!--
+        公共SQL片段：定义可复用的列名列表
+        使用<include refid="BaseColumns"/>引用，避免重复书写
+    -->
+    <sql id="BaseColumns">
+        id, course_id, stage_name, day_num, course_content, created_at, updated_at
+    </sql>
+
+    <!--
+        插入操作
+        useGeneratedKeys="true": 使用数据库自增主键
+        keyProperty="id": 将生成的主键值回填到实体的id属性
+        这样插入后可以通过entity.getId()获取新记录的ID
+    -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into edu_course_detail (course_id, stage_name, day_num, course_content)
+        values (#{courseId}, #{stageName}, #{dayNum}, #{courseContent})
+    </insert>
+
+    <!--
+        更新操作
+        <set>标签：动态生成SET子句，只更新非null的字段
+        <if>标签：条件判断，test属性是OGNL表达式
+        这样设计可以实现"部分更新"，只修改前端传来的字段
+    -->
+    <update id="updateById">
+        update edu_course_detail
+        <set>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="stageName != null">stage_name = #{stageName},</if>
+            <if test="dayNum != null">day_num = #{dayNum},</if>
+            <if test="courseContent != null">course_content = #{courseContent},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据ID查询单条记录 -->
+    <select id="selectById" resultMap="EduCourseDetailMap">
+        select <include refid="BaseColumns"/>
+        from edu_course_detail
+        where id = #{id}
+    </select>
+
+    <!--
+        根据课程ID查询所有详情
+        按天数从小到大排序
+    -->
+    <select id="selectByCourseId" resultMap="EduCourseDetailMap">
+        select <include refid="BaseColumns"/>
+        from edu_course_detail
+        where course_id = #{courseId}
+        order by day_num asc
+    </select>
+
+    <!-- 根据ID删除单条记录 -->
+    <delete id="deleteById">
+        delete from edu_course_detail where id = #{id}
+    </delete>
+
+    <!--
+        根据课程ID删除所有相关记录
+        用于删除课程时级联删除所有详情
+    -->
+    <delete id="deleteByCourseId">
+        delete from edu_course_detail where course_id = #{courseId}
+    </delete>
+
+    <!--
+        检查课程中是否已存在指定天数的记录
+        excludeId: 更新时排除自身（否则更新时会检测到自己）
+        用于保证整个课程中天数唯一
+    -->
+    <select id="countByCourseIdAndDayNum" resultType="int">
+        select count(*) from edu_course_detail
+        where course_id = #{courseId}
+          and day_num = #{dayNum}
+          <if test="excludeId != null">
+              and id != #{excludeId}
+          </if>
+    </select>
+
+    <!--
+        批量插入课程详情
+        用于Excel导入
+    -->
+    <insert id="insertBatch">
+        insert into edu_course_detail (course_id, stage_name, day_num, course_content, created_at, updated_at)
+        values
+        <foreach collection="entityList" item="entity" separator=",">
+            (#{entity.courseId}, #{entity.stageName}, #{entity.dayNum}, #{entity.courseContent}, #{entity.createdAt}, #{entity.updatedAt})
+        </foreach>
+    </insert>
+
+</mapper>

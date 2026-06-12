@@ -60,4 +60,18 @@
         delete from edu_campus where id = #{id}
     </delete>
 
+    <!--
+        批量查询校区
+        作用：一次查询多个校区，避免N+1查询问题
+        动态SQL：foreach遍历ID集合，生成 IN (id1, id2, ...) 语句
+    -->
+    <select id="selectByIds" resultMap="EduCampusMap">
+        select <include refid="BaseColumns"/>
+        from edu_campus
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
 </mapper>

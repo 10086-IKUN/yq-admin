@@ -28,6 +28,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 校区管理控制器
+ * 提供校区的增删改查接口
+ */
 @RestController
 @RequestMapping("/api/eduCampus")
 @Slf4j
@@ -37,6 +41,11 @@ public class EduCampusController {
     @Autowired
     private EduCampusService eduCampusService;
 
+    /**
+     * 添加校区
+     * @param req 创建校区请求参数
+     * @return 创建成功的校区信息
+     */
     @PostMapping
     @Operation(description = "添加校区")
     @RequirePermission("campus:add")
@@ -44,6 +53,12 @@ public class EduCampusController {
         return ApiResponse.success(eduCampusService.addCampus(req));
     }
 
+    /**
+     * 修改校区
+     * @param id 校区ID
+     * @param req 更新校区请求参数
+     * @return 更新后的校区信息
+     */
     @PutMapping("{id}")
     @Operation(description = "修改校区")
     @RequirePermission("campus:update")
@@ -53,6 +68,11 @@ public class EduCampusController {
         return ApiResponse.success(eduCampusService.updateCampus(req));
     }
 
+    /**
+     * 删除校区
+     * @param id 校区ID
+     * @return 删除结果
+     */
     @DeleteMapping("{id}")
     @Operation(description = "删除校区")
     @RequirePermission("campus:delete")
@@ -60,6 +80,11 @@ public class EduCampusController {
         return ApiResponse.success(eduCampusService.deleteCampus(id));
     }
 
+    /**
+     * 根据ID查询校区
+     * @param id 校区ID
+     * @return 校区详细信息
+     */
     @GetMapping("{id}")
     @Operation(description = "根据ID查询校区")
     @RequirePermission("campus:view")
@@ -67,6 +92,11 @@ public class EduCampusController {
         return ApiResponse.success(eduCampusService.getCampusById(id));
     }
 
+    /**
+     * 分页查询校区
+     * @param req 分页查询参数
+     * @return 分页校区列表
+     */
     @GetMapping
     @Operation(description = "分页查询校区")
     @RequirePermission("campus:view")
