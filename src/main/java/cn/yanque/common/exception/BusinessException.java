@@ -20,6 +20,8 @@ public class BusinessException extends RuntimeException {
     public static final BusinessException CampusNotExist = new BusinessException(15002, "校区不存在");
     public static final BusinessException StudentExist = new BusinessException(16001, "学员已存在");
     public static final BusinessException StudentNotExist = new BusinessException(16002, "学员不存在");
+    public static final BusinessException CourseExist = new BusinessException(17001, "课程已存在");
+    public static final BusinessException CourseNotExist = new BusinessException(17002, "课程不存在");
 
 
 

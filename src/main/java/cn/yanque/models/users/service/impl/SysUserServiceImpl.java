@@ -124,7 +124,10 @@ public class SysUserServiceImpl implements SysUserService {
         if (user == null) {
             throw BusinessException.UserNotExist;
         }
-        return buildUserDetailRes(user);
+        UserDetailRes res = buildUserDetailRes(user);
+        List<Long> roleIds = sysUserMapper.selectRoleIdsByUserId(id);
+        res.setRoleIds(roleIds);
+        return res;
     }
 
     @Override
@@ -175,7 +178,7 @@ public class SysUserServiceImpl implements SysUserService {
         // 生成签名密钥并写入Redis
         String signSecret = createSignSecret();
         String signSecretKey = "yanque:sign:secret:" + user.getId();
-        stringRedisTemplate.opsForValue().set(signSecretKey, signSecret, 300, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(signSecretKey, signSecret, sysConfigService.getConfig(SysConfig.signSecretExpireSeconds), TimeUnit.SECONDS);
 
 
         LoginRes res = new LoginRes();
@@ -238,7 +241,9 @@ public class SysUserServiceImpl implements SysUserService {
     private String createToken(SysUserEntity sysUserEntity) {
         Map<String, Object> map = new HashMap<>();
         map.put("uid", sysUserEntity.getId());
-        map.put("expire_time", System.currentTimeMillis() + 1000 * 60 * 60);
+        long expireSeconds = sysConfigService.getConfig(SysConfig.jwtExpire);
+        long expireTimestamp = System.currentTimeMillis() + (expireSeconds * 1000);
+        map.put("expire_time", expireTimestamp);
         return JWTUtil.createToken(map, sysConfigService.getConfig(SysConfig.jwtSecret).getBytes());
     }
 

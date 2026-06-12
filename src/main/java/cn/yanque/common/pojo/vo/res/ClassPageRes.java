@@ -18,8 +18,14 @@ public class ClassPageRes {
     @Schema(description = "校区ID")
     private Long campusId;
 
+    @Schema(description = "校区名称")
+    private String campusName;
+
     @Schema(description = "班主任用户ID")
     private Long headTeacherId;
+
+    @Schema(description = "班主任昵称")
+    private String headTeacherName;
 
     @Schema(description = "班级状态", allowableValues = {"WAITING", "TEACHING", "FINISHED"})
     private String classStatus;
@@ -29,6 +35,9 @@ public class ClassPageRes {
 
     @Schema(description = "课程ID")
     private Long courseId;
+
+    @Schema(description = "课程名称")
+    private String courseName;
 
     @Schema(description = "班级人数")
     private Integer studentCount;
