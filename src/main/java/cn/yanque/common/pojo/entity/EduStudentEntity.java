@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 学员实体类
+ * 对应数据库中的学员表
+ */
 @Data
 public class EduStudentEntity {
 

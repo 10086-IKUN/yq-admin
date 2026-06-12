@@ -24,6 +24,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 控制器日志切面
+ * 自动记录所有Controller方法的请求参数、响应结果和耗时
+ * 对敏感字段（password、secret、token）自动脱敏
+ */
 @Aspect
 @Component
 @Slf4j
@@ -31,6 +36,11 @@ public class ControllerLogAspect {
 
     private static final int MAX_LOG_LENGTH = 4000;
 
+    /**
+     * 环绕通知：记录接口请求开始、结束和耗时
+     * @param joinPoint 连接点
+     * @return 方法执行结果
+     */
     @Around("execution(* cn.yanque..controller..*.*(..))")
     public Object logController(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
@@ -56,6 +66,10 @@ public class ControllerLogAspect {
 
 
 
+    /**
+     * 获取当前请求对象
+     * @return HttpServletRequest，无上下文时返回null
+     */
     private HttpServletRequest getCurrentRequest() {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (!(attributes instanceof ServletRequestAttributes servletRequestAttributes)) {
@@ -64,6 +78,12 @@ public class ControllerLogAspect {
         return servletRequestAttributes.getRequest();
     }
 
+    /**
+     * 构建请求参数日志（过滤掉请求/响应和文件参数）
+     * @param args 参数数组
+     * @param parameterNames 参数名数组
+     * @return JSON格式参数日志
+     */
     private String buildArgsLog(Object[] args, String[] parameterNames) {
         if (args == null || args.length == 0) {
             return "[]";
@@ -82,6 +102,11 @@ public class ControllerLogAspect {
         return toJson(items);
     }
 
+    /**
+     * 判断是否应忽略该参数（请求/响应/文件类型）
+     * @param arg 参数对象
+     * @return true表示应忽略
+     */
     private boolean shouldIgnore(Object arg) {
         return arg == null
                 || arg instanceof ServletRequest
@@ -89,6 +114,11 @@ public class ControllerLogAspect {
                 || arg instanceof MultipartFile;
     }
 
+    /**
+     * 清洗对象中的敏感信息，递归处理集合和嵌套对象
+     * @param value 原始值
+     * @return 清洗后的值
+     */
     private Object sanitizeObject(Object value) {
         if (value == null) {
             return null;
@@ -150,6 +180,11 @@ public class ControllerLogAspect {
         return sanitized;
     }
 
+    /**
+     * 判断是否为JDK/Spring内置类（使用toString而非反射）
+     * @param clazz 类对象
+     * @return true表示使用直接字符串转换
+     */
     private boolean shouldUseDirectString(Class<?> clazz) {
         Package currentPackage = clazz.getPackage();
         String packageName = currentPackage == null ? "" : currentPackage.getName();
@@ -159,6 +194,11 @@ public class ControllerLogAspect {
                 || packageName.startsWith("org.springframework.");
     }
 
+    /**
+     * 判断字段名是否包含敏感关键词
+     * @param fieldName 字段名
+     * @return true表示敏感字段
+     */
     private boolean isSensitiveField(String fieldName) {
         String lower = fieldName.toLowerCase();
         return lower.contains("password")
@@ -166,6 +206,11 @@ public class ControllerLogAspect {
                 || lower.contains("token");
     }
 
+    /**
+     * 脱敏处理：保留前2位和后2位，中间用****替代
+     * @param value 原始值
+     * @return 脱敏后的值
+     */
     private String mask(String value) {
         if (value == null || value.isBlank()) {
             return value;
@@ -176,6 +221,11 @@ public class ControllerLogAspect {
         return value.substring(0, 2) + "****" + value.substring(value.length() - 2);
     }
 
+    /**
+     * 对象转JSON字符串
+     * @param value 对象
+     * @return JSON字符串
+     */
     private String toJson(Object value) {
         try {
             return truncate(JSON.toJSONString(value));
@@ -184,6 +234,11 @@ public class ControllerLogAspect {
         }
     }
 
+    /**
+     * 截断过长的日志内容
+     * @param value 原始字符串
+     * @return 截断后的字符串（最大4000字符）
+     */
     private String truncate(String value) {
         if (value == null || value.length() <= MAX_LOG_LENGTH) {
             return value;

@@ -24,12 +24,21 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 系统权限服务实现类
+ * 实现权限管理的业务逻辑，包括增删改查
+ */
 @Service
 public class SysPermissionServiceImpl implements SysPermissionService {
 
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
 
+    /**
+     * 添加权限
+     * @param req 创建权限请求参数
+     * @return 创建成功的权限ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public PermissionCreateRes addPermission(PermissionCreateReq req) {
@@ -56,6 +65,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         return res;
     }
 
+    /**
+     * 修改权限
+     * @param req 更新权限请求参数
+     * @return 更新后的权限ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public PermissionUpdateRes updatePermission(PermissionUpdateReq req) {
@@ -86,6 +100,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         return res;
     }
 
+    /**
+     * 删除权限（同时删除角色权限关联）
+     * @param id 权限ID
+     * @return 删除结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public PermissionDeleteRes deletePermission(Long id) {
@@ -100,6 +119,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         return res;
     }
 
+    /**
+     * 根据ID查询权限详情
+     * @param id 权限ID
+     * @return 权限详细信息
+     */
     @Override
     public PermissionDetailRes getPermissionById(Long id) {
         SysPermissionEntity permission = sysPermissionMapper.selectById(id);
@@ -109,6 +133,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         return buildPermissionDetailRes(permission);
     }
 
+    /**
+     * 分页查询权限
+     * @param req 分页查询参数（关键词、父级ID、权限类型、状态）
+     * @return 分页权限列表
+     */
     @Override
     public PageResult<PermissionPageRes> pagePermission(PermissionPageReq req) {
         int pageNum = req.getPageNum() == null ? 1 : req.getPageNum();
@@ -125,12 +154,22 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         return new PageResult<>(pageInfo.getTotal(), pageNum, pageSize, records);
     }
 
+    /**
+     * 构建权限详情响应对象
+     * @param permission 权限实体
+     * @return 权限详情
+     */
     private PermissionDetailRes buildPermissionDetailRes(SysPermissionEntity permission) {
         PermissionDetailRes res = new PermissionDetailRes();
         BeanUtils.copyProperties(permission, res);
         return res;
     }
 
+    /**
+     * 构建权限分页响应对象
+     * @param permission 权限实体
+     * @return 权限分页信息
+     */
     private PermissionPageRes buildPermissionPageRes(SysPermissionEntity permission) {
         PermissionPageRes res = new PermissionPageRes();
         BeanUtils.copyProperties(permission, res);

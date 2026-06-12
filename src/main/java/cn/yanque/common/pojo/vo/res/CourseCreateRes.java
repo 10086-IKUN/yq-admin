@@ -3,6 +3,9 @@ package cn.yanque.common.pojo.vo.res;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+/**
+ * 创建课程响应参数
+ */
 @Data
 @Schema(description = "创建课程响应")
 public class CourseCreateRes {

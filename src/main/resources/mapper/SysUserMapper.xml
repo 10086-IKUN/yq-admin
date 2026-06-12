@@ -133,4 +133,17 @@
         where user_id = #{userId}
         order by role_id asc
     </select>
+
+    <!--
+        批量查询用户
+        作用：一次查询多个用户，避免N+1查询问题
+    -->
+    <select id="selectByIds" resultMap="SysUserMap">
+        select <include refid="BaseColumns"/>
+        from sys_user
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

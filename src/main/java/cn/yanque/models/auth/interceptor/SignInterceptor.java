@@ -13,6 +13,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 签名校验拦截器
+ * 验证请求的HMAC-SHA256签名，防止请求篡改和重放攻击
+ * 签名算法：method + uri + queryString + timestamp + nonce
+ */
 @Component
 public class SignInterceptor implements HandlerInterceptor {
 
@@ -24,6 +29,13 @@ public class SignInterceptor implements HandlerInterceptor {
     private static final long TIMESTAMP_TOLERANCE = 300L;
     private static final String HMAC_SHA256 = "HmacSHA256";
 
+    /**
+     * 校验请求签名
+     * @param request HTTP请求
+     * @param response HTTP响应
+     * @param handler 处理器
+     * @return 签名校验通过返回true，否则抛出异常
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String timestamp = request.getHeader("X-Timestamp");
@@ -84,6 +96,12 @@ public class SignInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    /**
+     * 使用HmacSHA256算法计算签名
+     * @param data 待签名数据
+     * @param key 密钥
+     * @return 十六进制签名字符串
+     */
     private String hmacSha256(String data, String key) {
         try {
             Mac mac = Mac.getInstance(HMAC_SHA256);

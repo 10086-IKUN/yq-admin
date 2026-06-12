@@ -8,6 +8,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Web MVC配置类
+ * 配置拦截器、跨域等
+ */
+/**
+ * Web MVC配置类
+ * 注册拦截器链：JWT认证 → 签名校验 → 权限校验
+ */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -19,6 +27,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private SignInterceptor signInterceptor;
 
+    /**
+     * 注册拦截器
+     * @param registry 拦截器注册器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // JWT权限认证

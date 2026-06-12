@@ -20,6 +20,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * 权限校验拦截器
+ * 根据注解或路径校验用户权限，支持AND/OR逻辑
+ * 优先级：@SkipPermission跳过 > @RequirePermission注解 > 路径匹配
+ */
 @Component
 public class PermissionInterceptor implements HandlerInterceptor {
 
@@ -31,6 +36,13 @@ public class PermissionInterceptor implements HandlerInterceptor {
     /** 系统管理员角色编码 */
     private static final String ADMIN_ROLE_CODE = "SUPER_ADMIN";
 
+    /**
+     * 校验用户权限
+     * @param request HTTP请求
+     * @param response HTTP响应
+     * @param handler 处理器
+     * @return 权限校验通过返回true，否则抛出403异常
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 只处理Controller方法

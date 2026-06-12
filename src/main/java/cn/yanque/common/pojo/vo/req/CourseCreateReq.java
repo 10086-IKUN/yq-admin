@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+/**
+ * 创建课程请求参数
+ */
 @Data
 @Schema(description = "创建课程请求")
 public class CourseCreateReq {

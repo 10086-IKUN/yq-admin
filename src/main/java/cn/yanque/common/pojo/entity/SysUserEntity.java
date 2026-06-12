@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 系统用户实体类
+ * 对应数据库中的用户表
+ */
 @Data
 public class SysUserEntity {
 

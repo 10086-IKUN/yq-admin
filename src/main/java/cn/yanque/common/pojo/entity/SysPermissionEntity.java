@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 系统权限实体类
+ * 对应数据库中的权限表
+ */
 @Data
 public class SysPermissionEntity {
 

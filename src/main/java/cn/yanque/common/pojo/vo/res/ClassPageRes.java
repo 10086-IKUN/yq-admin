@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 班级分页响应参数
+ */
 @Data
 @Schema(description = "班级分页响应")
 public class ClassPageRes {

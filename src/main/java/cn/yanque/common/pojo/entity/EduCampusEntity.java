@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 校区实体类
+ * 对应数据库中的校区表
+ */
 @Data
 public class EduCampusEntity {
 

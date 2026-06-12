@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 用户角色关联实体类
+ * 对应数据库中的用户角色关联表
+ */
 @Data
 public class SysUserRoleEntity {
 

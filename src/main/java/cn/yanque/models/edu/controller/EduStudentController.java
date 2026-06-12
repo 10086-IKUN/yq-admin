@@ -28,6 +28,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 学员管理控制器
+ * 提供学员的增删改查接口
+ */
 @RestController
 @RequestMapping("/api/eduStudent")
 @Slf4j
@@ -37,6 +41,11 @@ public class EduStudentController {
     @Autowired
     private EduStudentService eduStudentService;
 
+    /**
+     * 添加学员
+     * @param req 创建学员请求参数
+     * @return 创建成功的学员信息
+     */
     @PostMapping
     @Operation(description = "添加学员")
     @RequirePermission("student:add")
@@ -44,6 +53,12 @@ public class EduStudentController {
         return ApiResponse.success(eduStudentService.addStudent(req));
     }
 
+    /**
+     * 修改学员
+     * @param id 学员ID
+     * @param req 更新学员请求参数
+     * @return 更新后的学员信息
+     */
     @PutMapping("{id}")
     @Operation(description = "修改学员")
     @RequirePermission("student:update")
@@ -53,6 +68,11 @@ public class EduStudentController {
         return ApiResponse.success(eduStudentService.updateStudent(req));
     }
 
+    /**
+     * 删除学员
+     * @param id 学员ID
+     * @return 删除结果
+     */
     @DeleteMapping("{id}")
     @Operation(description = "删除学员")
     @RequirePermission("student:delete")
@@ -60,6 +80,11 @@ public class EduStudentController {
         return ApiResponse.success(eduStudentService.deleteStudent(id));
     }
 
+    /**
+     * 根据ID查询学员
+     * @param id 学员ID
+     * @return 学员详细信息
+     */
     @GetMapping("{id}")
     @Operation(description = "根据ID查询学员")
     @RequirePermission("student:view")
@@ -67,6 +92,11 @@ public class EduStudentController {
         return ApiResponse.success(eduStudentService.getStudentById(id));
     }
 
+    /**
+     * 分页查询学员
+     * @param req 分页查询参数
+     * @return 分页学员列表
+     */
     @GetMapping
     @Operation(description = "分页查询学员")
     @RequirePermission("student:view")

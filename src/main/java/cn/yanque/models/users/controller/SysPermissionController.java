@@ -28,6 +28,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 系统权限管理控制器
+ * 提供权限的增删改查接口
+ */
 @RestController
 @RequestMapping("/api/sysPermission")
 @Slf4j
@@ -37,6 +41,11 @@ public class SysPermissionController {
     @Autowired
     private SysPermissionService sysPermissionService;
 
+    /**
+     * 添加权限
+     * @param req 创建权限请求参数
+     * @return 创建成功的权限信息
+     */
     @PostMapping
     @Operation(description = "添加权限")
     @RequirePermission("permission:add")
@@ -45,6 +54,12 @@ public class SysPermissionController {
         return ApiResponse.success(sysPermissionService.addPermission(req));
     }
 
+    /**
+     * 修改权限
+     * @param id 权限ID
+     * @param req 更新权限请求参数
+     * @return 更新后的权限信息
+     */
     @PutMapping("{id}")
     @Operation(description = "修改权限")
     @RequirePermission("permission:update")
@@ -55,6 +70,11 @@ public class SysPermissionController {
         return ApiResponse.success(sysPermissionService.updatePermission(req));
     }
 
+    /**
+     * 删除权限
+     * @param id 权限ID
+     * @return 删除结果
+     */
     @DeleteMapping("{id}")
     @Operation(description = "删除权限")
     @RequirePermission("permission:delete")
@@ -63,6 +83,11 @@ public class SysPermissionController {
         return ApiResponse.success(sysPermissionService.deletePermission(id));
     }
 
+    /**
+     * 根据ID查询权限
+     * @param id 权限ID
+     * @return 权限详细信息
+     */
     @GetMapping("{id}")
     @Operation(description = "根据ID查询权限")
     @RequirePermission("permission:view")
@@ -71,6 +96,11 @@ public class SysPermissionController {
         return ApiResponse.success(sysPermissionService.getPermissionById(id));
     }
 
+    /**
+     * 分页查询权限
+     * @param req 分页查询参数
+     * @return 分页权限列表
+     */
     @GetMapping
     @Operation(description = "分页查询权限")
     @RequirePermission("permission:view")

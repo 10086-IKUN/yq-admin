@@ -18,6 +18,9 @@ public class CampusPageRes {
     @Schema(description = "负责人用户ID")
     private Long principalUserId;
 
+    @Schema(description = "负责人姓名")
+    private String principalUserName;
+
     @Schema(description = "校区地址")
     private String address;
 

@@ -27,12 +27,21 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 系统角色服务实现类
+ * 实现角色管理、权限分配等业务逻辑
+ */
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
 
+    /**
+     * 添加角色（同时分配权限）
+     * @param req 创建角色请求参数
+     * @return 创建成功的角色ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RoleCreateRes addRole(RoleCreateReq req) {
@@ -56,6 +65,11 @@ public class SysRoleServiceImpl implements SysRoleService {
         return res;
     }
 
+    /**
+     * 修改角色（同时更新权限）
+     * @param req 更新角色请求参数
+     * @return 更新后的角色ID
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RoleUpdateRes updateRole(RoleUpdateReq req) {
@@ -83,6 +97,11 @@ public class SysRoleServiceImpl implements SysRoleService {
         return res;
     }
 
+    /**
+     * 删除角色（同时删除角色权限和用户角色关联）
+     * @param id 角色ID
+     * @return 删除结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RoleDeleteRes deleteRole(Long id) {
@@ -98,6 +117,11 @@ public class SysRoleServiceImpl implements SysRoleService {
         return res;
     }
 
+    /**
+     * 根据ID查询角色详情（含权限ID列表）
+     * @param id 角色ID
+     * @return 角色详细信息
+     */
     @Override
     public RoleDetailRes getRoleById(Long id) {
         SysRoleEntity role = sysRoleMapper.selectById(id);
@@ -109,6 +133,11 @@ public class SysRoleServiceImpl implements SysRoleService {
         return res;
     }
 
+    /**
+     * 分页查询角色
+     * @param req 分页查询参数（关键词、状态）
+     * @return 分页角色列表
+     */
     @Override
     public PageResult<RolePageRes> pageRole(RolePageReq req) {
         int pageNum = req.getPageNum() == null ? 1 : req.getPageNum();
@@ -120,6 +149,12 @@ public class SysRoleServiceImpl implements SysRoleService {
         return new PageResult<>(pageInfo.getTotal(), pageNum, pageSize, records);
     }
 
+    /**
+     * 分配角色权限（全量替换）
+     * @param roleId 角色ID
+     * @param req 权限分配请求参数
+     * @return 权限分配结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RolePermissionAssignRes assignRolePermissions(Long roleId, RolePermissionAssignReq req) {
@@ -136,6 +171,11 @@ public class SysRoleServiceImpl implements SysRoleService {
         return res;
     }
 
+    /**
+     * 重置角色权限（先删后插）
+     * @param roleId 角色ID
+     * @param permissionIds 权限ID列表
+     */
     public void resetRolePermissions(Long roleId, List<Long> permissionIds) {
         sysRoleMapper.deleteRolePermissions(roleId);
         if (permissionIds != null && !permissionIds.isEmpty()) {
@@ -143,12 +183,22 @@ public class SysRoleServiceImpl implements SysRoleService {
         }
     }
 
+    /**
+     * 构建角色详情响应对象
+     * @param role 角色实体
+     * @return 角色详情
+     */
     private RoleDetailRes buildRoleDetailRes(SysRoleEntity role) {
         RoleDetailRes res = new RoleDetailRes();
         BeanUtils.copyProperties(role, res);
         return res;
     }
 
+    /**
+     * 构建角色分页响应对象
+     * @param role 角色实体
+     * @return 角色分页信息
+     */
     private RolePageRes buildRolePageRes(SysRoleEntity role) {
         RolePageRes res = new RolePageRes();
         BeanUtils.copyProperties(role, res);

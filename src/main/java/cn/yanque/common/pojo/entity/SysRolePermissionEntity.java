@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * 角色权限关联实体类
+ * 对应数据库中的角色权限关联表
+ */
 @Data
 public class SysRolePermissionEntity {
 

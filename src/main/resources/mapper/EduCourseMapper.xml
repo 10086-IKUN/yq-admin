@@ -56,4 +56,17 @@
         delete from edu_course where id = #{id}
     </delete>
 
+    <!--
+        批量查询课程
+        作用：一次查询多个课程，避免N+1查询问题
+    -->
+    <select id="selectByIds" resultMap="EduCourseMap">
+        select <include refid="BaseColumns"/>
+        from edu_course
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
 </mapper>

@@ -13,6 +13,8 @@ import cn.yanque.common.pojo.vo.res.CampusPageRes;
 import cn.yanque.common.pojo.vo.res.CampusUpdateRes;
 import cn.yanque.models.edu.mapper.EduCampusMapper;
 import cn.yanque.models.edu.service.EduCampusService;
+import cn.yanque.models.users.mapper.SysUserMapper;
+import cn.yanque.common.pojo.entity.SysUserEntity;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -22,13 +24,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+/**
+ * 校区服务实现类
+ * 实现校区管理的业务逻辑
+ */
 @Service
 public class EduCampusServiceImpl implements EduCampusService {
 
     @Autowired
     private EduCampusMapper eduCampusMapper;
 
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
+    /**
+     * 添加校区
+     * @param req 创建校区请求参数
+     * @return 创建成功的校区信息
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CampusCreateRes addCampus(CampusCreateReq req) {
@@ -48,6 +65,11 @@ public class EduCampusServiceImpl implements EduCampusService {
         return res;
     }
 
+    /**
+     * 修改校区
+     * @param req 更新校区请求参数
+     * @return 更新后的校区信息
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CampusUpdateRes updateCampus(CampusUpdateReq req) {
@@ -74,6 +96,11 @@ public class EduCampusServiceImpl implements EduCampusService {
         return res;
     }
 
+    /**
+     * 删除校区
+     * @param id 校区ID
+     * @return 删除结果
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CampusDeleteRes deleteCampus(Long id) {
@@ -92,6 +119,11 @@ public class EduCampusServiceImpl implements EduCampusService {
         return res;
     }
 
+    /**
+     * 根据ID查询校区
+     * @param id 校区ID
+     * @return 校区详细信息
+     */
     @Override
     public CampusDetailRes getCampusById(Long id) {
         EduCampusEntity entity = eduCampusMapper.selectById(id);
@@ -101,6 +133,11 @@ public class EduCampusServiceImpl implements EduCampusService {
         return buildCampusDetailRes(entity);
     }
 
+    /**
+     * 分页查询校区（批量查询优化）
+     * @param req 分页查询参数
+     * @return 分页校区列表
+     */
     @Override
     public PageResult<CampusPageRes> pageCampus(CampusPageReq req) {
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
@@ -110,8 +147,33 @@ public class EduCampusServiceImpl implements EduCampusService {
         );
         PageInfo<EduCampusEntity> pageInfo = new PageInfo<>(list);
 
-        List<CampusPageRes> records = list.stream().map(this::buildCampusPageRes).toList();
+        // 批量查询负责人姓名（1次查询代替N次）
+        Map<Long, String> userMap = batchGetUserNames(list);
+
+        List<CampusPageRes> records = list.stream()
+                .map(entity -> buildCampusPageRes(entity, userMap))
+                .toList();
         return new PageResult<>(pageInfo.getTotal(), req.getPageNum(), req.getPageSize(), records);
+    }
+
+    /**
+     * 批量获取用户昵称（解决N+1查询问题）
+     * @param campusList 校区列表
+     * @return 用户ID -> 昵称 的映射
+     */
+    private Map<Long, String> batchGetUserNames(List<EduCampusEntity> campusList) {
+        Set<Long> userIds = campusList.stream()
+                .map(EduCampusEntity::getPrincipalUserId)
+                .filter(id -> id != null)
+                .collect(Collectors.toSet());
+
+        if (userIds.isEmpty()) {
+            return Map.of();
+        }
+
+        List<SysUserEntity> users = sysUserMapper.selectByIds(userIds);
+        return users.stream()
+                .collect(Collectors.toMap(SysUserEntity::getId, SysUserEntity::getNickname));
     }
 
     private CampusDetailRes buildCampusDetailRes(EduCampusEntity entity) {
@@ -120,9 +182,13 @@ public class EduCampusServiceImpl implements EduCampusService {
         return res;
     }
 
-    private CampusPageRes buildCampusPageRes(EduCampusEntity entity) {
+    private CampusPageRes buildCampusPageRes(EduCampusEntity entity, Map<Long, String> userMap) {
         CampusPageRes res = new CampusPageRes();
         BeanUtils.copyProperties(entity, res);
+        // 从Map中获取负责人姓名
+        if (entity.getPrincipalUserId() != null) {
+            res.setPrincipalUserName(userMap.get(entity.getPrincipalUserId()));
+        }
         return res;
     }
 }

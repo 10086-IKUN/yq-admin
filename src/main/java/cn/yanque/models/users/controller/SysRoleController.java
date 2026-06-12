@@ -30,6 +30,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 系统角色管理控制器
+ * 提供角色的增删改查、权限分配等接口
+ */
 @RestController
 @RequestMapping("/api/sysRole")
 @Slf4j
@@ -39,6 +43,11 @@ public class SysRoleController {
     @Autowired
     private SysRoleService sysRoleService;
 
+    /**
+     * 添加角色
+     * @param req 创建角色请求参数
+     * @return 创建成功的角色信息
+     */
     @PostMapping
     @Operation(description = "添加角色")
     @RequirePermission("role:add")
@@ -47,6 +56,12 @@ public class SysRoleController {
         return ApiResponse.success(sysRoleService.addRole(req));
     }
 
+    /**
+     * 修改角色
+     * @param id 角色ID
+     * @param req 更新角色请求参数
+     * @return 更新后的角色信息
+     */
     @PutMapping("{id}")
     @Operation(description = "修改角色")
     @RequirePermission("role:update")
@@ -57,6 +72,11 @@ public class SysRoleController {
         return ApiResponse.success(sysRoleService.updateRole(req));
     }
 
+    /**
+     * 删除角色
+     * @param id 角色ID
+     * @return 删除结果
+     */
     @DeleteMapping("{id}")
     @Operation(description = "删除角色")
     @RequirePermission("role:delete")
@@ -65,6 +85,11 @@ public class SysRoleController {
         return ApiResponse.success(sysRoleService.deleteRole(id));
     }
 
+    /**
+     * 根据ID查询角色
+     * @param id 角色ID
+     * @return 角色详细信息
+     */
     @GetMapping("{id}")
     @Operation(description = "根据ID查询角色")
     @RequirePermission("role:view")
@@ -73,6 +98,11 @@ public class SysRoleController {
         return ApiResponse.success(sysRoleService.getRoleById(id));
     }
 
+    /**
+     * 分页查询角色
+     * @param req 分页查询参数
+     * @return 分页角色列表
+     */
     @GetMapping
     @Operation(description = "分页查询角色")
     @RequirePermission("role:view")
@@ -81,6 +111,12 @@ public class SysRoleController {
         return ApiResponse.success(sysRoleService.pageRole(req));
     }
 
+    /**
+     * 角色分配权限
+     * @param id 角色ID
+     * @param req 权限分配请求参数
+     * @return 分配结果
+     */
     @PutMapping("{id}/permissions")
     @Operation(description = "角色分配权限")
     @RequirePermission("role:assign")

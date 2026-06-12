@@ -11,6 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * JWT认证拦截器
+ * 验证请求头中的JWT token有效性
+ */
+/**
+ * JWT认证拦截器
+ * 验证请求头中的Bearer Token，解析用户ID并设置到请求属性中
+ */
 @Component
 public class JwtAuthInterceptor implements HandlerInterceptor {
     @Autowired
@@ -22,6 +30,13 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
     private static final String USER_ID = "uid";
     private static final String EXPIRE_TIME = "expire_time";
 
+    /**
+     * 校验JWT Token并提取用户ID
+     * @param request HTTP请求
+     * @param response HTTP响应
+     * @param handler 处理器
+     * @return Token有效返回true，否则抛出401异常
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String authorization = request.getHeader(AUTHORIZATION);
