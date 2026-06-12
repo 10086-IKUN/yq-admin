@@ -2,8 +2,12 @@ package cn.yanque.models.edu.service.impl;
 
 import cn.yanque.common.api.PageResult;
 import cn.yanque.common.exception.BusinessException;
+import cn.yanque.models.edu.mapper.EduCampusMapper;
 import cn.yanque.models.edu.mapper.EduClassMapper;
+import cn.yanque.models.edu.mapper.EduCourseMapper;
+import cn.yanque.common.pojo.entity.EduCampusEntity;
 import cn.yanque.common.pojo.entity.EduClassEntity;
+import cn.yanque.common.pojo.entity.EduCourseEntity;
 import cn.yanque.common.pojo.vo.req.ClassCreateReq;
 import cn.yanque.common.pojo.vo.req.ClassPageReq;
 import cn.yanque.common.pojo.vo.req.ClassUpdateReq;
@@ -13,6 +17,8 @@ import cn.yanque.common.pojo.vo.res.ClassDetailRes;
 import cn.yanque.common.pojo.vo.res.ClassPageRes;
 import cn.yanque.common.pojo.vo.res.ClassUpdateRes;
 import cn.yanque.models.edu.service.EduClassService;
+import cn.yanque.models.users.mapper.SysUserMapper;
+import cn.yanque.common.pojo.entity.SysUserEntity;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +34,15 @@ public class EduClassServiceImpl implements EduClassService {
 
     @Autowired
     private EduClassMapper eduClassMapper;
+
+    @Autowired
+    private EduCampusMapper eduCampusMapper;
+
+    @Autowired
+    private EduCourseMapper eduCourseMapper;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -119,12 +134,34 @@ public class EduClassServiceImpl implements EduClassService {
     private ClassDetailRes buildClassDetailRes(EduClassEntity entity) {
         ClassDetailRes res = new ClassDetailRes();
         BeanUtils.copyProperties(entity, res);
+        fillRelatedNames(entity.getCampusId(), entity.getCourseId(), entity.getHeadTeacherId(),
+                res::setCampusName, res::setCourseName, res::setHeadTeacherName);
         return res;
     }
 
     private ClassPageRes buildClassPageRes(EduClassEntity entity) {
         ClassPageRes res = new ClassPageRes();
         BeanUtils.copyProperties(entity, res);
+        fillRelatedNames(entity.getCampusId(), entity.getCourseId(), entity.getHeadTeacherId(),
+                res::setCampusName, res::setCourseName, res::setHeadTeacherName);
         return res;
+    }
+
+    private void fillRelatedNames(Long campusId, Long courseId, Long headTeacherId,
+                                  java.util.function.Consumer<String> setCampusName,
+                                  java.util.function.Consumer<String> setCourseName,
+                                  java.util.function.Consumer<String> setHeadTeacherName) {
+        if (campusId != null) {
+            EduCampusEntity campus = eduCampusMapper.selectById(campusId);
+            if (campus != null) setCampusName.accept(campus.getCampusName());
+        }
+        if (courseId != null) {
+            EduCourseEntity course = eduCourseMapper.selectById(courseId);
+            if (course != null) setCourseName.accept(course.getCourseName());
+        }
+        if (headTeacherId != null) {
+            SysUserEntity user = sysUserMapper.selectById(headTeacherId);
+            if (user != null) setHeadTeacherName.accept(user.getNickname());
+        }
     }
 }
