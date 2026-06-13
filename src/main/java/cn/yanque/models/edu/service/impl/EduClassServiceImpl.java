@@ -606,16 +606,58 @@ public class EduClassServiceImpl implements EduClassService {
             throw BusinessException.DataError.newInstance("课表记录不存在");
         }
         Long classId = entity.getClassId();
-        eduClassScheduleMapper.deleteById(scheduleId);
 
-        // 重排序：查询该班所有CLASS课程，重新编号
-        List<EduClassScheduleEntity> classDays = eduClassScheduleMapper.selectClassDaysByClassId(classId);
-        for (int i = 0; i < classDays.size(); i++) {
-            classDays.get(i).setCourseDayNum(i + 1);
+        // 如果是 CLASS 记录，需要处理后续记录的前移和重排序
+        if ("CLASS".equals(entity.getScheduleType()) && entity.getCourseDayNum() != null) {
+            Integer deletedDayNum = entity.getCourseDayNum();
+            java.sql.Date deletedDate = entity.getScheduleDate();
+
+            // 获取节假日数据
+            List<EduClassScheduleEntity> allRecords = eduClassScheduleMapper.selectAllByClassId(classId);
+            Date earliestDate = allRecords.get(0).getScheduleDate();
+            Date latestDate = allRecords.get(allRecords.size() - 1).getScheduleDate();
+            int totalDays = (int) ((latestDate.getTime() - earliestDate.getTime()) / (1000 * 60 * 60 * 24)) + 60;
+            Map<String, HolidayInfo> holidayMap = fetchHolidayData(earliestDate, totalDays);
+
+            // 找到所有需要前移的 CLASS 记录（day_num > deletedDayNum）
+            List<EduClassScheduleEntity> toShift = allRecords.stream()
+                    .filter(r -> "CLASS".equals(r.getScheduleType())
+                            && r.getCourseDayNum() != null
+                            && r.getCourseDayNum() > deletedDayNum
+                            && !r.getId().equals(scheduleId))
+                    .sorted(Comparator.comparing(EduClassScheduleEntity::getCourseDayNum))
+                    .collect(java.util.stream.Collectors.toList());
+
+            // 为每条记录找前一个可用的上课日
+            for (EduClassScheduleEntity record : toShift) {
+                Date prevDate = DateUtil.offsetDay(record.getScheduleDate(), -1);
+                while (true) {
+                    // 不能早于被删除记录的日期
+                    if (prevDate.before(deletedDate)) {
+                        break;
+                    }
+                    String dateKey = DateUtil.format(prevDate, "yyyy-MM-dd");
+                    Week week = DateUtil.dayOfWeekEnum(prevDate);
+                    boolean isSunday = (week == Week.SUNDAY);
+                    boolean isThursday = (week == Week.THURSDAY);
+                    boolean isHoliday = holidayMap.containsKey(dateKey) && Boolean.TRUE.equals(holidayMap.get(dateKey).getHoliday());
+
+                    if (!isSunday && !isThursday && !isHoliday) {
+                        // 找到上课日，更新日期
+                        record.setScheduleDate(new java.sql.Date(prevDate.getTime()));
+                        break;
+                    }
+                    prevDate = DateUtil.offsetDay(prevDate, -1);
+                }
+                // day_num - 1
+                record.setCourseDayNum(record.getCourseDayNum() - 1);
+                record.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
+                eduClassScheduleMapper.updateById(record);
+            }
         }
-        if (!classDays.isEmpty()) {
-            eduClassScheduleMapper.batchUpdateDayNum(classDays);
-        }
+
+        // 删除记录
+        eduClassScheduleMapper.deleteById(scheduleId);
     }
 
     @Override
@@ -634,117 +676,101 @@ public class EduClassServiceImpl implements EduClassService {
             throw BusinessException.DataError.newInstance("该班级没有课表记录");
         }
 
-        // 2. 校验：插入日期必须是 CLASS 记录
         final java.sql.Date insertDate = new java.sql.Date(scheduleDate.getTime());
+
+        // 2. 查找目标日期的 CLASS 记录
         EduClassScheduleEntity targetRecord = allRecords.stream()
                 .filter(r -> r.getScheduleDate().equals(insertDate) && "CLASS".equals(r.getScheduleType()))
                 .findFirst()
                 .orElse(null);
-        if (targetRecord == null) {
-            throw BusinessException.DataError.newInstance("只能在上课日插入课程，不能在休息日/自习日/假期插入");
-        }
 
-        // 3. 获取节假日数据（用于判断后续日期是否为假期）
+        // 3. 获取节假日数据
         Date earliestDate = allRecords.get(0).getScheduleDate();
-        Date latestDate = DateUtil.offsetDay(scheduleDate, 365); // 往后查一年
+        Date latestDate = DateUtil.offsetDay(scheduleDate, 365);
         int totalDays = (int) ((latestDate.getTime() - earliestDate.getTime()) / (1000 * 60 * 60 * 24)) + 60;
         Map<String, HolidayInfo> holidayMap = fetchHolidayData(earliestDate, totalDays);
 
-        // 3.5 保存原始课表的最后日期（在 shift 之前）
-        java.sql.Date originalLastDate = (java.sql.Date) allRecords.stream()
-                .map(EduClassScheduleEntity::getScheduleDate)
-                .max(Date::compareTo)
-                .orElse(insertDate);
-
         // 4. 设置新课程信息
         entity.setScheduleDate(insertDate);
-        entity.setScheduleType("CLASS");
-        entity.setCourseDetailId(null); // 标记为自定义课程
-        entity.setCourseDayNum(targetRecord.getCourseDayNum()); // 新课程的 day_num = 原位置的值
+        if (entity.getScheduleType() == null) {
+            entity.setScheduleType("CLASS");
+        }
+        entity.setCourseDetailId(null);
         entity.setCreatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
         entity.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
 
-        // 5. 找到所有需要移动的 CLASS 记录（从插入位置开始及之后的所有 CLASS 记录）
-        Integer targetDayNum = targetRecord.getCourseDayNum();
-        List<EduClassScheduleEntity> toShift = allRecords.stream()
-                .filter(r -> "CLASS".equals(r.getScheduleType()) && r.getCourseDayNum() != null && r.getCourseDayNum() >= targetDayNum)
-                .sorted(Comparator.comparing(EduClassScheduleEntity::getCourseDayNum))
-                .collect(java.util.stream.Collectors.toList());
+        if ("CLASS".equals(entity.getScheduleType())) {
+            if (targetRecord != null) {
+                // === 插入模式：在 CLASS 记录前插入，原记录后移 ===
+                entity.setCourseDayNum(targetRecord.getCourseDayNum());
 
-        // 6. 为需要移动的记录找新的日期（从原日期的下一天开始找）
-        for (EduClassScheduleEntity record : toShift) {
-            Date nextDate = DateUtil.offsetDay(record.getScheduleDate(), 1);
-            while (true) {
-                String dateKey = DateUtil.format(nextDate, "yyyy-MM-dd");
-                Week week = DateUtil.dayOfWeekEnum(nextDate);
-                boolean isSunday = (week == Week.SUNDAY);
-                boolean isThursday = (week == Week.THURSDAY);
-                boolean isHoliday = holidayMap.containsKey(dateKey) && Boolean.TRUE.equals(holidayMap.get(dateKey).getHoliday());
+                // 找到所有需要移动的 CLASS 记录
+                Integer targetDayNum = targetRecord.getCourseDayNum();
+                List<EduClassScheduleEntity> toShift = allRecords.stream()
+                        .filter(r -> "CLASS".equals(r.getScheduleType()) && r.getCourseDayNum() != null && r.getCourseDayNum() >= targetDayNum)
+                        .sorted(Comparator.comparing(EduClassScheduleEntity::getCourseDayNum))
+                        .collect(java.util.stream.Collectors.toList());
 
-                if (!isSunday && !isThursday && !isHoliday) {
-                    // 找到上课日，更新日期
-                    record.setScheduleDate(new java.sql.Date(nextDate.getTime()));
-                    break;
+                // 为需要移动的记录找新的日期
+                for (EduClassScheduleEntity record : toShift) {
+                    Date nextDate = DateUtil.offsetDay(record.getScheduleDate(), 1);
+                    while (true) {
+                        String dateKey = DateUtil.format(nextDate, "yyyy-MM-dd");
+                        Week week = DateUtil.dayOfWeekEnum(nextDate);
+                        boolean isSunday = (week == Week.SUNDAY);
+                        boolean isThursday = (week == Week.THURSDAY);
+                        boolean isHoliday = holidayMap.containsKey(dateKey) && Boolean.TRUE.equals(holidayMap.get(dateKey).getHoliday());
+
+                        if (!isSunday && !isThursday && !isHoliday) {
+                            record.setScheduleDate(new java.sql.Date(nextDate.getTime()));
+                            break;
+                        }
+                        nextDate = DateUtil.offsetDay(nextDate, 1);
+                    }
                 }
-                nextDate = DateUtil.offsetDay(nextDate, 1);
+
+                // 更新 day_num
+                for (EduClassScheduleEntity record : toShift) {
+                    record.setCourseDayNum(record.getCourseDayNum() + 1);
+                    record.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
+                }
+            } else {
+                // === 新增模式：在空白日期添加新课程 ===
+                // 计算 day_num：找到前一个 CLASS 记录的 day_num + 1
+                Integer newDayNum = 1;
+                List<EduClassScheduleEntity> sortedRecords = allRecords.stream()
+                        .filter(r -> "CLASS".equals(r.getScheduleType()) && r.getCourseDayNum() != null)
+                        .sorted(Comparator.comparing(EduClassScheduleEntity::getCourseDayNum))
+                        .collect(java.util.stream.Collectors.toList());
+
+                for (EduClassScheduleEntity record : sortedRecords) {
+                    if (record.getScheduleDate().before(insertDate)) {
+                        newDayNum = record.getCourseDayNum() + 1;
+                    } else {
+                        break;
+                    }
+                }
+                entity.setCourseDayNum(newDayNum);
+
+                // 后续 CLASS 记录 day_num + 1
+                for (EduClassScheduleEntity record : sortedRecords) {
+                    if (record.getCourseDayNum() >= newDayNum) {
+                        record.setCourseDayNum(record.getCourseDayNum() + 1);
+                        record.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
+                        eduClassScheduleMapper.updateById(record);
+                    }
+                }
             }
         }
+        // REST/SELF_STUDY 类型：不需要设置 day_num，也不需要移动其他记录
 
-        // 7. 更新所有需要移动的 CLASS 记录的 day_num（原值 + 1）
-        for (EduClassScheduleEntity record : toShift) {
-            record.setCourseDayNum(record.getCourseDayNum() + 1);
-            record.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
-        }
-
-        // 8. 添加新课程到列表
+        // 5. 添加新课程到列表
         allRecords.add(entity);
 
-        // 9. 按日期排序
+        // 6. 按日期排序
         allRecords.sort(Comparator.comparing(EduClassScheduleEntity::getScheduleDate));
 
-        // 10. 找出最后一条记录的日期，补齐缺失的 REST/SELF_STUDY 记录
-        java.sql.Date lastDate = allRecords.get(allRecords.size() - 1).getScheduleDate();
-
-        if (lastDate.after(originalLastDate)) {
-            // 需要补齐从 originalLastDate+1 到 lastDate 之间的 REST/SELF_STUDY 记录
-            Date fillDate = DateUtil.offsetDay(originalLastDate, 1);
-            while (!fillDate.after(lastDate)) {
-                String dateKey = DateUtil.format(fillDate, "yyyy-MM-dd");
-                Week week = DateUtil.dayOfWeekEnum(fillDate);
-                boolean isSunday = (week == Week.SUNDAY);
-                boolean isThursday = (week == Week.THURSDAY);
-                boolean isHoliday = holidayMap.containsKey(dateKey) && Boolean.TRUE.equals(holidayMap.get(dateKey).getHoliday());
-
-                // 检查该日期是否已有记录
-                Date finalFillDate = fillDate;
-                boolean hasRecord = allRecords.stream()
-                        .anyMatch(r -> r.getScheduleDate().equals(new java.sql.Date(finalFillDate.getTime())));
-
-                if (!hasRecord && (isSunday || isThursday || isHoliday)) {
-                    // 补齐 REST/SELF_STUDY 记录
-                    EduClassScheduleEntity fillRecord = new EduClassScheduleEntity();
-                    fillRecord.setClassId(classId);
-                    fillRecord.setCourseId(allRecords.get(0).getCourseId());
-                    fillRecord.setScheduleDate(new java.sql.Date(fillDate.getTime()));
-                    fillRecord.setCreatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
-                    fillRecord.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
-
-                    if (isSunday || isHoliday) {
-                        fillRecord.setScheduleType("REST");
-                        fillRecord.setCourseContent(isHoliday ? "休息（" + holidayMap.get(dateKey).getName() + "）" : "休息");
-                    } else {
-                        fillRecord.setScheduleType("SELF_STUDY");
-                        fillRecord.setCourseContent("自习");
-                    }
-                    allRecords.add(fillRecord);
-                }
-                fillDate = DateUtil.offsetDay(fillDate, 1);
-            }
-            // 重新排序
-            allRecords.sort(Comparator.comparing(EduClassScheduleEntity::getScheduleDate));
-        }
-
-        // 11. 删除旧记录，插入新记录
+        // 7. 删除旧记录，插入新记录
         eduClassScheduleMapper.deleteByClassId(classId);
         if (!allRecords.isEmpty()) {
             eduClassScheduleMapper.insertBatch(allRecords);
@@ -753,10 +779,21 @@ public class EduClassServiceImpl implements EduClassService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateSchedule(Long scheduleId, Long teacherId, String stageName) {
+    public void updateSchedule(Long scheduleId, String scheduleType, String courseContent, Long teacherId, String stageName) {
         EduClassScheduleEntity entity = eduClassScheduleMapper.selectById(scheduleId);
         if (entity == null) {
             throw BusinessException.DataError.newInstance("课表记录不存在");
+        }
+
+        String oldType = entity.getScheduleType();
+        Long classId = entity.getClassId();
+
+        // 更新基本字段
+        if (scheduleType != null) {
+            entity.setScheduleType(scheduleType);
+        }
+        if (courseContent != null) {
+            entity.setCourseContent(courseContent);
         }
         if (teacherId != null) {
             entity.setTeacherId(teacherId);
@@ -764,6 +801,78 @@ public class EduClassServiceImpl implements EduClassService {
         if (stageName != null) {
             entity.setStageName(stageName);
         }
+
+        // 处理类型变化和 day_num 重排序
+        if (scheduleType != null && !scheduleType.equals(oldType)) {
+            List<EduClassScheduleEntity> allRecords = eduClassScheduleMapper.selectAllByClassId(classId);
+
+            if ("CLASS".equals(oldType) && !"CLASS".equals(scheduleType)) {
+                // CLASS → REST/SELF_STUDY：清空当前记录的 day_num，后续 CLASS 记录 day_num - 1
+                Integer oldDayNum = entity.getCourseDayNum(); // 先保存旧值
+                entity.setCourseDayNum(null);
+                entity.setClearCourseDayNum(true); // 标记需要清空数据库中的值
+                entity.setTeacherId(null);
+                entity.setClearTeacherId(true);
+                entity.setStageName(null);
+                entity.setClearStageName(true);
+
+                // 后续 CLASS 记录 day_num - 1
+                if (oldDayNum != null) {
+                    for (EduClassScheduleEntity record : allRecords) {
+                        if ("CLASS".equals(record.getScheduleType())
+                                && record.getCourseDayNum() != null
+                                && record.getCourseDayNum() > oldDayNum
+                                && !record.getId().equals(scheduleId)) {
+                            record.setCourseDayNum(record.getCourseDayNum() - 1);
+                            record.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
+                            eduClassScheduleMapper.updateById(record);
+                        }
+                    }
+                }
+            } else if (!"CLASS".equals(oldType) && "CLASS".equals(scheduleType)) {
+                // REST/SELF_STUDY → CLASS：找到插入位置，设置 day_num，后续 CLASS 记录 day_num + 1
+                entity.setTeacherId(teacherId);
+                entity.setStageName(stageName);
+
+                // 找到插入位置（按日期排序，找到当前记录的位置）
+                List<EduClassScheduleEntity> sortedRecords = allRecords.stream()
+                        .sorted(Comparator.comparing(EduClassScheduleEntity::getScheduleDate))
+                        .collect(java.util.stream.Collectors.toList());
+
+                int position = -1;
+                for (int i = 0; i < sortedRecords.size(); i++) {
+                    if (sortedRecords.get(i).getId().equals(scheduleId)) {
+                        position = i;
+                        break;
+                    }
+                }
+
+                // 计算新的 day_num：前一个 CLASS 记录的 day_num + 1
+                Integer newDayNum = 1;
+                for (int i = position - 1; i >= 0; i--) {
+                    if ("CLASS".equals(sortedRecords.get(i).getScheduleType())
+                            && sortedRecords.get(i).getCourseDayNum() != null) {
+                        newDayNum = sortedRecords.get(i).getCourseDayNum() + 1;
+                        break;
+                    }
+                }
+                entity.setCourseDayNum(newDayNum);
+
+                // 后续 CLASS 记录 day_num + 1
+                for (EduClassScheduleEntity record : allRecords) {
+                    if ("CLASS".equals(record.getScheduleType())
+                            && record.getCourseDayNum() != null
+                            && record.getCourseDayNum() >= newDayNum
+                            && !record.getId().equals(scheduleId)) {
+                        record.setCourseDayNum(record.getCourseDayNum() + 1);
+                        record.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
+                        eduClassScheduleMapper.updateById(record);
+                    }
+                }
+            }
+        }
+
+        entity.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
         eduClassScheduleMapper.updateById(entity);
     }
 

@@ -99,7 +99,7 @@ public interface EduClassService {
     void insertSchedule(EduClassScheduleEntity entity, Date scheduleDate);
 
     /**
-     * 更新课程（老师+阶段）
+     * 更新课程（老师+阶段+类型）
      */
-    void updateSchedule(Long scheduleId, Long teacherId, String stageName);
+    void updateSchedule(Long scheduleId, String scheduleType, String courseContent, Long teacherId, String stageName);
 }

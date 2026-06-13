@@ -155,7 +155,7 @@ public class EduClassController {
     }
 
     /**
-     * 更新课程（老师+阶段）
+     * 更新课程（老师+阶段+类型）
      */
     @PutMapping("/schedule/{id}")
     @Operation(description = "更新课程")
@@ -163,9 +163,11 @@ public class EduClassController {
     public ApiResponse<Void> updateSchedule(
             @Parameter(description = "课表ID") @PathVariable Long id,
             @RequestBody java.util.Map<String, Object> params) {
+        String scheduleType = params.get("scheduleType") != null ? params.get("scheduleType").toString() : null;
+        String courseContent = params.get("courseContent") != null ? params.get("courseContent").toString() : null;
         Long teacherId = params.get("teacherId") != null ? Long.valueOf(params.get("teacherId").toString()) : null;
         String stageName = params.get("stageName") != null ? params.get("stageName").toString() : null;
-        eduClassService.updateSchedule(id, teacherId, stageName);
+        eduClassService.updateSchedule(id, scheduleType, courseContent, teacherId, stageName);
         return ApiResponse.success();
     }
 

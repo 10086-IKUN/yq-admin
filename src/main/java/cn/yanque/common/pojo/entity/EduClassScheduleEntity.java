@@ -16,6 +16,15 @@ public class EduClassScheduleEntity {
     /** 课表ID，主键，自增 */
     private Long id;
 
+    /** 是否清空 courseDayNum（用于 CLASS → REST/SELF_STUDY 时），非数据库字段 */
+    private Boolean clearCourseDayNum;
+
+    /** 是否清空 teacherId，非数据库字段 */
+    private Boolean clearTeacherId;
+
+    /** 是否清空 stageName，非数据库字段 */
+    private Boolean clearStageName;
+
     /** 班级ID，关联 edu_class 表 */
     private Long classId;
 
