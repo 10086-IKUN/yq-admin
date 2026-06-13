@@ -12,6 +12,7 @@ import cn.yanque.common.pojo.vo.res.CourseDetailUpdateRes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 课程详情Service接口
@@ -66,4 +67,11 @@ public interface EduCourseDetailService {
      * @param file Excel文件
      */
     void importExcel(Long courseId,MultipartFile file);
+
+    /**
+     * 获取课程的所有阶段名称
+     * @param courseId 课程ID
+     * @return 阶段名称列表
+     */
+    List<String> getStageNames(Long courseId);
 }

@@ -48,4 +48,11 @@ public interface EduClassMapper {
      * @return 受影响的行数
      */
     int deleteById(@Param("id") Long id);
+
+    /**
+     * 根据多个ID批量查询班级
+     * @param ids 班级ID集合
+     * @return 班级列表
+     */
+    List<EduClassEntity> selectByIds(@Param("ids") java.util.Set<Long> ids);
 }

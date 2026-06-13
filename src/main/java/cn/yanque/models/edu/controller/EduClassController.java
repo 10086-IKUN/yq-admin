@@ -6,11 +6,15 @@ import cn.yanque.common.api.PageResult;
 import cn.yanque.common.pojo.vo.req.ClassCreateReq;
 import cn.yanque.common.pojo.vo.req.ClassPageReq;
 import cn.yanque.common.pojo.vo.req.ClassUpdateReq;
+import cn.yanque.common.pojo.vo.req.ScheduleGenerateReq;
+import cn.yanque.common.pojo.vo.req.SchedulePageReq;
 import cn.yanque.common.pojo.vo.res.ClassCreateRes;
 import cn.yanque.common.pojo.vo.res.ClassDeleteRes;
 import cn.yanque.common.pojo.vo.res.ClassDetailRes;
 import cn.yanque.common.pojo.vo.res.ClassPageRes;
 import cn.yanque.common.pojo.vo.res.ClassUpdateRes;
+import cn.yanque.common.pojo.vo.res.ScheduleGenerateRes;
+import cn.yanque.common.pojo.vo.res.SchedulePageRes;
 import cn.yanque.models.edu.service.EduClassService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,7 +30,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 班级管理控制器
@@ -102,5 +111,45 @@ public class EduClassController {
     @RequirePermission("class:view")
     public ApiResponse<PageResult<ClassPageRes>> pageClass(@Valid @ModelAttribute ClassPageReq req) {
         return ApiResponse.success(eduClassService.pageClass(req));
+    }
+
+    /**
+     * 生成班级课表
+     * @param id 班级ID
+     * @param req 开班时间、授课老师ID
+     * @return 生成的课表记录数
+     */
+    @PostMapping("/{id}/generateSchedule")
+    @Operation(description = "生成班级课表")
+    @RequirePermission("class:update")
+    public ApiResponse<ScheduleGenerateRes> generateSchedule(
+            @Parameter(description = "班级ID") @PathVariable Long id,
+            @Valid @RequestBody ScheduleGenerateReq req) {
+        return ApiResponse.success(eduClassService.generateSchedule(id, req));
+    }
+
+    /**
+     * 分页查询班级课表
+     * @param req 分页查询参数
+     * @return 分页课表列表
+     */
+    @GetMapping("/schedule")
+    @Operation(description = "分页查询班级课表")
+    @RequirePermission("class:view")
+    public ApiResponse<PageResult<SchedulePageRes>> pageSchedule(@Valid @ModelAttribute SchedulePageReq req) {
+        return ApiResponse.success(eduClassService.pageSchedule(req));
+    }
+
+    /**
+     * 查询指定日期范围内已排课的老师ID
+     */
+    @GetMapping("/{id}/busyTeachers")
+    @Operation(description = "查询已排课老师")
+    @RequirePermission("class:view")
+    public ApiResponse<List<Long>> getBusyTeachers(
+            @Parameter(description = "班级ID") @PathVariable Long id,
+            @Parameter(description = "开始日期") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @Parameter(description = "结束日期") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        return ApiResponse.success(eduClassService.getBusyTeacherIds(id, startDate, endDate));
     }
 }

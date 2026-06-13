@@ -53,4 +53,7 @@ public interface EduCourseDetailMapper {
     int countByCourseIdAndDayNum(@Param("courseId") Long courseId,
                                   @Param("dayNum") Integer dayNum,
                                   @Param("excludeId") Long excludeId);
+
+    /** 查询课程的所有不重复阶段名称 */
+    List<String> selectDistinctStageNames(@Param("courseId") Long courseId);
 }

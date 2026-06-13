@@ -13,11 +13,14 @@ import cn.yanque.common.pojo.vo.res.CourseDetailPageRes;
 import cn.yanque.common.pojo.vo.res.CourseDetailUpdateRes;
 import cn.yanque.models.edu.service.EduCourseDetailService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * 课程详情Controller
@@ -118,5 +121,15 @@ public class EduCourseDetailController {
     public ApiResponse importExcel(@PathVariable Long courseId, @RequestParam MultipartFile file) {
         eduCourseDetailService.importExcel(courseId, file);
         return ApiResponse.success();
+    }
+
+    /**
+     * 获取课程的所有阶段名称
+     */
+    @Operation(summary = "获取课程的阶段列表")
+    @RequirePermission("course:*")
+    @GetMapping("/stages/{courseId}")
+    public ApiResponse<List<String>> getStageNames(@Parameter(description = "课程ID") @PathVariable Long courseId) {
+        return ApiResponse.success(eduCourseDetailService.getStageNames(courseId));
     }
 }
