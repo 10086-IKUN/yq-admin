@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.edu.mapper.EduClassScheduleMapper">
+
+    <resultMap id="ScheduleMap" type="cn.yanque.common.pojo.entity.EduClassScheduleEntity">
+        <id property="id" column="id"/>
+        <result property="classId" column="class_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="courseDetailId" column="course_detail_id"/>
+        <result property="courseDayNum" column="course_day_num"/>
+        <result property="scheduleDate" column="schedule_date"/>
+        <result property="scheduleType" column="schedule_type"/>
+        <result property="courseContent" column="course_content"/>
+        <result property="stageName" column="stage_name"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, class_id, course_id, course_detail_id, course_day_num, schedule_date,
+        schedule_type, course_content, stage_name, teacher_id, created_at, updated_at
+    </sql>
+
+    <!-- 插入单条记录 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into edu_class_schedule (class_id, course_id, course_detail_id, course_day_num,
+                                        schedule_date, schedule_type, course_content, stage_name, teacher_id)
+        values (#{classId}, #{courseId}, #{courseDetailId}, #{courseDayNum},
+                #{scheduleDate}, #{scheduleType}, #{courseContent}, #{stageName}, #{teacherId})
+    </insert>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch">
+        insert into edu_class_schedule (class_id, course_id, course_detail_id, course_day_num,
+                                        schedule_date, schedule_type, course_content, stage_name, teacher_id)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.classId}, #{item.courseId}, #{item.courseDetailId}, #{item.courseDayNum},
+             #{item.scheduleDate}, #{item.scheduleType}, #{item.courseContent}, #{item.stageName}, #{item.teacherId})
+        </foreach>
+    </insert>
+
+    <!-- 根据班级ID删除 -->
+    <delete id="deleteByClassId">
+        delete from edu_class_schedule where class_id = #{classId}
+    </delete>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultMap="ScheduleMap">
+        select <include refid="BaseColumns"/>
+        from edu_class_schedule
+        where id = #{id}
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectPage" resultMap="ScheduleMap">
+        select <include refid="BaseColumns"/>
+        from edu_class_schedule
+        <where>
+            <if test="classId != null">
+                and class_id = #{classId}
+            </if>
+            <if test="scheduleType != null and scheduleType != ''">
+                and schedule_type = #{scheduleType}
+            </if>
+            <if test="startDate != null">
+                and schedule_date &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and schedule_date &lt;= #{endDate}
+            </if>
+        </where>
+        order by schedule_date asc
+    </select>
+
+    <!-- 查询指定日期范围内已排课的老师ID（排除当前班级） -->
+    <select id="selectBusyTeacherIds" resultType="java.lang.Long">
+        select distinct teacher_id
+        from edu_class_schedule
+        where schedule_date &gt;= #{startDate}
+          and schedule_date &lt;= #{endDate}
+          and schedule_type = 'CLASS'
+          and teacher_id is not null
+          and class_id != #{excludeClassId}
+    </select>
+
+    <!-- 更新单条记录 -->
+    <update id="updateById">
+        update edu_class_schedule
+        <set>
+            <if test="scheduleDate != null">schedule_date = #{scheduleDate},</if>
+            <if test="teacherId != null">teacher_id = #{teacherId},</if>
+            <if test="clearTeacherId">teacher_id = NULL,</if>
+            <if test="courseContent != null">course_content = #{courseContent},</if>
+            <if test="stageName != null">stage_name = #{stageName},</if>
+            <if test="clearStageName">stage_name = NULL,</if>
+            <if test="scheduleType != null">schedule_type = #{scheduleType},</if>
+            <if test="courseDayNum != null">course_day_num = #{courseDayNum},</if>
+            <if test="clearCourseDayNum">course_day_num = NULL,</if>
+            updated_at = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 删除单条记录 -->
+    <delete id="deleteById">
+        delete from edu_class_schedule where id = #{id}
+    </delete>
+
+    <!-- 查询班级所有CLASS类型课程（按日期升序） -->
+    <select id="selectClassDaysByClassId" resultMap="ScheduleMap">
+        select <include refid="BaseColumns"/>
+        from edu_class_schedule
+        where class_id = #{classId}
+          and schedule_type = 'CLASS'
+        order by schedule_date asc
+    </select>
+
+    <!-- 查询班级所有课程记录（按日期升序） -->
+    <select id="selectAllByClassId" resultMap="ScheduleMap">
+        select <include refid="BaseColumns"/>
+        from edu_class_schedule
+        where class_id = #{classId}
+        order by schedule_date asc
+    </select>
+
+    <!-- 批量更新courseDayNum（使用CASE WHEN） -->
+    <update id="batchUpdateDayNum">
+        update edu_class_schedule
+        <set>
+            course_day_num = CASE id
+            <foreach collection="list" item="item">
+                WHEN #{item.id} THEN #{item.courseDayNum}
+            </foreach>
+            END,
+            updated_at = now()
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <!-- 查询指定日期已排课的老师ID（用于修改老师时筛选空闲教师） -->
+    <select id="selectBusyTeacherIdsByDate" resultType="java.lang.Long">
+        select distinct teacher_id
+        from edu_class_schedule
+        where schedule_date = #{scheduleDate}
+          and schedule_type = 'CLASS'
+          and teacher_id is not null
+    </select>
+
+</mapper>

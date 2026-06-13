@@ -222,6 +222,7 @@ public class EduCourseDetailServiceImpl implements EduCourseDetailService {
      * @param file Excel文件
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void importExcel(Long courseId, MultipartFile file) {
         // 1. 校验课程是否存在
         EduCourseEntity eduCourseEntity = eduCourseMapper.selectById(courseId);
@@ -339,5 +340,13 @@ public class EduCourseDetailServiceImpl implements EduCourseDetailService {
             res.setStageName("未分类");
         }
         return res;
+    }
+
+    /**
+     * 获取课程的所有阶段名称
+     */
+    @Override
+    public List<String> getStageNames(Long courseId) {
+        return eduCourseDetailMapper.selectDistinctStageNames(courseId);
     }
 }

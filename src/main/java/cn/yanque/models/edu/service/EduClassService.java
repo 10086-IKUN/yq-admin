@@ -4,11 +4,19 @@ import cn.yanque.common.api.PageResult;
 import cn.yanque.common.pojo.vo.req.ClassCreateReq;
 import cn.yanque.common.pojo.vo.req.ClassPageReq;
 import cn.yanque.common.pojo.vo.req.ClassUpdateReq;
+import cn.yanque.common.pojo.vo.req.ScheduleGenerateReq;
+import cn.yanque.common.pojo.vo.req.SchedulePageReq;
 import cn.yanque.common.pojo.vo.res.ClassCreateRes;
 import cn.yanque.common.pojo.vo.res.ClassDeleteRes;
 import cn.yanque.common.pojo.vo.res.ClassDetailRes;
 import cn.yanque.common.pojo.vo.res.ClassPageRes;
 import cn.yanque.common.pojo.vo.res.ClassUpdateRes;
+import cn.yanque.common.pojo.vo.res.ScheduleGenerateRes;
+import cn.yanque.common.pojo.vo.res.SchedulePageRes;
+import cn.yanque.common.pojo.entity.EduClassScheduleEntity;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 班级服务接口
@@ -50,4 +58,48 @@ public interface EduClassService {
      * @return 分页班级列表
      */
     PageResult<ClassPageRes> pageClass(ClassPageReq req);
+
+    /**
+     * 生成班级课表
+     * @param classId 班级ID
+     * @param req 生成参数（开班时间、授课老师）
+     * @return 生成的课表记录数
+     */
+    ScheduleGenerateRes generateSchedule(Long classId, ScheduleGenerateReq req);
+
+    /**
+     * 分页查询班级课表
+     * @param req 分页查询参数
+     * @return 分页课表列表
+     */
+    PageResult<SchedulePageRes> pageSchedule(SchedulePageReq req);
+
+    /**
+     * 查询指定日期范围内已排课的老师ID
+     * @param classId 当前班级ID（排除自身）
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @return 已排课的老师ID列表
+     */
+    List<Long> getBusyTeacherIds(Long classId, Date startDate, Date endDate);
+
+    /**
+     * 删除单条课程（自动重排序）
+     */
+    void deleteSchedule(Long scheduleId);
+
+    /**
+     * 查询指定日期已排课的老师ID（用于修改老师时筛选空闲教师）
+     */
+    List<Long> getBusyTeacherIdsByDate(Date scheduleDate);
+
+    /**
+     * 在指定日期插入新课程（该日期及之后的CLASS记录自动后移并重排序）
+     */
+    void insertSchedule(EduClassScheduleEntity entity, Date scheduleDate);
+
+    /**
+     * 更新课程（老师+阶段+类型）
+     */
+    void updateSchedule(Long scheduleId, String scheduleType, String courseContent, Long teacherId, String stageName);
 }

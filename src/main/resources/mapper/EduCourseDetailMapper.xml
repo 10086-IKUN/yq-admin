@@ -115,4 +115,13 @@
         </foreach>
     </insert>
 
+    <!-- 查询课程的所有不重复阶段名称，按最小天数排序 -->
+    <select id="selectDistinctStageNames" resultType="string">
+        select stage_name
+        from edu_course_detail
+        where course_id = #{courseId}
+        group by stage_name
+        order by min(day_num) asc
+    </select>
+
 </mapper>
