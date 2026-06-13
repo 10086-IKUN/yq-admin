@@ -13,6 +13,7 @@ import cn.yanque.common.pojo.vo.res.ClassPageRes;
 import cn.yanque.common.pojo.vo.res.ClassUpdateRes;
 import cn.yanque.common.pojo.vo.res.ScheduleGenerateRes;
 import cn.yanque.common.pojo.vo.res.SchedulePageRes;
+import cn.yanque.common.pojo.entity.EduClassScheduleEntity;
 
 import java.util.Date;
 import java.util.List;
@@ -81,4 +82,24 @@ public interface EduClassService {
      * @return 已排课的老师ID列表
      */
     List<Long> getBusyTeacherIds(Long classId, Date startDate, Date endDate);
+
+    /**
+     * 删除单条课程（自动重排序）
+     */
+    void deleteSchedule(Long scheduleId);
+
+    /**
+     * 查询指定日期已排课的老师ID（用于修改老师时筛选空闲教师）
+     */
+    List<Long> getBusyTeacherIdsByDate(Date scheduleDate);
+
+    /**
+     * 在指定日期插入新课程（该日期及之后的CLASS记录自动后移并重排序）
+     */
+    void insertSchedule(EduClassScheduleEntity entity, Date scheduleDate);
+
+    /**
+     * 更新课程（老师+阶段）
+     */
+    void updateSchedule(Long scheduleId, Long teacherId, String stageName);
 }

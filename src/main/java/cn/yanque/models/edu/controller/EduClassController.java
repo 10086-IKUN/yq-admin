@@ -3,6 +3,7 @@ package cn.yanque.models.edu.controller;
 import cn.yanque.common.annotation.RequirePermission;
 import cn.yanque.common.api.ApiResponse;
 import cn.yanque.common.api.PageResult;
+import cn.yanque.common.pojo.entity.EduClassScheduleEntity;
 import cn.yanque.common.pojo.vo.req.ClassCreateReq;
 import cn.yanque.common.pojo.vo.req.ClassPageReq;
 import cn.yanque.common.pojo.vo.req.ClassUpdateReq;
@@ -151,5 +152,56 @@ public class EduClassController {
             @Parameter(description = "开始日期") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
             @Parameter(description = "结束日期") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
         return ApiResponse.success(eduClassService.getBusyTeacherIds(id, startDate, endDate));
+    }
+
+    /**
+     * 更新课程（老师+阶段）
+     */
+    @PutMapping("/schedule/{id}")
+    @Operation(description = "更新课程")
+    @RequirePermission("class:update")
+    public ApiResponse<Void> updateSchedule(
+            @Parameter(description = "课表ID") @PathVariable Long id,
+            @RequestBody java.util.Map<String, Object> params) {
+        Long teacherId = params.get("teacherId") != null ? Long.valueOf(params.get("teacherId").toString()) : null;
+        String stageName = params.get("stageName") != null ? params.get("stageName").toString() : null;
+        eduClassService.updateSchedule(id, teacherId, stageName);
+        return ApiResponse.success();
+    }
+
+    /**
+     * 删除单条课程
+     */
+    @DeleteMapping("/schedule/{id}")
+    @Operation(description = "删除课程")
+    @RequirePermission("class:update")
+    public ApiResponse<Void> deleteSchedule(
+            @Parameter(description = "课表ID") @PathVariable Long id) {
+        eduClassService.deleteSchedule(id);
+        return ApiResponse.success();
+    }
+
+    /**
+     * 查询指定日期已排课的老师ID（用于修改老师时筛选空闲教师）
+     */
+    @GetMapping("/schedule/busyTeachersByDate")
+    @Operation(description = "查询指定日期已排课老师")
+    @RequirePermission("class:view")
+    public ApiResponse<List<Long>> getBusyTeachersByDate(
+            @Parameter(description = "日期") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date scheduleDate) {
+        return ApiResponse.success(eduClassService.getBusyTeacherIdsByDate(scheduleDate));
+    }
+
+    /**
+     * 在指定日期插入新课程
+     */
+    @PostMapping("/schedule/insert")
+    @Operation(description = "插入课程")
+    @RequirePermission("class:update")
+    public ApiResponse<Void> insertSchedule(
+            @RequestBody EduClassScheduleEntity entity,
+            @Parameter(description = "插入日期") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date scheduleDate) {
+        eduClassService.insertSchedule(entity, scheduleDate);
+        return ApiResponse.success();
     }
 }

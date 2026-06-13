@@ -74,11 +74,6 @@
         order by schedule_date asc
     </select>
 
-    <!-- 查询班级课表数量 -->
-    <select id="countByClassId" resultType="int">
-        select count(*) from edu_class_schedule where class_id = #{classId}
-    </select>
-
     <!-- 查询指定日期范围内已排课的老师ID（排除当前班级） -->
     <select id="selectBusyTeacherIds" resultType="java.lang.Long">
         select distinct teacher_id
@@ -88,6 +83,68 @@
           and schedule_type = 'CLASS'
           and teacher_id is not null
           and class_id != #{excludeClassId}
+    </select>
+
+    <!-- 更新单条记录 -->
+    <update id="updateById">
+        update edu_class_schedule
+        <set>
+            <if test="teacherId != null">teacher_id = #{teacherId},</if>
+            <if test="courseContent != null">course_content = #{courseContent},</if>
+            <if test="stageName != null">stage_name = #{stageName},</if>
+            <if test="scheduleType != null">schedule_type = #{scheduleType},</if>
+            <if test="courseDayNum != null">course_day_num = #{courseDayNum},</if>
+            updated_at = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 删除单条记录 -->
+    <delete id="deleteById">
+        delete from edu_class_schedule where id = #{id}
+    </delete>
+
+    <!-- 查询班级所有CLASS类型课程（按日期升序） -->
+    <select id="selectClassDaysByClassId" resultMap="ScheduleMap">
+        select <include refid="BaseColumns"/>
+        from edu_class_schedule
+        where class_id = #{classId}
+          and schedule_type = 'CLASS'
+        order by schedule_date asc
+    </select>
+
+    <!-- 查询班级所有课程记录（按日期升序） -->
+    <select id="selectAllByClassId" resultMap="ScheduleMap">
+        select <include refid="BaseColumns"/>
+        from edu_class_schedule
+        where class_id = #{classId}
+        order by schedule_date asc
+    </select>
+
+    <!-- 批量更新courseDayNum（使用CASE WHEN） -->
+    <update id="batchUpdateDayNum">
+        update edu_class_schedule
+        <set>
+            course_day_num = CASE id
+            <foreach collection="list" item="item">
+                WHEN #{item.id} THEN #{item.courseDayNum}
+            </foreach>
+            END,
+            updated_at = now()
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <!-- 查询指定日期已排课的老师ID（用于修改老师时筛选空闲教师） -->
+    <select id="selectBusyTeacherIdsByDate" resultType="java.lang.Long">
+        select distinct teacher_id
+        from edu_class_schedule
+        where schedule_date = #{scheduleDate}
+          and schedule_type = 'CLASS'
+          and teacher_id is not null
     </select>
 
 </mapper>
