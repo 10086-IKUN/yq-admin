@@ -5,14 +5,14 @@
     namespace: 对应Mapper接口的全限定名
     作用: 定义SQL语句，将数据库字段映射到Java实体属性
 -->
-<mapper namespace="cn.yanque.models.edu.mapper.EduCourseDetailMapper">
+<mapper namespace="cn.yanque.models.edu.course.mapper.EduCourseDetailMapper">
 
     <!--
         结果映射：定义数据库列名到Java属性的映射关系
         当列名和属性名不一致时需要手动映射（如course_id -> courseId）
         id: 唯一标识，其他SQL可以引用这个映射
     -->
-    <resultMap id="EduCourseDetailMap" type="cn.yanque.common.pojo.entity.EduCourseDetailEntity">
+    <resultMap id="EduCourseDetailMap" type="cn.yanque.models.edu.course.pojo.entity.EduCourseDetailEntity">
         <id property="id" column="id"/>
         <result property="courseId" column="course_id"/>
         <result property="stageName" column="stage_name"/>

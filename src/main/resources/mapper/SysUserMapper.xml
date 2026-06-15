@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.yanque.models.users.mapper.SysUserMapper">
+<mapper namespace="cn.yanque.models.system.user.mapper.SysUserMapper">
 
     <!-- 用户实体映射 -->
-    <resultMap id="SysUserMap" type="cn.yanque.common.pojo.entity.SysUserEntity">
+    <resultMap id="SysUserMap" type="cn.yanque.models.system.user.pojo.entity.SysUserEntity">
         <id property="id" column="id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
@@ -95,7 +95,7 @@
     </update>
 
     <!-- 查询用户关联的角色 -->
-    <select id="selectRolesByUserId" resultType="cn.yanque.common.pojo.entity.SysRoleEntity">
+    <select id="selectRolesByUserId" resultType="cn.yanque.models.system.role.pojo.entity.SysRoleEntity">
         select r.*
         from sys_role r
         inner join sys_user_role ur on ur.role_id = r.id
@@ -104,7 +104,7 @@
     </select>
 
     <!-- 查询用户通过角色聚合出的权限 -->
-    <select id="selectRolePermissionsByUserId" resultType="cn.yanque.common.pojo.entity.SysPermissionEntity">
+    <select id="selectRolePermissionsByUserId" resultType="cn.yanque.models.system.permission.pojo.entity.SysPermissionEntity">
         select distinct p.*
         from sys_permission p
         inner join sys_role_permission rp on rp.permission_id = p.id

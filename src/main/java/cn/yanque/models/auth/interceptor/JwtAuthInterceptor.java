@@ -1,8 +1,8 @@
 package cn.yanque.models.auth.interceptor;
 
 import cn.hutool.jwt.JWT;
-import cn.yanque.common.dataConfig.service.SysConfig;
-import cn.yanque.common.dataConfig.service.SysConfigService;
+import cn.yanque.models.system.config.service.SysConfig;
+import cn.yanque.models.system.config.service.SysConfigService;
 import cn.yanque.common.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
