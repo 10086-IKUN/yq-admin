@@ -85,8 +85,9 @@ public class EduScheduleController {
     @Operation(description = "删除课程")
     @RequirePermission("class:update")
     public ApiResponse<Void> deleteSchedule(
-            @Parameter(description = "课表ID") @PathVariable Long id) {
-        eduScheduleService.deleteSchedule(id);
+            @Parameter(description = "课表ID") @PathVariable Long id,
+            @Parameter(description = "是否前移后续课程") @RequestParam(defaultValue = "false") boolean forwardCourses) {
+        eduScheduleService.deleteSchedule(id, forwardCourses);
         return ApiResponse.success();
     }
 

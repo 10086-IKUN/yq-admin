@@ -21,7 +21,7 @@ public interface EduScheduleService {
 
     List<Long> getBusyTeacherIds(Long classId, Date startDate, Date endDate);
 
-    void deleteSchedule(Long scheduleId);
+    void deleteSchedule(Long scheduleId, boolean forwardCourses);
 
     List<Long> getBusyTeacherIdsByDate(Date scheduleDate);
 
