@@ -4,6 +4,8 @@ import cn.yanque.common.api.PageResult;
 import cn.yanque.common.exception.BusinessException;
 import cn.yanque.models.edu.clazz.mapper.EduClassMapper;
 import cn.yanque.models.edu.clazz.pojo.entity.EduClassEntity;
+import cn.yanque.models.edu.course.mapper.EduCourseMapper;
+import cn.yanque.models.edu.course.pojo.entity.EduCourseEntity;
 import cn.yanque.models.duty.pojo.entity.EduDutyAssignmentEntity;
 import cn.yanque.models.system.user.pojo.entity.SysUserEntity;
 import cn.yanque.models.duty.pojo.vo.req.DutyAssignmentCreateReq;
@@ -41,6 +43,9 @@ public class EduDutyAssignmentServiceImpl implements EduDutyAssignmentService {
 
     @Autowired
     private EduClassMapper eduClassMapper;
+
+    @Autowired
+    private EduCourseMapper eduCourseMapper;
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -152,7 +157,7 @@ public class EduDutyAssignmentServiceImpl implements EduDutyAssignmentService {
     }
 
     /**
-     * 批量获取班级名称
+     * 批量获取班级名称（格式：课程名第x期）
      */
     private Map<Long, String> batchGetClassNames(List<EduDutyAssignmentEntity> list) {
         Set<Long> classIds = list.stream()
@@ -165,8 +170,23 @@ public class EduDutyAssignmentServiceImpl implements EduDutyAssignmentService {
         }
 
         List<EduClassEntity> classes = eduClassMapper.selectByIds(classIds);
+
+        // 批量查询课程名称
+        Set<Long> courseIds = classes.stream()
+                .map(EduClassEntity::getCourseId)
+                .filter(id -> id != null)
+                .collect(Collectors.toSet());
+        Map<Long, String> courseMap = Map.of();
+        if (!courseIds.isEmpty()) {
+            List<EduCourseEntity> courses = eduCourseMapper.selectByIds(courseIds);
+            courseMap = courses.stream()
+                    .collect(Collectors.toMap(EduCourseEntity::getId, EduCourseEntity::getCourseName));
+        }
+
+        final Map<Long, String> finalCourseMap = courseMap;
         return classes.stream()
-                .collect(Collectors.toMap(EduClassEntity::getId, c -> c.getClassTerm() + "班"));
+                .collect(Collectors.toMap(EduClassEntity::getId,
+                        c -> (finalCourseMap.getOrDefault(c.getCourseId(), "") + "第" + c.getClassTerm() + "期")));
     }
 
     /**
@@ -191,11 +211,18 @@ public class EduDutyAssignmentServiceImpl implements EduDutyAssignmentService {
         DutyAssignmentDetailRes res = new DutyAssignmentDetailRes();
         BeanUtils.copyProperties(entity, res);
 
-        // 填充班级名称
+        // 填充班级名称（格式：课程名第x期）
         if (entity.getClassId() != null && entity.getClassId() > 0) {
             EduClassEntity clazz = eduClassMapper.selectById(entity.getClassId());
             if (clazz != null) {
-                res.setClassName(clazz.getClassTerm() + "班");
+                String courseName = "";
+                if (clazz.getCourseId() != null) {
+                    EduCourseEntity course = eduCourseMapper.selectById(clazz.getCourseId());
+                    if (course != null) {
+                        courseName = course.getCourseName();
+                    }
+                }
+                res.setClassName(courseName + "第" + clazz.getClassTerm() + "期");
             }
         } else {
             res.setClassName("全局");
@@ -231,5 +258,11 @@ public class EduDutyAssignmentServiceImpl implements EduDutyAssignmentService {
         }
 
         return res;
+    }
+
+    @Override
+    public List<Long> getBusyTeacherIds(Date dutyDate, String dutyType) {
+        java.sql.Date sqlDate = new java.sql.Date(dutyDate.getTime());
+        return eduDutyAssignmentMapper.selectBusyTeacherIds(sqlDate, dutyType);
     }
 }

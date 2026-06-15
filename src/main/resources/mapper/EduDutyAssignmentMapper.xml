@@ -78,4 +78,11 @@
           </if>
     </select>
 
+    <select id="selectBusyTeacherIds" resultType="java.lang.Long">
+        select distinct teacher_id from edu_duty_assignment
+        where duty_date = #{dutyDate}
+          and duty_type = #{dutyType}
+          and teacher_id is not null
+    </select>
+
 </mapper>
