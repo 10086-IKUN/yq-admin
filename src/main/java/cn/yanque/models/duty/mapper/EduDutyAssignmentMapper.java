@@ -1,6 +1,6 @@
 package cn.yanque.models.duty.mapper;
 
-import cn.yanque.common.pojo.entity.EduDutyAssignmentEntity;
+import cn.yanque.models.duty.pojo.entity.EduDutyAssignmentEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.Date;
