@@ -16,7 +16,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 值班安排Controller
@@ -63,5 +67,14 @@ public class EduDutyAssignmentController {
     @GetMapping
     public ApiResponse<PageResult<DutyAssignmentPageRes>> page(@ModelAttribute DutyAssignmentPageReq req) {
         return ApiResponse.success(eduDutyAssignmentService.pageDutyAssignment(req));
+    }
+
+    @Operation(summary = "查询指定日期指定类型已占用的老师ID")
+    @RequirePermission("duty:*")
+    @GetMapping("/busyTeachers")
+    public ApiResponse<List<Long>> getBusyTeacherIds(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dutyDate,
+            @RequestParam String dutyType) {
+        return ApiResponse.success(eduDutyAssignmentService.getBusyTeacherIds(dutyDate, dutyType));
     }
 }

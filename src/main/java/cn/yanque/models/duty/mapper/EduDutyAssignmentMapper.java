@@ -28,4 +28,6 @@ public interface EduDutyAssignmentMapper {
                                     @Param("dutyType") String dutyType,
                                     @Param("classId") Long classId,
                                     @Param("excludeId") Long excludeId);
+
+    List<Long> selectBusyTeacherIds(@Param("dutyDate") Date dutyDate, @Param("dutyType") String dutyType);
 }

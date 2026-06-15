@@ -10,6 +10,9 @@ import cn.yanque.models.duty.pojo.vo.res.DutyAssignmentDetailRes;
 import cn.yanque.models.duty.pojo.vo.res.DutyAssignmentPageRes;
 import cn.yanque.models.duty.pojo.vo.res.DutyAssignmentUpdateRes;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * 值班安排Service接口
  */
@@ -24,4 +27,6 @@ public interface EduDutyAssignmentService {
     DutyAssignmentDetailRes getDutyAssignmentById(Long id);
 
     PageResult<DutyAssignmentPageRes> pageDutyAssignment(DutyAssignmentPageReq req);
+
+    List<Long> getBusyTeacherIds(Date dutyDate, String dutyType);
 }
