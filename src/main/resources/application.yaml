@@ -7,6 +7,11 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 
   data:
     redis:
@@ -22,3 +27,12 @@ mybatis:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     map-underscore-to-camel-case: true
   mapper-locations: classpath*:/mapper/**/*.xml
+
+oss:
+  endpoint: oss-cn-beijing.aliyuncs.com
+  bucket: yq-homework
+  access-key-id: ${ALIYUN_OSS_ACCESS_KEY_ID:}
+  access-key-secret: ${ALIYUN_OSS_ACCESS_KEY_SECRET:}
+  dir-prefix: homework
+  preview-expire-minutes: 10
+  max-file-size-mb: 50

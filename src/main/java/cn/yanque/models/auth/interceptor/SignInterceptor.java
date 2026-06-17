@@ -13,41 +13,28 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 签名校验拦截器
- * 验证请求的HMAC-SHA256签名，防止请求篡改和重放攻击
- * 签名算法：method + uri + queryString + timestamp + nonce
- */
 @Component
 public class SignInterceptor implements HandlerInterceptor {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    private static final String SECRET_KEY_PREFIX = "yanque:sign:secret:";
-    private static final String NONCE_KEY_PREFIX = "yanque:sign:nonce:";
+    private static final String USER_SECRET_KEY_PREFIX = "yanque:sign:secret:";
+    private static final String STUDENT_SECRET_KEY_PREFIX = "yanque:student:sign:secret:";
+    private static final String USER_NONCE_KEY_PREFIX = "yanque:sign:nonce:";
+    private static final String STUDENT_NONCE_KEY_PREFIX = "yanque:student:sign:nonce:";
     private static final long TIMESTAMP_TOLERANCE = 300L;
     private static final String HMAC_SHA256 = "HmacSHA256";
 
-    /**
-     * 校验请求签名
-     * @param request HTTP请求
-     * @param response HTTP响应
-     * @param handler 处理器
-     * @return 签名校验通过返回true，否则抛出异常
-     */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String timestamp = request.getHeader("X-Timestamp");
         String nonce = request.getHeader("X-Nonce");
         String sign = request.getHeader("X-Sign");
-
-        // 1. 参数完整性校验
         if (timestamp == null || nonce == null || sign == null) {
             throw new BusinessException(401, "签名参数缺失");
         }
 
-        // 2. 时间戳校验
         long reqTime;
         try {
             reqTime = Long.parseLong(timestamp);
@@ -59,36 +46,37 @@ public class SignInterceptor implements HandlerInterceptor {
             throw new BusinessException(401, "请求已过期");
         }
 
-        // 3. 获取当前用户ID
+        // JwtAuthInterceptor 会根据 token 类型写入 userId 或 studentId。
+        Object studentId = request.getAttribute("studentId");
         Object userId = request.getAttribute("userId");
-        if (userId == null) {
+        if (studentId == null && userId == null) {
             throw new BusinessException(401, "未登录");
         }
-        String uid = String.valueOf(userId);
 
-        // 4. 从Redis获取签名密钥
-        String signSecret = stringRedisTemplate.opsForValue().get(SECRET_KEY_PREFIX + uid);
+        // 管理端和学生端使用不同 Redis 前缀，避免同 ID 的用户互相串签名密钥。
+        boolean studentRequest = studentId != null;
+        String id = String.valueOf(studentRequest ? studentId : userId);
+        String secretPrefix = studentRequest ? STUDENT_SECRET_KEY_PREFIX : USER_SECRET_KEY_PREFIX;
+        String noncePrefix = studentRequest ? STUDENT_NONCE_KEY_PREFIX : USER_NONCE_KEY_PREFIX;
+
+        String signSecret = stringRedisTemplate.opsForValue().get(secretPrefix + id);
         if (signSecret == null) {
             throw new BusinessException(401, "签名密钥不存在，请重新登录");
         }
 
-        // 5. 防重放校验
-        String nonceKey = NONCE_KEY_PREFIX + uid + ":" + nonce;
+        // nonce 只允许使用一次，用于防重放。
+        String nonceKey = noncePrefix + id + ":" + nonce;
         Boolean absent = stringRedisTemplate.opsForValue().setIfAbsent(nonceKey, "1", TIMESTAMP_TOLERANCE, TimeUnit.SECONDS);
         if (Boolean.FALSE.equals(absent)) {
             throw new BusinessException(401, "重复请求");
         }
 
-        // 6. 构建签名原文: method + uri + queryString + timestamp + nonce
+        // 签名原文必须和前端保持一致：method + uri + queryString + timestamp + nonce。
         String method = request.getMethod();
         String uri = request.getServletPath();
         String queryString = request.getQueryString() != null ? request.getQueryString() : "";
         String plaintext = String.join("\n", method, uri, queryString, timestamp, nonce);
-
-        // 7. 计算签名并比对
         String serverSign = hmacSha256(plaintext, signSecret);
-
-
         if (!serverSign.equalsIgnoreCase(sign)) {
             throw new BusinessException(401, "签名验证失败");
         }
@@ -96,12 +84,6 @@ public class SignInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    /**
-     * 使用HmacSHA256算法计算签名
-     * @param data 待签名数据
-     * @param key 密钥
-     * @return 十六进制签名字符串
-     */
     private String hmacSha256(String data, String key) {
         try {
             Mac mac = Mac.getInstance(HMAC_SHA256);

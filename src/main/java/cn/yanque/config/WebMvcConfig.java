@@ -3,6 +3,7 @@ package cn.yanque.config;
 import cn.yanque.models.auth.interceptor.JwtAuthInterceptor;
 import cn.yanque.models.auth.interceptor.PermissionInterceptor;
 import cn.yanque.models.auth.interceptor.SignInterceptor;
+import cn.yanque.models.auth.interceptor.StudentPermissionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -26,6 +27,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private PermissionInterceptor permissionInterceptor;
     @Autowired
     private SignInterceptor signInterceptor;
+    @Autowired
+    private StudentPermissionInterceptor studentPermissionInterceptor;
 
     /**
      * 注册拦截器
@@ -38,6 +41,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 .excludePathPatterns(
                         "/api/sysUser/login",
+                        "/api/student/login",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
                         "/swagger-ui/**");
@@ -46,6 +50,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 .excludePathPatterns(
                         "/api/sysUser/login",
+                        "/api/student/login",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
                         "/swagger-ui/**");
@@ -53,6 +58,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(permissionInterceptor)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns(
+                        "/api/sysUser/login",
+                        "/api/student/login",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**");
+        registry.addInterceptor(studentPermissionInterceptor)
+                .addPathPatterns("/api/**")
+                .excludePathPatterns(
+                        "/api/student/login",
                         "/api/sysUser/login",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",

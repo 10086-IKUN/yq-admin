@@ -26,9 +26,10 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final byte[] JWT_KEY = "1234".getBytes();
     private static final String USER_ID = "uid";
     private static final String EXPIRE_TIME = "expire_time";
+    private static final String USER_TYPE = "user_type";
+    private static final String STUDENT = "STUDENT";
 
     /**
      * 校验JWT Token并提取用户ID
@@ -62,8 +63,13 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
                 throw new BusinessException(401, "Token无效或已过期");
             }
 
-            request.setAttribute("userId", Long.parseLong(String.valueOf(userId)));
-            MDC.put("userId", String.valueOf(userId));
+            if (STUDENT.equals(String.valueOf(jwt.getPayload(USER_TYPE)))) {
+                request.setAttribute("studentId", Long.parseLong(String.valueOf(userId)));
+                MDC.put("studentId", String.valueOf(userId));
+            } else {
+                request.setAttribute("userId", Long.parseLong(String.valueOf(userId)));
+                MDC.put("userId", String.valueOf(userId));
+            }
             return true;
         } catch (BusinessException ex) {
             throw ex;

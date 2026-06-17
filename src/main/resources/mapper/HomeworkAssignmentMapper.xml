@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.homework.mapper.HomeworkAssignmentMapper">
+
+    <resultMap id="HomeworkAssignmentMap" type="cn.yanque.models.homework.pojo.entity.HomeworkAssignmentEntity">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="classId" column="class_id"/>
+        <result property="homeworkDate" column="homework_date"/>
+        <result property="courseId" column="course_id"/>
+        <result property="courseDetailId" column="course_detail_id"/>
+        <result property="courseContentSnapshot" column="course_content_snapshot"/>
+        <result property="attachmentName" column="attachment_name"/>
+        <result property="attachmentUrl" column="attachment_url"/>
+        <result property="attachmentType" column="attachment_type"/>
+        <result property="answerAttachmentName" column="answer_attachment_name"/>
+        <result property="answerAttachmentUrl" column="answer_attachment_url"/>
+        <result property="answerAttachmentType" column="answer_attachment_type"/>
+        <result property="answerPublishStatus" column="answer_publish_status"/>
+        <result property="answerPublishTime" column="answer_publish_time"/>
+        <result property="answerPublishTeacherId" column="answer_publish_teacher_id"/>
+        <result property="publishTeacherId" column="publish_teacher_id"/>
+        <result property="publishDate" column="publish_date"/>
+        <result property="deadline" column="deadline"/>
+        <result property="status" column="status"/>
+        <result property="allowResubmit" column="allow_resubmit"/>
+        <result property="studentCountSnapshot" column="student_count_snapshot"/>
+        <result property="deleted" column="deleted"/>
+        <result property="closeTime" column="close_time"/>
+        <result property="closeTeacherId" column="close_teacher_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="classTerm" column="class_term"/>
+        <result property="className" column="class_name"/>
+        <result property="courseName" column="course_name"/>
+        <result property="publishTeacherName" column="publish_teacher_name"/>
+        <result property="answerPublishTeacherName" column="answer_publish_teacher_name"/>
+    </resultMap>
+
+    <sql id="BaseSelect">
+        select ha.*,
+               ec.class_term,
+               concat('第', ec.class_term, '期') as class_name,
+               course.course_name,
+               coalesce(publisher.real_name, publisher.nickname, publisher.username) as publish_teacher_name,
+               coalesce(answer_teacher.real_name, answer_teacher.nickname, answer_teacher.username) as answer_publish_teacher_name
+        from homework_assignment ha
+        left join edu_class ec on ec.id = ha.class_id
+        left join edu_course course on course.id = ha.course_id
+        left join sys_user publisher on publisher.id = ha.publish_teacher_id
+        left join sys_user answer_teacher on answer_teacher.id = ha.answer_publish_teacher_id
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into homework_assignment (
+            title, description, class_id, homework_date, course_id, course_detail_id,
+            course_content_snapshot, attachment_name, attachment_url, attachment_type,
+            answer_publish_status, publish_teacher_id, publish_date, deadline, status,
+            allow_resubmit, student_count_snapshot
+        )
+        values (
+            #{title}, #{description}, #{classId}, #{homeworkDate}, #{courseId}, #{courseDetailId},
+            #{courseContentSnapshot}, #{attachmentName}, #{attachmentUrl}, #{attachmentType},
+            #{answerPublishStatus}, #{publishTeacherId}, #{publishDate}, #{deadline}, #{status},
+            #{allowResubmit}, #{studentCountSnapshot}
+        )
+    </insert>
+
+    <update id="updateById">
+        update homework_assignment
+        set title = #{title},
+            description = #{description},
+            class_id = #{classId},
+            homework_date = #{homeworkDate},
+            course_id = #{courseId},
+            course_detail_id = #{courseDetailId},
+            course_content_snapshot = #{courseContentSnapshot},
+            attachment_name = #{attachmentName},
+            attachment_url = #{attachmentUrl},
+            attachment_type = #{attachmentType},
+            deadline = #{deadline},
+            allow_resubmit = #{allowResubmit}
+        where id = #{id}
+          and deleted = 0
+    </update>
+
+    <update id="deleteById">
+        update homework_assignment
+        set deleted = 1
+        where id = #{id}
+          and deleted = 0
+    </update>
+
+    <update id="closeById">
+        update homework_assignment
+        set status = 'CLOSED',
+            close_time = now(),
+            close_teacher_id = #{teacherId}
+        where id = #{id}
+          and deleted = 0
+    </update>
+
+    <update id="publishAnswer">
+        update homework_assignment
+        set answer_attachment_name = #{answerAttachmentName},
+            answer_attachment_url = #{answerAttachmentUrl},
+            answer_attachment_type = #{answerAttachmentType},
+            answer_publish_status = #{answerPublishStatus},
+            answer_publish_time = #{answerPublishTime},
+            answer_publish_teacher_id = #{answerPublishTeacherId}
+        where id = #{id}
+          and deleted = 0
+    </update>
+
+    <update id="clearAttachment">
+        update homework_assignment
+        set attachment_name = null,
+            attachment_url = null,
+            attachment_type = null
+        where id = #{id}
+          and deleted = 0
+    </update>
+
+    <update id="clearAnswerAttachment">
+        update homework_assignment
+        set answer_attachment_name = null,
+            answer_attachment_url = null,
+            answer_attachment_type = null,
+            answer_publish_status = 'UNPUBLISHED',
+            answer_publish_time = null,
+            answer_publish_teacher_id = null
+        where id = #{id}
+          and deleted = 0
+    </update>
+
+    <select id="selectById" resultMap="HomeworkAssignmentMap">
+        <include refid="BaseSelect"/>
+        where ha.id = #{id}
+          and ha.deleted = 0
+    </select>
+
+    <select id="selectPage" resultMap="HomeworkAssignmentMap">
+        <include refid="BaseSelect"/>
+        <where>
+            ha.deleted = 0
+            <if test="keyword != null and keyword != ''">
+                and (ha.title like concat('%', #{keyword}, '%')
+                     or ha.description like concat('%', #{keyword}, '%'))
+            </if>
+            <if test="classId != null">
+                and ha.class_id = #{classId}
+            </if>
+            <if test="courseId != null">
+                and ha.course_id = #{courseId}
+            </if>
+            <if test="status != null and status != ''">
+                and ha.status = #{status}
+            </if>
+            <if test="answerPublishStatus != null and answerPublishStatus != ''">
+                and ha.answer_publish_status = #{answerPublishStatus}
+            </if>
+        </where>
+        order by ha.publish_date desc, ha.id desc
+    </select>
+
+    <select id="countStudentsByClassId" resultType="int">
+        select count(*)
+        from edu_student
+        where class_id = #{classId}
+    </select>
+</mapper>

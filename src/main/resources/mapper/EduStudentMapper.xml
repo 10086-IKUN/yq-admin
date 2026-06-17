@@ -41,7 +41,7 @@
             <if test="school != null">school = #{school},</if>
             <if test="education != null">education = #{education},</if>
             <if test="studyMode != null">study_mode = #{studyMode},</if>
-            <if test="classId != null">class_id = #{classId},</if>
+            class_id = #{classId},
             <if test="productId != null">product_id = #{productId},</if>
             <if test="joinTime != null">join_time = #{joinTime},</if>
         </set>
@@ -79,5 +79,11 @@
     <delete id="deleteById">
         delete from edu_student where id = #{id}
     </delete>
+
+    <select id="selectByPhone" resultMap="EduStudentMap">
+        select <include refid="BaseColumns"/>, password
+        from edu_student
+        where phone = #{phone}
+    </select>
 
 </mapper>

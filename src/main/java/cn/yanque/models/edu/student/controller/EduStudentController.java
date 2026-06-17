@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 提供学员的增删改查接口
  */
 @RestController
-@RequestMapping("/api/eduStudent")
+@RequestMapping("/api/student")
 @Slf4j
 @Tag(name = "EduStudentController", description = "学员管理")
 public class EduStudentController {

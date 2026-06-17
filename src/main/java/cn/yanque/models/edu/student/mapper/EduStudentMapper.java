@@ -50,4 +50,11 @@ public interface EduStudentMapper {
      * @return 受影响的行数
      */
     int deleteById(@Param("id") Long id);
+
+    /**
+     * 根据手机号查询学员
+     * @param phone 手机号
+     * @return 学员实体
+     */
+    EduStudentEntity selectByPhone(@Param("phone") String phone);
 }

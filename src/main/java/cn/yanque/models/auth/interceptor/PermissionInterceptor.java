@@ -49,6 +49,9 @@ public class PermissionInterceptor implements HandlerInterceptor {
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
+        if (handlerMethod.getBeanType().getPackageName().contains(".models.studentFront.")) {
+            return true;
+        }
 
         // 检查是否有跳过权限校验的注解（方法优先，其次类）
         if (hasSkipPermissionAnnotation(handlerMethod)) {

@@ -13,6 +13,7 @@ import cn.yanque.models.edu.student.pojo.vo.res.StudentPageRes;
 import cn.yanque.models.edu.student.pojo.vo.res.StudentUpdateRes;
 import cn.yanque.models.edu.student.mapper.EduStudentMapper;
 import cn.yanque.models.edu.student.service.EduStudentService;
+import cn.yanque.models.system.config.service.SysConfigService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -32,6 +33,7 @@ public class EduStudentServiceImpl implements EduStudentService {
 
     @Autowired
     private EduStudentMapper eduStudentMapper;
+
 
     /**
      * 添加学生
