@@ -13,5 +13,7 @@ public interface StudentFrontService {
 
     EduStudentEntity getStudentByPhone(String phone);
 
+    EduStudentEntity getStudentById(Long studentId);
+
     List<StuPermissionEntity> getPermissionsByStudentId(Long studentId);
 }

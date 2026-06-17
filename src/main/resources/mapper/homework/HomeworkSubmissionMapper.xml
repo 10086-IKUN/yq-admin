@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.homework.mapper.HomeworkSubmissionMapper">
+
+    <resultMap id="BaseResultMap" type="cn.yanque.models.homework.pojo.entity.HomeworkSubmissionEntity">
+        <id column="id" property="id"/>
+        <result column="assignment_id" property="assignmentId"/>
+        <result column="student_no" property="studentNo"/>
+        <result column="student_name_snapshot" property="studentNameSnapshot"/>
+        <result column="submit_content" property="submitContent"/>
+        <result column="attachment_name" property="attachmentName"/>
+        <result column="attachment_url" property="attachmentUrl"/>
+        <result column="attachment_type" property="attachmentType"/>
+        <result column="submit_time" property="submitTime"/>
+        <result column="status" property="status"/>
+        <result column="score" property="score"/>
+        <result column="teacher_comment" property="teacherComment"/>
+        <result column="review_teacher_id" property="reviewTeacherId"/>
+        <result column="review_time" property="reviewTime"/>
+        <result column="version" property="version"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.yanque.models.homework.pojo.entity.HomeworkSubmissionEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO homework_submission (assignment_id, student_no, student_name_snapshot, submit_content, attachment_name, attachment_url, attachment_type, submit_time, status, version)
+        VALUES (#{assignmentId}, #{studentNo}, #{studentNameSnapshot}, #{submitContent}, #{attachmentName}, #{attachmentUrl}, #{attachmentType}, #{submitTime}, #{status}, #{version})
+    </insert>
+
+    <update id="update" parameterType="cn.yanque.models.homework.pojo.entity.HomeworkSubmissionEntity">
+        UPDATE homework_submission
+        <set>
+            <if test="submitContent != null">submit_content = #{submitContent},</if>
+            <if test="attachmentName != null">attachment_name = #{attachmentName},</if>
+            <if test="attachmentUrl != null">attachment_url = #{attachmentUrl},</if>
+            <if test="attachmentType != null">attachment_type = #{attachmentType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="teacherComment != null">teacher_comment = #{teacherComment},</if>
+            <if test="reviewTeacherId != null">review_teacher_id = #{reviewTeacherId},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+            <if test="version != null">version = #{version},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM homework_submission WHERE id = #{id}
+    </select>
+
+    <select id="selectByAssignmentAndStudent" resultMap="BaseResultMap">
+        SELECT * FROM homework_submission WHERE assignment_id = #{assignmentId} AND student_no = #{studentNo}
+    </select>
+
+    <select id="selectByAssignmentId" resultMap="BaseResultMap">
+        SELECT * FROM homework_submission WHERE assignment_id = #{assignmentId} ORDER BY submit_time DESC
+    </select>
+
+    <select id="selectByStudentNo" resultMap="BaseResultMap">
+        SELECT * FROM homework_submission WHERE student_no = #{studentNo} ORDER BY submit_time DESC
+    </select>
+
+</mapper>

@@ -37,6 +37,11 @@ public class StudentFrontServiceImpl implements StudentFrontService {
     }
 
     @Override
+    public EduStudentEntity getStudentById(Long studentId) {
+        return eduStudentMapper.selectById(studentId);
+    }
+
+    @Override
     public List<StuPermissionEntity> getPermissionsByStudentId(Long studentId) {
         return stuPermissionMapper.selectByStudentId(studentId);
     }

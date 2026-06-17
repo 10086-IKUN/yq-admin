@@ -1,7 +1,9 @@
 package cn.yanque.models.studentFront.biz;
 
 import cn.yanque.common.api.PageResult;
+import cn.yanque.models.homework.pojo.entity.HomeworkSubmissionEntity;
 import cn.yanque.models.homework.pojo.vo.req.HomeworkAssignmentPageReq;
+import cn.yanque.models.homework.pojo.vo.req.HomeworkSubmissionReq;
 import cn.yanque.models.homework.pojo.vo.res.HomeworkAssignmentRes;
 
 /**
@@ -23,4 +25,21 @@ public interface StudentHomeworkBiz {
      * @return 作业详情
      */
     HomeworkAssignmentRes detail(Long id);
+
+    /**
+     * 提交作业
+     * @param req 提交请求
+     * @param studentNo 学员编号
+     * @param studentName 学员姓名
+     * @return 提交记录
+     */
+    HomeworkSubmissionEntity submit(HomeworkSubmissionReq req, String studentNo, String studentName);
+
+    /**
+     * 获取学员的作业提交记录
+     * @param assignmentId 作业ID
+     * @param studentNo 学员编号
+     * @return 提交记录
+     */
+    HomeworkSubmissionEntity getSubmission(Long assignmentId, String studentNo);
 }

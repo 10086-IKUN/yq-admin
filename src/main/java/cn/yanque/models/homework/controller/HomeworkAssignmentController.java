@@ -3,12 +3,15 @@ package cn.yanque.models.homework.controller;
 import cn.yanque.common.annotation.RequirePermission;
 import cn.yanque.common.api.ApiResponse;
 import cn.yanque.common.api.PageResult;
+import cn.yanque.models.homework.pojo.entity.HomeworkSubmissionEntity;
 import cn.yanque.models.homework.pojo.vo.req.HomeworkAnswerPublishReq;
+import cn.yanque.models.homework.pojo.vo.req.HomeworkReviewReq;
 import cn.yanque.models.homework.pojo.vo.req.HomeworkAssignmentPageReq;
 import cn.yanque.models.homework.pojo.vo.req.HomeworkAssignmentReq;
 import cn.yanque.models.homework.pojo.vo.res.HomeworkAssignmentRes;
 import cn.yanque.models.homework.pojo.vo.res.HomeworkIdRes;
 import cn.yanque.models.homework.service.HomeworkAssignmentService;
+import cn.yanque.models.homework.service.HomeworkSubmissionService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class HomeworkAssignmentController {
 
     @Autowired
     private HomeworkAssignmentService homeworkAssignmentService;
+
+    @Autowired
+    private HomeworkSubmissionService homeworkSubmissionService;
 
     /**
      * 发布作业。
@@ -124,6 +130,29 @@ public class HomeworkAssignmentController {
     @RequirePermission("homework:view")
     public ApiResponse<PageResult<HomeworkAssignmentRes>> page(@ModelAttribute HomeworkAssignmentPageReq req) {
         return ApiResponse.success(homeworkAssignmentService.page(req));
+    }
+
+    /**
+     * 查询作业的提交情况。
+     * 返回该作业下所有学员的提交记录。
+     */
+    @GetMapping("{id}/submissions")
+    @RequirePermission("homework:submissions")
+    public ApiResponse<java.util.List<HomeworkSubmissionEntity>> submissions(@PathVariable Long id) {
+        return ApiResponse.success(homeworkSubmissionService.listByAssignmentId(id));
+    }
+
+    /**
+     * 批改作业提交。
+     * 打分、写评语、更新状态为已批阅。
+     */
+    @PutMapping("submissions/{id}/review")
+    @RequirePermission("homework:submissions")
+    public ApiResponse<Void> reviewSubmission(@PathVariable Long id,
+                                              @RequestBody HomeworkReviewReq req,
+                                              HttpServletRequest request) {
+        homeworkSubmissionService.review(id, req, currentUserId(request));
+        return ApiResponse.success();
     }
 
     private Long currentUserId(HttpServletRequest request) {
