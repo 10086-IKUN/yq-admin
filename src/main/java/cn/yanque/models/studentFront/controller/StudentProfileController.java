@@ -2,10 +2,13 @@ package cn.yanque.models.studentFront.controller;
 
 import cn.yanque.common.annotation.SkipPermission;
 import cn.yanque.common.api.ApiResponse;
-import cn.yanque.models.edu.student.pojo.entity.EduStudentEntity;
 import cn.yanque.models.studentFront.biz.StudentProfileBiz;
+import cn.yanque.models.studentFront.pojo.vo.req.StudentProfileUpdateReq;
+import cn.yanque.models.studentFront.pojo.vo.res.StudentProfileRes;
+import cn.yanque.models.studentFront.util.StudentAuthUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,19 +37,21 @@ public class StudentProfileController {
      */
     @GetMapping
     @Operation(description = "获取个人信息")
-    public ApiResponse<EduStudentEntity> getProfile() {
-        return ApiResponse.success(studentProfileBiz.getProfile());
+    public ApiResponse<StudentProfileRes> getProfile(HttpServletRequest request) {
+        Long studentId = StudentAuthUtil.getStudentId(request);
+        return ApiResponse.success(studentProfileBiz.getProfile(studentId));
     }
 
     /**
      * 修改个人信息
-     * @param entity 学员信息
+     * @param req 学员可自行修改的个人资料
      * @return 修改结果
      */
     @PutMapping
     @Operation(description = "修改个人信息")
-    public ApiResponse<Void> updateProfile(@RequestBody EduStudentEntity entity) {
-        studentProfileBiz.updateProfile(entity);
+    public ApiResponse<Void> updateProfile(@RequestBody StudentProfileUpdateReq req, HttpServletRequest request) {
+        Long studentId = StudentAuthUtil.getStudentId(request);
+        studentProfileBiz.updateProfile(studentId, req);
         return ApiResponse.success();
     }
 }

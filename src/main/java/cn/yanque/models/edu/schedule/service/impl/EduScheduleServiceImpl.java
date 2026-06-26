@@ -373,62 +373,28 @@ public class EduScheduleServiceImpl implements EduScheduleService {
             }
         }
 
-        // 如果是 REST/SELF_STUDY 且需要前移，将后续 CLASS 记录向前移（只改日期，不改 courseDayNum）
+        // 如果删除的是休息/自习，并且前端选择了“前移后续课程”，就把后续排课整体向前补位。
         if (forwardCourses && !"CLASS".equals(entity.getScheduleType())) {
             java.sql.Date deletedDate = entity.getScheduleDate();
 
             List<EduClassScheduleEntity> allRecords = eduClassScheduleMapper.selectAllByClassId(classId);
-            Date earliestDate = allRecords.get(0).getScheduleDate();
-            Date latestDate = allRecords.get(allRecords.size() - 1).getScheduleDate();
-            int totalDays = (int) ((latestDate.getTime() - earliestDate.getTime()) / (1000 * 60 * 60 * 24)) + 60;
-            Map<String, HolidayInfo> holidayMap = fetchHolidayData(earliestDate, totalDays);
-
-            // 收集不可占用的日期：所有不会被前移的记录占用的日期
-            Set<java.sql.Date> occupiedDates = new HashSet<>();
-            for (EduClassScheduleEntity r : allRecords) {
-                if (r.getId().equals(scheduleId)) continue; // 跳过被删记录
-                // 只有被删日期之后的 CLASS 才会被前移，其余记录日期不可占用
-                boolean willShift = "CLASS".equals(r.getScheduleType())
-                        && r.getScheduleDate().after(deletedDate);
-                if (!willShift) {
-                    occupiedDates.add(r.getScheduleDate());
-                }
-            }
-
-            // 找到所有在被删日期之后的 CLASS 记录，按日期升序
+            // 找到被删日期之后的所有排课记录，包含上课、休息和自习。
             List<EduClassScheduleEntity> toShift = allRecords.stream()
-                    .filter(r -> "CLASS".equals(r.getScheduleType())
-                            && r.getScheduleDate().after(deletedDate)
+                    .filter(r -> r.getScheduleDate().after(deletedDate)
                             && !r.getId().equals(scheduleId))
-                    .sorted(Comparator.comparing(EduClassScheduleEntity::getScheduleDate))
+                    .sorted(Comparator.comparing(EduClassScheduleEntity::getScheduleDate)
+                            .thenComparing(EduClassScheduleEntity::getId))
                     .collect(java.util.stream.Collectors.toList());
 
-            // 每条 CLASS 独立向前搜索（与删除 CLASS 同理），利用级联效应自然紧凑排列
+            // 删除休息/自习并选择前移时，删除当天就是第一个空位。
+            // 后续所有排课记录按日期顺序依次填补上一个空位，避免只移动第一天导致中间断档。
+            java.sql.Date emptyDate = deletedDate;
             for (EduClassScheduleEntity record : toShift) {
-                java.sql.Date originalDate = record.getScheduleDate(); // 保存原位，无法前移时标记为占用
-                Date prevDate = DateUtil.offsetDay(originalDate, -1);
-                boolean moved = false;
-                while (true) {
-                    if (prevDate.before(deletedDate)) {
-                        break;
-                    }
-                    String dateKey = DateUtil.format(prevDate, "yyyy-MM-dd");
-                    boolean isHoliday = holidayMap.containsKey(dateKey) && Boolean.TRUE.equals(holidayMap.get(dateKey).getHoliday());
-                    java.sql.Date candidate = new java.sql.Date(prevDate.getTime());
-
-                    if (!isHoliday && !occupiedDates.contains(candidate)) {
-                        record.setScheduleDate(candidate);
-                        moved = true;
-                        break;
-                    }
-                    prevDate = DateUtil.offsetDay(prevDate, -1);
-                }
-                if (!moved) {
-                    // 无法前移，原日期仍需保留为已占用，防止后续记录碰撞
-                    occupiedDates.add(originalDate);
-                }
+                java.sql.Date originalDate = record.getScheduleDate();
+                record.setScheduleDate(emptyDate);
                 record.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
                 eduClassScheduleMapper.updateById(record);
+                emptyDate = originalDate;
             }
         }
 

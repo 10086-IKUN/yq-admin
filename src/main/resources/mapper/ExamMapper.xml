@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.exam.mapper.ExamMapper">
+
+    <resultMap id="QuestionMap" type="cn.yanque.models.exam.pojo.entity.ExamQuestionEntity">
+        <id property="id" column="id"/>
+        <result property="questionType" column="question_type"/>
+        <result property="questionStem" column="question_stem"/>
+        <result property="optionsJson" column="options_json"/>
+        <result property="correctAnswer" column="correct_answer"/>
+        <result property="answerAnalysis" column="answer_analysis"/>
+        <result property="difficulty" column="difficulty"/>
+        <result property="status" column="status"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="PaperMap" type="cn.yanque.models.exam.pojo.entity.ExamPaperEntity">
+        <id property="id" column="id"/>
+        <result property="paperName" column="paper_name"/>
+        <result property="description" column="description"/>
+        <result property="durationMinutes" column="duration_minutes"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="passScore" column="pass_score"/>
+        <result property="status" column="status"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="questionCount" column="question_count"/>
+    </resultMap>
+
+    <resultMap id="PaperQuestionMap" type="cn.yanque.models.exam.pojo.entity.ExamPaperQuestionEntity">
+        <id property="id" column="id"/>
+        <result property="paperId" column="paper_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="questionScore" column="question_score"/>
+        <result property="sortNum" column="sort_num"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="questionType" column="question_type"/>
+        <result property="questionStem" column="question_stem"/>
+        <result property="optionsJson" column="options_json"/>
+        <result property="correctAnswer" column="correct_answer"/>
+        <result property="answerAnalysis" column="answer_analysis"/>
+    </resultMap>
+
+    <resultMap id="ScheduleMap" type="cn.yanque.models.exam.pojo.entity.ExamScheduleEntity">
+        <id property="id" column="id"/>
+        <result property="paperId" column="paper_id"/>
+        <result property="classId" column="class_id"/>
+        <result property="examName" column="exam_name"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="status" column="status"/>
+        <result property="answerPublished" column="answer_published"/>
+        <result property="answerPublishTime" column="answer_publish_time"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="paperName" column="paper_name"/>
+        <result property="classTerm" column="class_term"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="durationMinutes" column="duration_minutes"/>
+        <result property="attemptCount" column="attempt_count"/>
+        <result property="attemptId" column="attempt_id"/>
+        <result property="attemptStatus" column="attempt_status"/>
+        <result property="studentScore" column="student_score"/>
+    </resultMap>
+
+    <resultMap id="AttemptMap" type="cn.yanque.models.exam.pojo.entity.ExamAttemptEntity">
+        <id property="id" column="id"/>
+        <result property="scheduleId" column="schedule_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="studentNo" column="student_no"/>
+        <result property="studentNameSnapshot" column="student_name_snapshot"/>
+        <result property="startTime" column="start_time"/>
+        <result property="submitTime" column="submit_time"/>
+        <result property="status" column="status"/>
+        <result property="objectiveScore" column="objective_score"/>
+        <result property="subjectiveScore" column="subjective_score"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="examName" column="exam_name"/>
+        <result property="paperTotalScore" column="paper_total_score"/>
+    </resultMap>
+
+    <resultMap id="AnswerMap" type="cn.yanque.models.exam.pojo.entity.ExamAnswerEntity">
+        <id property="id" column="id"/>
+        <result property="attemptId" column="attempt_id"/>
+        <result property="paperQuestionId" column="paper_question_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="answerContent" column="answer_content"/>
+        <result property="correct" column="is_correct"/>
+        <result property="score" column="score"/>
+        <result property="reviewComment" column="review_comment"/>
+        <result property="reviewTeacherId" column="review_teacher_id"/>
+        <result property="reviewTime" column="review_time"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="questionType" column="question_type"/>
+        <result property="questionStem" column="question_stem"/>
+        <result property="optionsJson" column="options_json"/>
+        <result property="correctAnswer" column="correct_answer"/>
+        <result property="answerAnalysis" column="answer_analysis"/>
+        <result property="questionScore" column="question_score"/>
+        <result property="sortNum" column="sort_num"/>
+    </resultMap>
+
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_question (
+            question_type, question_stem, options_json, correct_answer,
+            answer_analysis, difficulty, status, created_by
+        )
+        values (
+            #{questionType}, #{questionStem}, #{optionsJson}, #{correctAnswer},
+            #{answerAnalysis}, #{difficulty}, #{status}, #{createdBy}
+        )
+    </insert>
+
+    <update id="updateQuestion">
+        update exam_question
+        set question_type = #{questionType},
+            question_stem = #{questionStem},
+            options_json = #{optionsJson},
+            correct_answer = #{correctAnswer},
+            answer_analysis = #{answerAnalysis},
+            difficulty = #{difficulty},
+            status = #{status}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteQuestion">
+        delete from exam_question
+        where id = #{id}
+          and not exists (
+              select 1 from exam_paper_question epq where epq.question_id = exam_question.id
+          )
+    </delete>
+
+    <select id="selectQuestionById" resultMap="QuestionMap">
+        select *
+        from exam_question
+        where id = #{id}
+    </select>
+
+    <select id="selectQuestionPage" resultMap="QuestionMap">
+        select *
+        from exam_question
+        <where>
+            <if test="keyword != null and keyword != ''">
+                question_stem like concat('%', #{keyword}, '%')
+            </if>
+            <if test="questionType != null and questionType != ''">
+                and question_type = #{questionType}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insertPaper" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_paper (
+            paper_name, description, duration_minutes, total_score,
+            pass_score, status, created_by
+        )
+        values (
+            #{paperName}, #{description}, #{durationMinutes}, #{totalScore},
+            #{passScore}, #{status}, #{createdBy}
+        )
+    </insert>
+
+    <update id="updatePaper">
+        update exam_paper
+        set paper_name = #{paperName},
+            description = #{description},
+            duration_minutes = #{durationMinutes},
+            total_score = #{totalScore},
+            pass_score = #{passScore},
+            status = #{status}
+        where id = #{id}
+    </update>
+
+    <delete id="deletePaper">
+        delete from exam_paper
+        where id = #{id}
+    </delete>
+
+    <select id="selectPaperById" resultMap="PaperMap">
+        select ep.*,
+               (select count(*) from exam_paper_question epq where epq.paper_id = ep.id) as question_count
+        from exam_paper ep
+        where ep.id = #{id}
+    </select>
+
+    <select id="selectPaperPage" resultMap="PaperMap">
+        select ep.*,
+               (select count(*) from exam_paper_question epq where epq.paper_id = ep.id) as question_count
+        from exam_paper ep
+        <where>
+            <if test="keyword != null and keyword != ''">
+                ep.paper_name like concat('%', #{keyword}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and ep.status = #{status}
+            </if>
+        </where>
+        order by ep.id desc
+    </select>
+
+    <delete id="deletePaperQuestions">
+        delete from exam_paper_question where paper_id = #{paperId}
+    </delete>
+
+    <insert id="insertPaperQuestion" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_paper_question (paper_id, question_id, question_score, sort_num)
+        values (#{paperId}, #{questionId}, #{questionScore}, #{sortNum})
+    </insert>
+
+    <select id="selectPaperQuestions" resultMap="PaperQuestionMap">
+        select epq.*, eq.question_type, eq.question_stem, eq.options_json,
+               eq.correct_answer, eq.answer_analysis
+        from exam_paper_question epq
+        join exam_question eq on eq.id = epq.question_id
+        where epq.paper_id = #{paperId}
+        order by epq.sort_num, epq.id
+    </select>
+
+    <select id="countPaperSchedules" resultType="int">
+        select count(*) from exam_schedule where paper_id = #{paperId}
+    </select>
+
+    <insert id="insertSchedule" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_schedule (
+            paper_id, class_id, exam_name, start_time, end_time,
+            status, answer_published, created_by
+        )
+        values (
+            #{paperId}, #{classId}, #{examName}, #{startTime}, #{endTime},
+            #{status}, #{answerPublished}, #{createdBy}
+        )
+    </insert>
+
+    <update id="updateSchedule">
+        update exam_schedule
+        set paper_id = #{paperId},
+            class_id = #{classId},
+            exam_name = #{examName},
+            start_time = #{startTime},
+            end_time = #{endTime}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSchedule">
+        delete from exam_schedule
+        where id = #{id}
+    </delete>
+
+    <update id="publishAnswers">
+        update exam_schedule
+        set answer_published = 1,
+            answer_publish_time = now()
+        where id = #{id}
+    </update>
+
+    <sql id="ScheduleSelect">
+        select es.*,
+               ep.paper_name,
+               ep.total_score,
+               ep.duration_minutes,
+               ec.class_term,
+               (select count(*) from exam_attempt ea where ea.schedule_id = es.id) as attempt_count
+        from exam_schedule es
+        join exam_paper ep on ep.id = es.paper_id
+        join edu_class ec on ec.id = es.class_id
+    </sql>
+
+    <select id="selectScheduleById" resultMap="ScheduleMap">
+        <include refid="ScheduleSelect"/>
+        where es.id = #{id}
+    </select>
+
+    <select id="selectSchedulePage" resultMap="ScheduleMap">
+        <include refid="ScheduleSelect"/>
+        <where>
+            <if test="keyword != null and keyword != ''">
+                es.exam_name like concat('%', #{keyword}, '%')
+            </if>
+            <if test="classId != null">
+                and es.class_id = #{classId}
+            </if>
+            <if test="status != null and status != ''">
+                and es.status = #{status}
+            </if>
+        </where>
+        order by es.start_time desc, es.id desc
+    </select>
+
+    <select id="selectAttemptsBySchedule" resultMap="AttemptMap">
+        select ea.*, es.exam_name, ep.total_score as paper_total_score
+        from exam_attempt ea
+        join exam_schedule es on es.id = ea.schedule_id
+        join exam_paper ep on ep.id = es.paper_id
+        where ea.schedule_id = #{scheduleId}
+        order by ea.submit_time desc, ea.id desc
+    </select>
+
+    <select id="selectAttemptById" resultMap="AttemptMap">
+        select ea.*, es.exam_name, ep.total_score as paper_total_score
+        from exam_attempt ea
+        join exam_schedule es on es.id = ea.schedule_id
+        join exam_paper ep on ep.id = es.paper_id
+        where ea.id = #{id}
+    </select>
+
+    <select id="selectAttemptByStudent" resultMap="AttemptMap">
+        select ea.*, es.exam_name, ep.total_score as paper_total_score
+        from exam_attempt ea
+        join exam_schedule es on es.id = ea.schedule_id
+        join exam_paper ep on ep.id = es.paper_id
+        where ea.schedule_id = #{scheduleId}
+          and ea.student_id = #{studentId}
+    </select>
+
+    <insert id="insertAttempt" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_attempt (
+            schedule_id, student_id, student_no, student_name_snapshot,
+            start_time, status, objective_score, subjective_score, total_score
+        )
+        values (
+            #{scheduleId}, #{studentId}, #{studentNo}, #{studentNameSnapshot},
+            #{startTime}, #{status}, 0, 0, 0
+        )
+    </insert>
+
+    <insert id="insertAttemptAnswers">
+        insert into exam_answer (attempt_id, paper_question_id, question_id)
+        select #{attemptId}, epq.id, epq.question_id
+        from exam_paper_question epq
+        where epq.paper_id = #{paperId}
+        order by epq.sort_num, epq.id
+    </insert>
+
+    <select id="selectAnswersByAttempt" resultMap="AnswerMap">
+        select ea.*,
+               eq.question_type,
+               eq.question_stem,
+               eq.options_json,
+               eq.correct_answer,
+               eq.answer_analysis,
+               epq.question_score,
+               epq.sort_num
+        from exam_answer ea
+        join exam_question eq on eq.id = ea.question_id
+        join exam_paper_question epq on epq.id = ea.paper_question_id
+        where ea.attempt_id = #{attemptId}
+        order by epq.sort_num, epq.id
+    </select>
+
+    <select id="selectAnswerById" resultMap="AnswerMap">
+        select ea.*,
+               eq.question_type,
+               eq.question_stem,
+               eq.options_json,
+               eq.correct_answer,
+               eq.answer_analysis,
+               epq.question_score,
+               epq.sort_num
+        from exam_answer ea
+        join exam_question eq on eq.id = ea.question_id
+        join exam_paper_question epq on epq.id = ea.paper_question_id
+        where ea.id = #{id}
+    </select>
+
+    <update id="updateAnswerContent">
+        update exam_answer
+        set answer_content = #{answerContent}
+        where id = #{id}
+          and attempt_id = #{attemptId}
+          and exists (
+              select 1
+              from exam_attempt attempt
+              where attempt.id = exam_answer.attempt_id
+                and attempt.status = 'IN_PROGRESS'
+          )
+    </update>
+
+    <update id="updateAnswerScore">
+        update exam_answer
+        set is_correct = #{correct},
+            score = #{score}
+        where id = #{id}
+    </update>
+
+    <update id="reviewAnswer">
+        update exam_answer
+        set score = #{score},
+            review_comment = #{reviewComment},
+            review_teacher_id = #{teacherId},
+            review_time = now()
+        where id = #{id}
+    </update>
+
+    <update id="submitAttempt">
+        update exam_attempt
+        set submit_time = now(),
+            status = 'SUBMITTED',
+            objective_score = #{objectiveScore},
+            total_score = #{objectiveScore} + subjective_score
+        where id = #{id}
+          and status = 'IN_PROGRESS'
+    </update>
+
+    <update id="refreshAttemptScore">
+        update exam_attempt
+        set objective_score = coalesce((
+                select sum(coalesce(answer.score, 0))
+                from exam_answer answer
+                join exam_question question on question.id = answer.question_id
+                where answer.attempt_id = exam_attempt.id
+                  and question.question_type in ('SINGLE', 'MULTIPLE', 'JUDGE')
+            ), 0),
+            subjective_score = coalesce((
+                select sum(coalesce(answer.score, 0))
+                from exam_answer answer
+                join exam_question question on question.id = answer.question_id
+                where answer.attempt_id = exam_attempt.id
+                  and question.question_type in ('FILL', 'SHORT')
+            ), 0),
+            total_score = coalesce((
+                select sum(coalesce(answer.score, 0))
+                from exam_answer answer
+                where answer.attempt_id = exam_attempt.id
+            ), 0)
+        where id = #{id}
+    </update>
+
+    <update id="markAttemptReviewed">
+        update exam_attempt
+        set status = 'REVIEWED'
+        where id = #{id}
+          and status = 'SUBMITTED'
+    </update>
+
+    <select id="selectStudentExams" resultMap="ScheduleMap">
+        select es.*,
+               ep.paper_name,
+               ep.total_score,
+               ep.duration_minutes,
+               ec.class_term,
+               ea.id as attempt_id,
+               ea.status as attempt_status,
+               ea.total_score as student_score
+        from edu_student student
+        join exam_schedule es on es.class_id = student.class_id
+        join exam_paper ep on ep.id = es.paper_id
+        join edu_class ec on ec.id = es.class_id
+        left join exam_attempt ea
+               on ea.schedule_id = es.id
+              and ea.student_id = student.id
+        where student.id = #{studentId}
+          and es.status != 'CANCELLED'
+        order by es.start_time desc, es.id desc
+    </select>
+</mapper>

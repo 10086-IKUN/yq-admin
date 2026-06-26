@@ -41,7 +41,8 @@
             <if test="school != null">school = #{school},</if>
             <if test="education != null">education = #{education},</if>
             <if test="studyMode != null">study_mode = #{studyMode},</if>
-            class_id = #{classId},
+            <!-- classId 只有管理端绑定/解绑班级时才允许更新，避免学生端资料保存时把班级清空。 -->
+            <if test="classId != null">class_id = #{classId},</if>
             <if test="productId != null">product_id = #{productId},</if>
             <if test="joinTime != null">join_time = #{joinTime},</if>
         </set>

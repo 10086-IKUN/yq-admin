@@ -44,7 +44,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/student/login",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
-                        "/swagger-ui/**");
+                        "/swagger-ui/**",
+                        "/login/**");
         // 签名校验
         registry.addInterceptor(signInterceptor)
                 .addPathPatterns("/api/**")
@@ -53,7 +54,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/student/login",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
-                        "/swagger-ui/**");
+                        "/swagger-ui/**",
+                        "/login/**");
         // 权限校验
         registry.addInterceptor(permissionInterceptor)
                 .addPathPatterns("/api/**")
@@ -62,7 +64,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/student/login",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
-                        "/swagger-ui/**");
+                        "/swagger-ui/**",
+                        "/login/**");
         registry.addInterceptor(studentPermissionInterceptor)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns(
@@ -70,7 +73,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/sysUser/login",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
-                        "/swagger-ui/**");
+                        "/swagger-ui/**",
+                        "/login/**");
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 }

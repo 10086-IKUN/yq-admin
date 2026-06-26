@@ -33,8 +33,8 @@ public class StudentHomeworkBizImpl implements StudentHomeworkBiz {
      * @return 分页作业列表
      */
     @Override
-    public PageResult<HomeworkAssignmentRes> list(HomeworkAssignmentPageReq req) {
-        return studentHomeworkService.list(req);
+    public PageResult<HomeworkAssignmentRes> list(HomeworkAssignmentPageReq req, String studentNo) {
+        return studentHomeworkService.list(req, studentNo);
     }
 
     /**

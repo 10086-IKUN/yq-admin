@@ -61,4 +61,32 @@ public class StudentAuthUtil {
         }
         return student.getStudentName();
     }
+
+    /**
+     * 获取当前登录学员班级ID
+     * @param request HTTP请求
+     * @return 班级ID
+     */
+    public static Long getClassId(HttpServletRequest request) {
+        Long studentId = getStudentId(request);
+        EduStudentEntity student = studentFrontService.getStudentById(studentId);
+        if (student == null) {
+            throw new BusinessException(404, "学员不存在");
+        }
+        return student.getClassId();
+    }
+
+    /**
+     * 获取当前登录学员实体
+     * @param request HTTP请求
+     * @return 学员实体
+     */
+    public static EduStudentEntity getStudent(HttpServletRequest request) {
+        Long studentId = getStudentId(request);
+        EduStudentEntity student = studentFrontService.getStudentById(studentId);
+        if (student == null) {
+            throw new BusinessException(404, "学员不存在");
+        }
+        return student;
+    }
 }

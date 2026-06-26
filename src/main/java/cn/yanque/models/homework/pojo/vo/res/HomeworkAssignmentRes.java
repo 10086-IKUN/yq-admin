@@ -3,6 +3,7 @@ package cn.yanque.models.homework.pojo.vo.res;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -134,4 +135,35 @@ public class HomeworkAssignmentRes {
     /** 更新时间。 */
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 当前登录学员是否已经提交过这份作业。
+     *
+     * <p>这个字段主要给学员端首页和作业列表使用。
+     * 有了这个字段，前端就不需要为了每一条作业再单独请求一次提交记录。</p>
+     */
+    @Schema(description = "当前登录学员是否已提交")
+    private Boolean hasSubmitted;
+
+    /**
+     * 当前登录学员的提交状态。
+     *
+     * <p>取值来自 homework_submission.status。
+     * SUBMITTED 表示已提交，REVIEWED 表示已批改，
+     * RESUBMIT_REQUIRED 表示老师要求重新提交。</p>
+     */
+    @Schema(description = "当前登录学员提交状态", allowableValues = {"SUBMITTED", "REVIEWED", "RESUBMIT_REQUIRED"})
+    private String submissionStatus;
+
+    /** 当前登录学员最近一次提交时间。 */
+    @Schema(description = "当前登录学员最近一次提交时间")
+    private LocalDateTime submitTime;
+
+    /** 当前登录学员当前作业得分。 */
+    @Schema(description = "当前登录学员当前作业得分")
+    private BigDecimal score;
+
+    /** 当前登录学员当前作业批改时间。 */
+    @Schema(description = "当前登录学员当前作业批改时间")
+    private LocalDateTime reviewTime;
 }

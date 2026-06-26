@@ -16,7 +16,7 @@ public interface StudentHomeworkService {
      * @param req 分页查询参数
      * @return 分页作业列表
      */
-    PageResult<HomeworkAssignmentRes> list(HomeworkAssignmentPageReq req);
+    PageResult<HomeworkAssignmentRes> list(HomeworkAssignmentPageReq req, String studentNo);
 
     /**
      * 根据ID获取作业

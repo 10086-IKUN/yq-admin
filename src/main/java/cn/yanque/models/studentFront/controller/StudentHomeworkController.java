@@ -44,8 +44,14 @@ public class StudentHomeworkController {
      */
     @GetMapping
     @Operation(description = "获取作业列表")
-    public ApiResponse<PageResult<HomeworkAssignmentRes>> list(@Valid @ModelAttribute HomeworkAssignmentPageReq req) {
-        return ApiResponse.success(studentHomeworkBiz.list(req));
+    public ApiResponse<PageResult<HomeworkAssignmentRes>> list(@Valid @ModelAttribute HomeworkAssignmentPageReq req,
+                                                               HttpServletRequest request) {
+        // 强制使用学生所在班级ID，防止查看其他班级作业
+        Long classId = StudentAuthUtil.getClassId(request);
+        req.setClassId(classId);
+
+        String studentNo = StudentAuthUtil.getStudentNo(request);
+        return ApiResponse.success(studentHomeworkBiz.list(req, studentNo));
     }
 
     /**
