@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.studentTag.mapper.StudentTagMapper">
+
+    <resultMap id="StudentTagMap" type="cn.yanque.models.studentTag.pojo.entity.StudentTagEntity">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="tagType" column="tag_type"/>
+        <result property="onTimeRate" column="on_time_rate"/>
+        <result property="totalAssignments" column="total_assignments"/>
+        <result property="onTimeCount" column="on_time_count"/>
+        <result property="confirmed" column="confirmed"/>
+        <result property="confirmedBy" column="confirmed_by"/>
+        <result property="confirmedTime" column="confirmed_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap id="StudentTagVOMap" type="cn.yanque.models.studentTag.pojo.vo.StudentTagVO">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="studentName" column="student_name"/>
+        <result property="studentCode" column="student_code"/>
+        <result property="classId" column="class_id"/>
+        <result property="classTerm" column="class_term"/>
+        <result property="className" column="class_name"/>
+        <result property="tagType" column="tag_type"/>
+        <result property="onTimeRate" column="on_time_rate"/>
+        <result property="totalAssignments" column="total_assignments"/>
+        <result property="onTimeCount" column="on_time_count"/>
+        <result property="confirmed" column="confirmed"/>
+        <result property="confirmedBy" column="confirmed_by"/>
+        <result property="confirmedTime" column="confirmed_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO student_tag (
+            student_id,
+            tag_type,
+            on_time_rate,
+            total_assignments,
+            on_time_count
+        ) VALUES (
+            #{studentId},
+            #{tagType},
+            #{onTimeRate},
+            #{totalAssignments},
+            #{onTimeCount}
+        )
+    </insert>
+
+    <update id="updateByStudentId">
+        UPDATE student_tag
+        SET tag_type = #{tagType},
+            on_time_rate = #{onTimeRate},
+            total_assignments = #{totalAssignments},
+            on_time_count = #{onTimeCount},
+            update_time = NOW()
+        WHERE student_id = #{studentId}
+    </update>
+
+    <select id="selectByStudentId" resultMap="StudentTagMap">
+        SELECT *
+        FROM student_tag
+        WHERE student_id = #{studentId}
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
+
+    <sql id="LatestStudentTagSelect">
+        FROM (
+            SELECT st1.*
+            FROM student_tag st1
+            INNER JOIN (
+                SELECT student_id, MAX(id) AS max_id
+                FROM student_tag
+                GROUP BY student_id
+            ) latest ON latest.max_id = st1.id
+        ) st
+        LEFT JOIN edu_student es ON es.id = st.student_id
+        LEFT JOIN edu_class ec ON ec.id = es.class_id
+    </sql>
+
+    <select id="selectList" resultMap="StudentTagVOMap">
+        SELECT st.*,
+               es.student_name,
+               es.student_code,
+               es.class_id,
+               ec.class_term,
+               CONCAT('第', ec.class_term, '期') AS class_name
+        <include refid="LatestStudentTagSelect"/>
+        <where>
+            <if test="tagType != null and tagType != ''">
+                AND st.tag_type = #{tagType}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (
+                    es.student_name LIKE CONCAT('%', #{keyword}, '%')
+                    OR es.student_code LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+        </where>
+        ORDER BY st.update_time DESC, st.id DESC
+    </select>
+
+    <update id="confirm">
+        UPDATE student_tag
+        SET confirmed = 1,
+            confirmed_by = #{confirmedBy},
+            confirmed_time = NOW(),
+            <if test="tagType != null and tagType != ''">
+                tag_type = #{tagType},
+            </if>
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByTeacherId" resultMap="StudentTagVOMap">
+        SELECT st.*,
+               es.student_name,
+               es.student_code,
+               es.class_id,
+               ec.class_term,
+               CONCAT('第', ec.class_term, '期') AS class_name
+        <include refid="LatestStudentTagSelect"/>
+        WHERE ec.head_teacher_id = #{teacherId}
+        ORDER BY st.update_time DESC, st.id DESC
+    </select>
+</mapper>

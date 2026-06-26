@@ -169,4 +169,19 @@
         from edu_student
         where class_id = #{classId}
     </select>
+
+    <select id="selectByClassId" resultMap="HomeworkAssignmentMap">
+        <include refid="BaseSelect"/>
+        where ha.class_id = #{classId}
+          and ha.deleted = 0
+        order by ha.publish_date desc, ha.id desc
+    </select>
+
+    <select id="selectClosedByClassId" resultMap="HomeworkAssignmentMap">
+        <include refid="BaseSelect"/>
+        where ha.class_id = #{classId}
+          and ha.deleted = 0
+          and (ha.status = 'CLOSED' OR ha.deadline &lt; NOW())
+        order by ha.deadline desc
+    </select>
 </mapper>

@@ -87,4 +87,10 @@
         where phone = #{phone}
     </select>
 
+    <select id="selectAll" resultMap="EduStudentMap">
+        select <include refid="BaseColumns"/>
+        from edu_student
+        order by id desc
+    </select>
+
 </mapper>

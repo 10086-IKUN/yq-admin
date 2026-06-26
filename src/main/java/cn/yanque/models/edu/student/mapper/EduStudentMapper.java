@@ -57,4 +57,10 @@ public interface EduStudentMapper {
      * @return 学员实体
      */
     EduStudentEntity selectByPhone(@Param("phone") String phone);
+
+    /**
+     * 查询所有学员
+     * @return 学员列表
+     */
+    List<EduStudentEntity> selectAll();
 }

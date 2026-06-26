@@ -32,6 +32,14 @@ public class StudentProfileRes {
     @Schema(description = "手机号")
     private String phone;
 
+    /** 学校名称。个人中心需要回显和修改这个字段，所以响应对象必须显式返回。 */
+    @Schema(description = "学校名称")
+    private String school;
+
+    /** 学历。个人中心需要回显和修改这个字段，所以响应对象必须显式返回。 */
+    @Schema(description = "学历")
+    private String education;
+
     /** 学习方式：ONLINE 线上，OFFLINE 线下。 */
     @Schema(description = "学习方式")
     private String studyMode;

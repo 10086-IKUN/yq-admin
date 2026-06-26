@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.studentVisit.mapper.StudentVisitMapper">
+
+    <resultMap id="StudentVisitMap" type="cn.yanque.models.studentVisit.pojo.entity.StudentVisitEntity">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="visitTime" column="visit_time"/>
+        <result property="visitContent" column="visit_content"/>
+        <result property="nextVisitTime" column="next_visit_time"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO student_visit (student_id, teacher_id, visit_time, visit_content, next_visit_time, status)
+        VALUES (#{studentId}, #{teacherId}, #{visitTime}, #{visitContent}, #{nextVisitTime}, #{status})
+    </insert>
+
+    <update id="update">
+        UPDATE student_visit
+        SET visit_time = #{visitTime},
+            visit_content = #{visitContent},
+            status = #{status},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectById" resultMap="StudentVisitMap">
+        SELECT * FROM student_visit WHERE id = #{id}
+    </select>
+
+    <select id="selectTodayVisit" resultMap="StudentVisitMap">
+        SELECT sv.*, es.student_name, es.student_code, es.phone,
+               st.tag_type, st.on_time_rate
+        FROM student_visit sv
+        LEFT JOIN edu_student es ON es.id = sv.student_id
+        LEFT JOIN student_tag st ON st.student_id = sv.student_id
+        WHERE sv.teacher_id = #{teacherId}
+          AND sv.next_visit_time &lt;= #{today}
+          AND sv.status = 'PENDING'
+        ORDER BY sv.next_visit_time ASC
+    </select>
+
+    <select id="selectByStudentId" resultMap="StudentVisitMap">
+        SELECT * FROM student_visit
+        WHERE student_id = #{studentId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectLatestPending" resultMap="StudentVisitMap">
+        SELECT * FROM student_visit
+        WHERE student_id = #{studentId} AND status = 'PENDING'
+        ORDER BY next_visit_time DESC
+        LIMIT 1
+    </select>
+</mapper>
