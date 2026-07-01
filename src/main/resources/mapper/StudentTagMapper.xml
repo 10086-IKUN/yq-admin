@@ -69,6 +69,12 @@
         LIMIT 1
     </select>
 
+    <select id="selectById" resultMap="StudentTagMap">
+        SELECT *
+        FROM student_tag
+        WHERE id = #{id}
+    </select>
+
     <sql id="LatestStudentTagSelect">
         FROM (
             SELECT st1.*

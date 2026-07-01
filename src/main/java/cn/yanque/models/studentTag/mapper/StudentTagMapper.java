@@ -16,6 +16,8 @@ public interface StudentTagMapper {
 
     StudentTagEntity selectByStudentId(@Param("studentId") Long studentId);
 
+    StudentTagEntity selectById(@Param("id") Long id);
+
     List<StudentTagVO> selectList(@Param("tagType") String tagType,
                                    @Param("keyword") String keyword);
 

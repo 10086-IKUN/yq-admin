@@ -1,6 +1,7 @@
 package cn.yanque.models.studentVisit.pojo.entity;
 
 import lombok.Data;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,4 +16,9 @@ public class StudentVisitEntity {
     private String status;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private String studentName;
+    private String studentCode;
+    private String phone;
+    private String tagType;
+    private BigDecimal onTimeRate;
 }

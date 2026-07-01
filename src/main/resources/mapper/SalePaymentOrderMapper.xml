@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.sale.mapper.SalePaymentOrderMapper">
+
+    <resultMap id="SalePaymentOrderMap" type="cn.yanque.models.sale.entity.SalePaymentOrderEntity">
+        <id property="id" column="id"/>
+        <result property="paymentOrderNo" column="payment_order_no"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="studentCode" column="student_code"/>
+        <result property="studentName" column="student_name"/>
+        <result property="phone" column="phone"/>
+        <result property="productName" column="product_name"/>
+        <result property="paymentAmount" column="payment_amount"/>
+        <result property="paymentChannel" column="payment_channel"/>
+        <result property="paymentStatus" column="payment_status"/>
+        <result property="uniqueOrderNo" column="unique_order_no"/>
+        <result property="lastErrorMsg" column="last_error_msg"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sale_payment_order (payment_order_no, order_no, student_code, student_name,
+            phone, product_name, payment_amount, payment_channel, payment_status, unique_order_no)
+        VALUES (#{paymentOrderNo}, #{orderNo}, #{studentCode}, #{studentName},
+            #{phone}, #{productName}, #{paymentAmount}, #{paymentChannel}, #{paymentStatus}, #{uniqueOrderNo})
+    </insert>
+
+    <update id="updateById">
+        UPDATE sale_payment_order
+        SET payment_status = #{paymentStatus},
+            unique_order_no = #{uniqueOrderNo},
+            last_error_msg = #{lastErrorMsg},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByPaymentOrderNo" resultMap="SalePaymentOrderMap">
+        SELECT * FROM sale_payment_order WHERE payment_order_no = #{paymentOrderNo}
+    </select>
+
+    <select id="selectByOrderNo" resultMap="SalePaymentOrderMap">
+        SELECT * FROM sale_payment_order WHERE order_no = #{orderNo} ORDER BY id DESC LIMIT 1
+    </select>
+
+    <select id="selectListByOrderNo" resultMap="SalePaymentOrderMap">
+        SELECT * FROM sale_payment_order WHERE order_no = #{orderNo} ORDER BY id DESC
+    </select>
+
+</mapper>

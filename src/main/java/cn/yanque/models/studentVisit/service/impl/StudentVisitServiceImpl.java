@@ -18,9 +18,6 @@ public class StudentVisitServiceImpl implements StudentVisitService {
     @Autowired
     private StudentVisitMapper studentVisitMapper;
 
-    /**
-     * 标签对应的回访天数
-     */
     private static final int ACTIVE_VISIT_DAYS = 3;
     private static final int NORMAL_VISIT_DAYS = 5;
     private static final int LAZY_VISIT_DAYS = 7;
@@ -32,21 +29,25 @@ public class StudentVisitServiceImpl implements StudentVisitService {
 
     @Override
     public void submitVisit(StudentVisitEntity entity) {
-        // 更新回访记录
+        StudentVisitEntity existing = studentVisitMapper.selectById(entity.getId());
+        if (existing == null) {
+            return;
+        }
+
+        entity.setStudentId(existing.getStudentId());
         entity.setVisitTime(LocalDateTime.now());
         entity.setStatus("VISITED");
         studentVisitMapper.update(entity);
 
-        // 创建下次回访计划
         StudentVisitEntity nextVisit = new StudentVisitEntity();
-        nextVisit.setStudentId(entity.getStudentId());
+        nextVisit.setStudentId(existing.getStudentId());
         nextVisit.setTeacherId(entity.getTeacherId());
-        nextVisit.setNextVisitTime(LocalDate.now().plusDays(getVisitDays("NORMAL"))); // 默认5天，后续可从标签获取
+        nextVisit.setNextVisitTime(LocalDate.now().plusDays(getVisitDays("NORMAL")));
         nextVisit.setStatus("PENDING");
         studentVisitMapper.insert(nextVisit);
 
-        log.info("回访记录提交成功，已创建下次回访计划: studentId={}, nextVisitTime={}",
-                entity.getStudentId(), nextVisit.getNextVisitTime());
+        log.info("Student visit submitted: studentId={}, nextVisitTime={}",
+                existing.getStudentId(), nextVisit.getNextVisitTime());
     }
 
     @Override
@@ -56,14 +57,12 @@ public class StudentVisitServiceImpl implements StudentVisitService {
 
     @Override
     public void initVisitPlan(Long studentId, Long teacherId, String tagType) {
-        // 检查是否已有待回访记录
         StudentVisitEntity existing = studentVisitMapper.selectLatestPending(studentId);
         if (existing != null) {
-            log.info("学员已有待回访记录，跳过初始化: studentId={}", studentId);
+            log.info("Student already has pending visit plan: studentId={}", studentId);
             return;
         }
 
-        // 创建回访计划
         StudentVisitEntity visit = new StudentVisitEntity();
         visit.setStudentId(studentId);
         visit.setTeacherId(teacherId);
@@ -71,7 +70,7 @@ public class StudentVisitServiceImpl implements StudentVisitService {
         visit.setStatus("PENDING");
         studentVisitMapper.insert(visit);
 
-        log.info("学员回访计划初始化成功: studentId={}, tagType={}, nextVisitTime={}",
+        log.info("Student visit plan initialized: studentId={}, tagType={}, nextVisitTime={}",
                 studentId, tagType, visit.getNextVisitTime());
     }
 

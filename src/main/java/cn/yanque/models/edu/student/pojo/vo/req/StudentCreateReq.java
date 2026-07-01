@@ -38,8 +38,7 @@ public class StudentCreateReq {
     @Schema(description = "学历")
     private String education;
 
-    @NotBlank(message = "学习方式不能为空")
-    @Schema(description = "学习方式", allowableValues = {"ONLINE", "OFFLINE"})
+    @Schema(description = "学习方式，由所选产品自动带入", allowableValues = {"ONLINE", "OFFLINE"})
     private String studyMode;
 
     @Schema(description = "班级ID，线下学员使用")

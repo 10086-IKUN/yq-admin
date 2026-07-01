@@ -10,6 +10,7 @@ import cn.yanque.models.studentTag.mapper.StudentTagMapper;
 import cn.yanque.models.studentTag.pojo.entity.StudentTagEntity;
 import cn.yanque.models.studentTag.pojo.vo.StudentTagVO;
 import cn.yanque.models.studentTag.service.StudentTagService;
+import cn.yanque.models.studentVisit.service.StudentVisitService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,9 @@ public class StudentTagServiceImpl implements StudentTagService {
 
     @Autowired
     private HomeworkSubmissionMapper homeworkSubmissionMapper;
+
+    @Autowired
+    private StudentVisitService studentVisitService;
 
     /**
      * 重新计算单个学员标签。
@@ -115,7 +119,12 @@ public class StudentTagServiceImpl implements StudentTagService {
 
     @Override
     public void confirm(Long id, Long confirmedBy, String tagType) {
+        StudentTagEntity tag = studentTagMapper.selectById(id);
         studentTagMapper.confirm(id, confirmedBy, tagType);
+        if (tag != null) {
+            String confirmedTagType = tagType == null || tagType.isBlank() ? tag.getTagType() : tagType;
+            studentVisitService.initVisitPlan(tag.getStudentId(), confirmedBy, confirmedTagType);
+        }
     }
 
     @Override

@@ -42,6 +42,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/sysUser/login",
                         "/api/student/login",
+                        "/api/student/pay/notify",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
                         "/swagger-ui/**",
@@ -52,6 +53,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/sysUser/login",
                         "/api/student/login",
+                        "/api/student/pay/notify",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
                         "/swagger-ui/**",
@@ -62,6 +64,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/sysUser/login",
                         "/api/student/login",
+                        "/api/student/pay/notify",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
                         "/swagger-ui/**",
@@ -71,6 +74,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/student/login",
                         "/api/sysUser/login",
+                        "/api/student/pay/notify",
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
                         "/swagger-ui/**",

@@ -12,6 +12,11 @@
         <result property="status" column="status"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="studentName" column="student_name"/>
+        <result property="studentCode" column="student_code"/>
+        <result property="phone" column="phone"/>
+        <result property="tagType" column="tag_type"/>
+        <result property="onTimeRate" column="on_time_rate"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -45,9 +50,13 @@
     </select>
 
     <select id="selectByStudentId" resultMap="StudentVisitMap">
-        SELECT * FROM student_visit
-        WHERE student_id = #{studentId}
-        ORDER BY create_time DESC
+        SELECT sv.*, es.student_name, es.student_code, es.phone,
+               st.tag_type, st.on_time_rate
+        FROM student_visit sv
+        LEFT JOIN edu_student es ON es.id = sv.student_id
+        LEFT JOIN student_tag st ON st.student_id = sv.student_id
+        WHERE sv.student_id = #{studentId}
+        ORDER BY sv.create_time DESC
     </select>
 
     <select id="selectLatestPending" resultMap="StudentVisitMap">

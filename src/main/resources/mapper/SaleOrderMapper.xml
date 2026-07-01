@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.sale.mapper.SaleOrderMapper">
+
+    <resultMap id="SaleOrderMap" type="cn.yanque.models.sale.entity.SaleOrderEntity">
+        <id property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="studentName" column="student_name"/>
+        <result property="phone" column="phone"/>
+        <result property="productId" column="product_id"/>
+        <result property="classId" column="class_id"/>
+        <result property="studentCode" column="student_code"/>
+        <result property="productAmount" column="product_amount"/>
+        <result property="discountAmount" column="discount_amount"/>
+        <result property="receivableAmount" column="receivable_amount"/>
+        <result property="paidAmount" column="paid_amount"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="orderSource" column="order_source"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sale_order (order_no, student_name, phone, product_id, class_id,
+            student_code, product_amount, discount_amount, receivable_amount, paid_amount, order_status, order_source)
+        VALUES (#{orderNo}, #{studentName}, #{phone}, #{productId}, #{classId},
+            #{studentCode}, #{productAmount}, #{discountAmount}, #{receivableAmount}, #{paidAmount}, #{orderStatus}, #{orderSource})
+    </insert>
+
+    <update id="updateById">
+        UPDATE sale_order
+        SET paid_amount = #{paidAmount},
+            order_status = #{orderStatus},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="cancelExpiredPendingOrders">
+        UPDATE sale_order
+        SET order_status = 'CANCELLED',
+            updated_at = NOW()
+        WHERE order_status = 'PENDING'
+          AND IFNULL(order_source, 'STUDENT_PURCHASE') = 'STUDENT_PURCHASE'
+          AND created_at &lt;= DATE_SUB(NOW(), INTERVAL 20 MINUTE)
+    </update>
+
+    <update id="updateDiscountById">
+        UPDATE sale_order
+        SET discount_amount = #{discountAmount},
+            receivable_amount = #{receivableAmount},
+            updated_at = NOW()
+        WHERE id = #{id}
+          AND order_status = 'PENDING'
+    </update>
+
+    <select id="selectById" resultMap="SaleOrderMap">
+        SELECT * FROM sale_order WHERE id = #{id}
+    </select>
+
+    <select id="selectByOrderNo" resultMap="SaleOrderMap">
+        SELECT * FROM sale_order WHERE order_no = #{orderNo}
+    </select>
+
+    <select id="selectPage" resultMap="SaleOrderMap">
+        SELECT * FROM sale_order
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (order_no LIKE CONCAT('%', #{keyword}, '%')
+                     OR student_name LIKE CONCAT('%', #{keyword}, '%')
+                     OR student_code LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="orderStatus != null and orderStatus != ''">
+                AND order_status = #{orderStatus}
+            </if>
+        </where>
+        ORDER BY id DESC
+    </select>
+
+    <select id="selectByStudentCode" resultMap="SaleOrderMap">
+        SELECT * FROM sale_order
+        WHERE student_code = #{studentCode}
+        ORDER BY id DESC
+    </select>
+
+    <select id="selectRequiredPendingOrder" resultMap="SaleOrderMap">
+        SELECT * FROM sale_order
+        WHERE student_code = #{studentCode}
+          AND order_status = 'PENDING'
+          AND order_source = 'ADMIN_CREATE'
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
+
+</mapper>
