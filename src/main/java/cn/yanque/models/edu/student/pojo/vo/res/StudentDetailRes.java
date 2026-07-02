@@ -7,6 +7,12 @@ import java.util.Date;
 
 @Data
 @Schema(description = "学员详情响应")
+
+/**
+ * StudentDetailRes 响应结果对象。
+ *
+ * <p>用于把业务层处理后的数据整理成前端需要的展示结构。</p>
+ */
 public class StudentDetailRes {
 
     @Schema(description = "学员ID")

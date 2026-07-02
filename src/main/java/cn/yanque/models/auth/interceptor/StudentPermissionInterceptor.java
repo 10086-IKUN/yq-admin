@@ -19,6 +19,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+
+/**
+ * 学生端权限拦截器。
+ *
+ * <p>只处理 studentFront 包下的学生端接口。优先读取 {@link RequireStudentPermission} 注解；
+ * 没有注解时，再用学生权限模板中的 apiPath 做路径匹配。</p>
+ */
 public class StudentPermissionInterceptor implements HandlerInterceptor {
 
     @Autowired
@@ -28,11 +35,11 @@ public class StudentPermissionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        // 只处理 Controller 方法，非接口方法直接放过。
+        // 只处理 Controller 方法，静态资源等非接口方法直接放行。
         if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
-        // 学生权限只作用于 studentFront 包，避免影响管理端学员管理接口。
+        // 学生权限只作用于学生端接口，避免影响管理端的学员管理接口。
         if (!handlerMethod.getBeanType().getPackageName().contains(".models.studentFront.")) {
             return true;
         }
@@ -75,19 +82,19 @@ public class StudentPermissionInterceptor implements HandlerInterceptor {
                 ? required.stream().allMatch(codes::contains)
                 : required.stream().anyMatch(codes::contains);
         if (!passed) {
-            throw new BusinessException(403, "无权限访问");
+            throw new BusinessException(403, "鏃犳潈闄愯闂?");
         }
         return true;
     }
 
     private boolean checkPathPermission(String path, List<StuPermissionEntity> permissions) {
-        // 没有权限注解时，用 stu_permission.api_path 做兜底路径匹配。
+        // 没有权限注解时，使用 stu_permission.api_path 做兜底路径匹配。
         for (StuPermissionEntity permission : permissions) {
             String apiPath = permission.getApiPath();
             if (apiPath != null && !apiPath.isBlank() && pathMatcher.match(apiPath, path)) {
                 return true;
             }
         }
-        throw new BusinessException(403, "无权限访问");
+        throw new BusinessException(403, "鏃犳潈闄愯闂?");
     }
 }

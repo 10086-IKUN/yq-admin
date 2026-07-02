@@ -5,6 +5,12 @@ import lombok.Data;
 
 @Data
 @Schema(description = "修改权限响应")
+
+/**
+ * PermissionUpdateRes 响应结果对象。
+ *
+ * <p>用于把业务层处理后的数据整理成前端需要的展示结构。</p>
+ */
 public class PermissionUpdateRes {
 
     @Schema(description = "权限ID")

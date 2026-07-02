@@ -20,6 +20,13 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Component
+
+/**
+ * 学生端登录业务。
+ *
+ * <p>登录成功后同时签发 JWT 和请求签名密钥。JWT 用于识别学生身份，签名密钥存入 Redis，
+ * 供后续接口做 HMAC 防重放校验。</p>
+ */
 public class StudentFrontBizImpl implements StudentFrontBiz {
 
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
@@ -36,13 +43,13 @@ public class StudentFrontBizImpl implements StudentFrontBiz {
 
     @Override
     public StudentLoginRes login(StudentLoginReq req) {
-        // 学生端先按手机号查学员，再校验登录密码。
+        // 学生端先按手机号查询学员，再校验登录密码。
         EduStudentEntity student = studentFrontService.getStudentByPhone(req.getPhone());
         if (student == null || !req.getPassword().equals(student.getPassword())) {
             throw new BusinessException(400, "手机号或密码错误");
         }
 
-        // 登录成功后返回 JWT 和签名密钥，前端后续请求会同时带上二者。
+        // 登录成功后返回 JWT 和签名密钥，前端后续请求会同时携带二者。
         String token = createToken(student);
         String signSecret = createSignSecret();
         stringRedisTemplate.opsForValue().set(

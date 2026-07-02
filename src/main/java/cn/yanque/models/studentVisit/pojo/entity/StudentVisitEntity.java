@@ -6,6 +6,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+
+/**
+ * StudentVisitEntity 数据库实体对象。
+ *
+ * <p>字段与对应业务表保持映射关系，供 MyBatis 查询和写入使用。</p>
+ */
 public class StudentVisitEntity {
     private Long id;
     private Long studentId;

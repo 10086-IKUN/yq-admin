@@ -18,6 +18,12 @@ import java.util.List;
 
 @Service
 @Slf4j
+
+/**
+ * 系统消息服务。
+ *
+ * <p>除普通消息的读写和已读处理外，还会根据学生回访计划生成班主任的回访提醒。</p>
+ */
 public class SysMessageServiceImpl implements SysMessageService {
 
     @Autowired
@@ -64,19 +70,18 @@ public class SysMessageServiceImpl implements SysMessageService {
         // 查询所有有待回访任务的教师
         LocalDate today = LocalDate.now();
 
-        // 这里需要遍历所有班级的班主任，检查是否有今日需回访的学员
-        // 简化实现：直接查询所有待回访记录，按教师分组发送消息
+        // 查询待回访学生后按负责老师分组发送系统消息。
         List<EduStudentEntity> students = eduStudentMapper.selectAll();
 
         for (EduStudentEntity student : students) {
             try {
-                // 查询该学员的待回访记录
+                // 查询该学员最新的待回访记录。
                 StudentVisitEntity visit = studentVisitMapper.selectLatestPending(student.getId());
                 if (visit == null || visit.getNextVisitTime().isAfter(today)) {
                     continue;
                 }
 
-                // 获取班主任
+                // 通过学员班级找到负责的班主任。
                 EduClassEntity clazz = eduClassMapper.selectById(student.getClassId());
                 if (clazz == null || clazz.getHeadTeacherId() == null) {
                     continue;
@@ -84,8 +89,7 @@ public class SysMessageServiceImpl implements SysMessageService {
 
                 // 检查是否已发送过今日提醒
                 // 简化处理：直接发送（实际可加去重逻辑）
-
-                // 发送消息
+                // 生成并发送班主任的回访提醒消息。
                 SysMessageEntity message = new SysMessageEntity();
                 message.setUserId(clazz.getHeadTeacherId());
                 message.setTitle("回访提醒");

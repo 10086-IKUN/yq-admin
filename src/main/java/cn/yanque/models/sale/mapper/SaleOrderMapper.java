@@ -6,6 +6,12 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
+
+/**
+ * 销售订单表访问接口。
+ *
+ * <p>包含管理端订单列表、学生端订单列表、报名必付订单和超时订单取消等查询更新。</p>
+ */
 public interface SaleOrderMapper {
 
     void insert(SaleOrderEntity entity);
@@ -23,6 +29,9 @@ public interface SaleOrderMapper {
 
     SaleOrderEntity selectRequiredPendingOrder(@Param("studentCode") String studentCode);
 
+    /**
+     * 取消超过支付窗口的学生自助购买待支付订单。
+     */
     int cancelExpiredPendingOrders();
 
     int updateDiscountById(@Param("id") Long id,

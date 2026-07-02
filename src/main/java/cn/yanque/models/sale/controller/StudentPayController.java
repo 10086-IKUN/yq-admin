@@ -30,6 +30,12 @@ import java.util.UUID;
 @SkipPermission
 @Tag(name = "StudentPayController", description = "学员端支付")
 @Slf4j
+
+/**
+ * 学生端支付接口。
+ *
+ * <p>提供可购买产品、学生自助下单、支付宝支付发起、异步回调、订单查询和待支付订单取消能力。</p>
+ */
 public class StudentPayController {
 
     @Autowired
@@ -56,7 +62,7 @@ public class StudentPayController {
             throw new BusinessException(404, "产品不存在");
         }
 
-        // 生成订单号
+        // 学生端下单时生成业务订单号。
         String orderNo = "ORD" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
                 + UUID.randomUUID().toString().substring(0, 6);
 
@@ -73,8 +79,8 @@ public class StudentPayController {
         order.setReceivableAmount(product.getProductPrice());
         order.setPaidAmount(BigDecimal.ZERO);
         order.setOrderStatus("PENDING");
-        // 学员自己在前台购买的订单，允许超过 20 分钟后自动取消。
-        order.setOrderSource("STUDENT_PURCHASE");
+        // 学生自助购买订单允许超过支付窗口后自动取消。
+order.setOrderSource("STUDENT_PURCHASE");
 
         return ApiResponse.success(saleOrderService.createOrder(order));
     }
@@ -91,9 +97,9 @@ public class StudentPayController {
     }
 
     @PostMapping("/notify")
-    @Operation(description = "支付宝异步回调")
+    @Operation(description = "鏀粯瀹濆紓姝ュ洖璋?")
     public String notify(HttpServletRequest request) throws Exception {
-        log.info("收到支付宝异步回调");
+        log.info("鏀跺埌鏀粯瀹濆紓姝ュ洖璋?");
         return salePaymentService.handleNotify(request);
     }
 
@@ -115,8 +121,8 @@ public class StudentPayController {
     @Operation(description = "删除我的待支付订单")
     public ApiResponse<Void> deleteOrder(@PathVariable String orderNo, HttpServletRequest request) {
         String studentCode = StudentAuthUtil.getStudentNo(request);
-        // 学员端的“删除”实际是取消待支付订单，后台仍保留订单流水，方便后续核对。
-        saleOrderService.cancelStudentOrder(orderNo, studentCode);
+        // 学生端删除订单实际是取消待支付订单，后台仍保留订单流水。
+saleOrderService.cancelStudentOrder(orderNo, studentCode);
         return ApiResponse.success();
     }
 

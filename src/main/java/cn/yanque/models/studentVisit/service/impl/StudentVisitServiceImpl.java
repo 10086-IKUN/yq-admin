@@ -13,6 +13,12 @@ import java.util.List;
 
 @Service
 @Slf4j
+
+/**
+ * 学生回访计划服务。
+ *
+ * <p>根据学生标签决定下次回访间隔；提交一次回访后，会立即生成下一次待回访计划。</p>
+ */
 public class StudentVisitServiceImpl implements StudentVisitService {
 
     @Autowired

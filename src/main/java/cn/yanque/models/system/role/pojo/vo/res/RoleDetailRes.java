@@ -8,6 +8,12 @@ import java.util.List;
 
 @Data
 @Schema(description = "角色详情响应")
+
+/**
+ * RoleDetailRes 响应结果对象。
+ *
+ * <p>用于把业务层处理后的数据整理成前端需要的展示结构。</p>
+ */
 public class RoleDetailRes {
 
     @Schema(description = "角色ID")

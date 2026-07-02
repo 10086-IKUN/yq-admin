@@ -36,3 +36,11 @@ oss:
   dir-prefix: homework
   preview-expire-minutes: 10
   max-file-size-mb: 50
+
+yanque:
+  ai-chat:
+    base-url: ${YANQUE_AI_BASE_URL:http://localhost:8000}
+    stream-path: /api/ai-chat/stream
+    connect-timeout-seconds: 5
+    response-timeout-seconds: 180
+    history-limit: 20

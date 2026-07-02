@@ -10,6 +10,12 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "alipay")
+
+/**
+ * AlipayConfig 配置对象。
+ *
+ * <p>集中承载外部配置项，避免业务代码直接散落读取环境变量或配置文件。</p>
+ */
 public class AlipayConfig {
 
     private String appId;

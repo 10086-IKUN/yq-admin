@@ -1,6 +1,7 @@
 package cn.yanque.models.auth.interceptor;
 
 import cn.yanque.common.exception.BusinessException;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 @Component
+
+/**
+ * 请求签名拦截器。
+ *
+ * <p>校验 X-Timestamp、X-Nonce 和 X-Sign，使用 Redis 中的登录签名密钥计算 HMAC-SHA256，
+ * 同时用 nonce 做短期防重放。</p>
+ */
 public class SignInterceptor implements HandlerInterceptor {
 
     @Autowired
@@ -28,6 +36,12 @@ public class SignInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // SSE 的 SseEmitter 在响应完成时会触发一次 ASYNC dispatch。
+        // 这不是新的业务请求，不能再次消费 nonce，否则会把合法长连接误判为重放请求。
+        if (request.getDispatcherType() == DispatcherType.ASYNC) {
+            return true;
+        }
+
         String timestamp = request.getHeader("X-Timestamp");
         String nonce = request.getHeader("X-Nonce");
         String sign = request.getHeader("X-Sign");
@@ -53,7 +67,7 @@ public class SignInterceptor implements HandlerInterceptor {
             throw new BusinessException(401, "未登录");
         }
 
-        // 管理端和学生端使用不同 Redis 前缀，避免同 ID 的用户互相串签名密钥。
+        // 管理端和学生端使用不同 Redis 前缀，避免相同 ID 的账号串用签名密钥。
         boolean studentRequest = studentId != null;
         String id = String.valueOf(studentRequest ? studentId : userId);
         String secretPrefix = studentRequest ? STUDENT_SECRET_KEY_PREFIX : USER_SECRET_KEY_PREFIX;
@@ -64,7 +78,7 @@ public class SignInterceptor implements HandlerInterceptor {
             throw new BusinessException(401, "签名密钥不存在，请重新登录");
         }
 
-        // nonce 只允许使用一次，用于防重放。
+        // nonce 只允许使用一次，用于防止签名请求被重放。
         String nonceKey = noncePrefix + id + ":" + nonce;
         Boolean absent = stringRedisTemplate.opsForValue().setIfAbsent(nonceKey, "1", TIMESTAMP_TOLERANCE, TimeUnit.SECONDS);
         if (Boolean.FALSE.equals(absent)) {

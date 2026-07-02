@@ -6,6 +6,12 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
+
+/**
+ * 销售产品表访问接口。
+ *
+ * <p>管理端可按关键词分页维护产品，学生端使用 selectAll 获取可购买产品列表。</p>
+ */
 public interface SaleProductMapper {
 
     void insert(SaleProductEntity entity);

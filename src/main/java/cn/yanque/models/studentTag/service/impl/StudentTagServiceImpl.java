@@ -21,6 +21,12 @@ import java.util.List;
 
 @Service
 @Slf4j
+/**
+ * 学生标签服务。
+ *
+ * <p>根据班级作业和学员提交记录计算按时提交率，再生成 ACTIVE、NORMAL 或 LAZY 标签；
+ * 标签被班主任确认后，会初始化对应的学生回访计划。</p>
+ */
 public class StudentTagServiceImpl implements StudentTagService {
 
     /** 按时提交率达到 80% 及以上时，系统建议为积极学员。 */

@@ -6,6 +6,12 @@ import lombok.Data;
 
 @Data
 @Schema(description = "分页查询用户请求")
+
+/**
+ * UserPageReq 请求参数对象。
+ *
+ * <p>用于承载前端提交到后端的表单或查询条件，字段含义由对应控制器和业务服务消费。</p>
+ */
 public class UserPageReq {
 
     @Schema(description = "关键词（用户名/昵称/真实姓名）")

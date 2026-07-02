@@ -7,6 +7,12 @@ import java.util.Date;
 
 @Data
 @Schema(description = "权限分页响应")
+
+/**
+ * PermissionPageRes 响应结果对象。
+ *
+ * <p>用于把业务层处理后的数据整理成前端需要的展示结构。</p>
+ */
 public class PermissionPageRes {
 
     @Schema(description = "权限ID")

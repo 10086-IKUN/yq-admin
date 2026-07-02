@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
+/**
+ * CourseDetailInfo 聚合信息对象。
+ *
+ * <p>用于承载跨表组装后的业务信息，避免控制层直接拼装零散字段。</p>
+ */
 public class CourseDetailInfo {
     @Schema(description = "所属阶段")
     private String stageName;

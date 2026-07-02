@@ -8,6 +8,12 @@ import java.util.List;
 
 @Data
 @Schema(description = "分页查询权限请求")
+
+/**
+ * PermissionPageReq 请求参数对象。
+ *
+ * <p>用于承载前端提交到后端的表单或查询条件，字段含义由对应控制器和业务服务消费。</p>
+ */
 public class PermissionPageReq {
 
     @Schema(description = "关键词（权限名称/权限编码）")

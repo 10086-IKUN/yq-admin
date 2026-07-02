@@ -15,6 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/student-visit")
 @Tag(name = "StudentVisitController", description = "学员回访管理")
+
+/**
+ * 学生回访接口。
+ *
+ * <p>班主任在这里查看今日待回访学生、提交回访记录，并查看单个学生的历史回访。</p>
+ */
 public class StudentVisitController {
 
     @Autowired

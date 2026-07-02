@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+
+/**
+ * 销售订单服务。
+ *
+ * <p>这里区分学生自助购买订单和管理端报名订单：前者可超时取消，后者是登录后的必付报名订单。</p>
+ */
 public class SaleOrderServiceImpl implements SaleOrderService {
 
     private static final String ORDER_SOURCE_STUDENT_PURCHASE = "STUDENT_PURCHASE";
@@ -25,12 +31,11 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
     @Override
     public SaleOrderEntity createOrder(SaleOrderEntity entity) {
-        // 订单号允许调用方不传，统一在服务层补齐，避免多个入口重复写生成规则。
+        // 订单号允许调用方不传，由服务层统一补齐，避免多个入口重复生成。
         if (entity.getOrderNo() == null || entity.getOrderNo().isBlank()) {
             entity.setOrderNo(buildOrderNo());
         }
-        // 老数据和学员端自助购买默认都是 STUDENT_PURCHASE。
-        // 只有管理端新增学员时，才会显式传 ADMIN_CREATE。
+        // 默认按学生自助购买处理；管理端报名订单会显式传入 ADMIN_CREATE。
         if (entity.getOrderSource() == null || entity.getOrderSource().isBlank()) {
             entity.setOrderSource(ORDER_SOURCE_STUDENT_PURCHASE);
         }
@@ -77,14 +82,13 @@ public class SaleOrderServiceImpl implements SaleOrderService {
         if (!studentCode.equals(order.getStudentCode())) {
             throw new BusinessException(403, "无权操作该订单");
         }
-        // 已支付订单涉及真实流水，不能让学员端删除。
-        // 这里的删除实际是取消待支付订单，不做物理删除。
+        // 已支付订单涉及真实流水，学生端不能删除；这里只允许取消待支付订单。
         if (!"PENDING".equals(order.getOrderStatus())) {
             throw new BusinessException(400, "只有待支付订单可以删除");
         }
-        // 管理端创建的报名订单是进入学员端前必须支付的订单，不允许学员自己取消。
+        // 管理端创建的报名订单是进入学生端前必须支付的订单，不允许学生自行取消。
         if (ORDER_SOURCE_ADMIN_CREATE.equals(order.getOrderSource())) {
-            throw new BusinessException(400, "报名订单需完成支付，不能删除");
+            throw new BusinessException(400, "鎶ュ悕璁㈠崟闇€瀹屾垚鏀粯锛屼笉鑳藉垹闄?");
         }
         order.setOrderStatus("CANCELLED");
         saleOrderMapper.updateById(order);
@@ -92,8 +96,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
     @Override
     public int cancelExpiredPendingOrders() {
-        // 自动过期只处理学员端自助购买的订单。
-        // 管理端新增学员生成的报名订单，需要一直保留到学员完成支付。
+        // 自动过期只处理学生端自助购买订单，报名订单保留到支付完成。
         return saleOrderMapper.cancelExpiredPendingOrders();
     }
 

@@ -31,6 +31,12 @@ import java.util.List;
 @RequestMapping("/api/sysConfig")
 @Slf4j
 @Tag(name = "SysConfigController", description = "系统配置管理")
+
+/**
+ * 系统配置管理接口。
+ *
+ * <p>提供配置项的增删改查，修改后由服务层负责同步清理运行时缓存。</p>
+ */
 public class SysConfigController {
 
     @Autowired

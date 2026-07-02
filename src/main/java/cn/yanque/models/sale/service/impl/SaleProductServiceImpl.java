@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+
+/**
+ * 销售产品服务。
+ *
+ * <p>管理端用于维护可售产品，学生端下单时只读取已上架的产品列表。</p>
+ */
 public class SaleProductServiceImpl implements SaleProductService {
 
     @Autowired

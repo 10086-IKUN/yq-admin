@@ -7,6 +7,12 @@ import lombok.Data;
 
 @Data
 @Schema(description = "修改校区请求")
+
+/**
+ * CampusUpdateReq 请求参数对象。
+ *
+ * <p>用于承载前端提交到后端的表单或查询条件，字段含义由对应控制器和业务服务消费。</p>
+ */
 public class CampusUpdateReq {
 
     @Schema(description = "校区ID")

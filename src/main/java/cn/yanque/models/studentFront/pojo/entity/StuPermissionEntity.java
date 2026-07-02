@@ -5,6 +5,12 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
+
+/**
+ * StuPermissionEntity 数据库实体对象。
+ *
+ * <p>字段与对应业务表保持映射关系，供 MyBatis 查询和写入使用。</p>
+ */
 public class StuPermissionEntity {
 
     private Long id;

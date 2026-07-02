@@ -19,7 +19,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/sale")
-@Tag(name = "SaleAdminController", description = "销售管理")
+@Tag(name = "SaleAdminController", description = "閿€鍞鐞?")
+
+/**
+ * 管理端销售接口。
+ *
+ * <p>用于维护销售产品、查看订单和调整待支付订单优惠金额。</p>
+ */
 public class SaleAdminController {
 
     @Autowired
@@ -82,7 +88,7 @@ public class SaleAdminController {
 
     @PutMapping("/orders/{id}/discount")
     @RequirePermission("sale:order:list")
-    @Operation(description = "璁㈠崟浼樻儬")
+    @Operation(description = "订单优惠")
     public ApiResponse<Void> orderDiscount(@PathVariable Long id, @RequestBody OrderDiscountReq req) {
         saleOrderService.updateDiscount(id, req.getDiscountAmount());
         return ApiResponse.success(null);

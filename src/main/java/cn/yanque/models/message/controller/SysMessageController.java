@@ -16,6 +16,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/message")
 @Tag(name = "SysMessageController", description = "系统消息管理")
+
+/**
+ * 系统消息接口。
+ *
+ * <p>提供当前登录用户的消息列表、未读数量和已读状态更新能力。</p>
+ */
 public class SysMessageController {
 
     @Autowired

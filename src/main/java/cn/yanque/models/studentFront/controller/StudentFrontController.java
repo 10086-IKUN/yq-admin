@@ -18,6 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/student")
 @Slf4j
 @Tag(name = "StudentFrontController", description = "学生端")
+
+/**
+ * 学生端登录接口。
+ *
+ * <p>登录成功后返回学生 JWT、签名密钥、学生信息和可访问权限。</p>
+ */
 public class StudentFrontController {
 
     @Autowired

@@ -15,6 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/student-tag")
 @Tag(name = "StudentTagController", description = "学员标签管理")
+
+/**
+ * 学生标签接口。
+ *
+ * <p>用于查看、确认和手动重新计算学生标签，标签会影响后续回访节奏。</p>
+ */
 public class StudentTagController {
 
     @Autowired

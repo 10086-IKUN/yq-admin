@@ -11,6 +11,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+
+/**
+ * 学生端基础数据服务。
+ *
+ * <p>对学生登录、个人信息和学生端权限模板提供最小的数据读取能力。</p>
+ */
 public class StudentFrontServiceImpl implements StudentFrontService {
 
     @Autowired

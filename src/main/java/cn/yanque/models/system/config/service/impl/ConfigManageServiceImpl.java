@@ -20,6 +20,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+
+/**
+ * 系统配置管理服务。
+ *
+ * <p>管理端修改配置后会主动清理 {@link SysConfigService} 的缓存，保证运行时读取到最新配置。</p>
+ */
 public class ConfigManageServiceImpl implements ConfigManageService {
 
     @Autowired

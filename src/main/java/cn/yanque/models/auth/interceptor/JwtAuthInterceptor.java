@@ -12,12 +12,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
- * JWT认证拦截器
- * 验证请求头中的JWT token有效性
- */
-/**
- * JWT认证拦截器
- * 验证请求头中的Bearer Token，解析用户ID并设置到请求属性中
+ * JWT 认证拦截器。
+ *
+ * <p>验证请求头中的 Bearer Token，并按 token 中的 user_type 把身份写入 request：
+ * 管理端写 userId，学生端写 studentId，后续签名和权限拦截器依赖这两个属性区分账号体系。</p>
  */
 @Component
 public class JwtAuthInterceptor implements HandlerInterceptor {
@@ -32,11 +30,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
     private static final String STUDENT = "STUDENT";
 
     /**
-     * 校验JWT Token并提取用户ID
-     * @param request HTTP请求
-     * @param response HTTP响应
-     * @param handler 处理器
-     * @return Token有效返回true，否则抛出401异常
+     * 校验 JWT 并提取登录身份。
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -63,6 +57,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
                 throw new BusinessException(401, "Token无效或已过期");
             }
 
+            // 学生端和管理端共用 JWT 结构，但后续权限体系不同，所以这里写入不同的 request 属性。
             if (STUDENT.equals(String.valueOf(jwt.getPayload(USER_TYPE)))) {
                 request.setAttribute("studentId", Long.parseLong(String.valueOf(userId)));
                 MDC.put("studentId", String.valueOf(userId));

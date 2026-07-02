@@ -36,6 +36,8 @@ import java.util.UUID;
 @Slf4j
 public class SalePaymentServiceImpl implements SalePaymentService {
 
+    private static final int LAST_ERROR_MSG_MAX_LENGTH = 240;
+
     @Autowired
     private AlipayClient alipayClient;
 
@@ -87,6 +89,11 @@ public class SalePaymentServiceImpl implements SalePaymentService {
         throw new BusinessException(400, "不支持的支付渠道");
     }
 
+    /**
+     * 创建支付宝电脑网站支付表单。
+     *
+     * <p>本系统使用内部支付流水号作为 outTradeNo，后续回调和主动查询都依赖该值回查本地支付单。</p>
+     */
     private String createAlipayPayment(SaleOrderEntity order, SalePaymentOrderEntity paymentOrder) throws Exception {
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         request.setNotifyUrl(alipayConfig.getNotifyUrl());
@@ -159,6 +166,7 @@ public class SalePaymentServiceImpl implements SalePaymentService {
         // 创建渠道支付记录
         SalePaymentChannelOrderEntity channelOrder = new SalePaymentChannelOrderEntity();
         channelOrder.setPaymentOrderNo(outTradeNo);
+        channelOrder.setUniqueOrderNo(tradeNo);
         channelOrder.setChannelOrderId(tradeNo);
         channelOrder.setOrderAmount(paymentOrder.getPaymentAmount());
         channelOrder.setPayAmount(new BigDecimal(totalAmount));
@@ -226,7 +234,8 @@ public class SalePaymentServiceImpl implements SalePaymentService {
                         orderNo,
                         paymentOrder.getPaymentOrderNo(),
                         ex);
-                paymentOrder.setLastErrorMsg(ex.getMessage());
+                // 支付宝异常信息可能包含完整响应体，入库前要截断，避免错误记录本身再次导致数据库异常。
+                paymentOrder.setLastErrorMsg(truncateErrorMsg(ex.getMessage()));
                 salePaymentOrderMapper.updateById(paymentOrder);
             }
         }
@@ -254,7 +263,8 @@ public class SalePaymentServiceImpl implements SalePaymentService {
 
         AlipayTradeQueryResponse response = alipayClient.execute(request);
         if (!response.isSuccess()) {
-            paymentOrder.setLastErrorMsg(response.getSubMsg());
+            // 查询失败只记录支付流水错误，不把业务订单直接改成失败，避免临时网络或沙箱状态误伤订单。
+            paymentOrder.setLastErrorMsg(truncateErrorMsg(response.getSubMsg()));
             salePaymentOrderMapper.updateById(paymentOrder);
             return saleOrderService.getByOrderNo(orderNo);
         }
@@ -268,6 +278,8 @@ public class SalePaymentServiceImpl implements SalePaymentService {
 
             SalePaymentChannelOrderEntity channelOrder = new SalePaymentChannelOrderEntity();
             channelOrder.setPaymentOrderNo(paymentOrder.getPaymentOrderNo());
+            // 渠道流水表的 unique_order_no 表示第三方唯一交易号，支付宝场景下对应 tradeNo。
+            channelOrder.setUniqueOrderNo(response.getTradeNo());
             channelOrder.setChannelOrderId(response.getTradeNo());
             channelOrder.setOrderAmount(paymentOrder.getPaymentAmount());
             channelOrder.setPayAmount(new BigDecimal(response.getTotalAmount()));
@@ -285,6 +297,15 @@ public class SalePaymentServiceImpl implements SalePaymentService {
         }
 
         return saleOrderService.getByOrderNo(orderNo);
+    }
+
+    private String truncateErrorMsg(String message) {
+        if (message == null) {
+            return null;
+        }
+        return message.length() > LAST_ERROR_MSG_MAX_LENGTH
+                ? message.substring(0, LAST_ERROR_MSG_MAX_LENGTH)
+                : message;
     }
 
     @Override
