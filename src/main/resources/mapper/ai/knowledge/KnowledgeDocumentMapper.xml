@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.ai.knowledge.mapper.KnowledgeDocumentMapper">
+
+    <resultMap id="KnowledgeDocumentMap" type="cn.yanque.models.ai.knowledge.pojo.entity.KnowledgeDocumentEntity">
+        <id property="id" column="id"/>
+        <result property="knowledgeBaseId" column="knowledge_base_id"/>
+        <result property="documentName" column="document_name"/>
+        <result property="objectKey" column="object_key"/>
+        <result property="fileSize" column="file_size"/>
+        <result property="version" column="version"/>
+        <result property="indexStatus" column="index_status"/>
+        <result property="chunkCount" column="chunk_count"/>
+        <result property="vectorDim" column="vector_dim"/>
+        <result property="errorMessage" column="error_message"/>
+        <result property="indexedAt" column="indexed_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.yanque.models.ai.knowledge.pojo.entity.KnowledgeDocumentEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into knowledge_document
+            (knowledge_base_id, document_name, object_key, file_size, version, index_status, created_at, updated_at)
+        values
+            (#{knowledgeBaseId}, #{documentName}, #{objectKey}, #{fileSize}, #{version}, #{indexStatus}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updateIndexing">
+        update knowledge_document
+        set index_status = 'INDEXING',
+            error_message = null,
+            updated_at = #{updatedAt}
+        where id = #{id}
+    </update>
+
+    <update id="updateIndexed" parameterType="cn.yanque.models.ai.knowledge.pojo.entity.KnowledgeDocumentEntity">
+        update knowledge_document
+        set index_status = #{indexStatus},
+            chunk_count = #{chunkCount},
+            vector_dim = #{vectorDim},
+            error_message = #{errorMessage},
+            indexed_at = #{indexedAt},
+            updated_at = #{updatedAt}
+        where id = #{id}
+    </update>
+
+    <update id="updateFailed" parameterType="cn.yanque.models.ai.knowledge.pojo.entity.KnowledgeDocumentEntity">
+        update knowledge_document
+        set index_status = #{indexStatus},
+            error_message = #{errorMessage},
+            updated_at = #{updatedAt}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from knowledge_document where id = #{id}
+    </delete>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="KnowledgeDocumentMap">
+        select id, knowledge_base_id, document_name, object_key, file_size, version,
+               index_status, chunk_count, vector_dim, error_message, indexed_at, created_at, updated_at
+        from knowledge_document
+        where id = #{id}
+    </select>
+
+    <select id="selectPage" parameterType="cn.yanque.models.ai.knowledge.pojo.bo.KnowledgeDocumentQueryBo" resultMap="KnowledgeDocumentMap">
+        select id, knowledge_base_id, document_name, object_key, file_size, version,
+               index_status, chunk_count, vector_dim, error_message, indexed_at, created_at, updated_at
+        from knowledge_document
+        <where>
+            <if test="knowledgeBaseId != null">
+                and knowledge_base_id = #{knowledgeBaseId}
+            </if>
+            <if test="documentName != null and documentName != ''">
+                and document_name like concat('%', #{documentName}, '%')
+            </if>
+            <if test="indexStatus != null and indexStatus != ''">
+                and index_status = #{indexStatus}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="countByKnowledgeBaseId" parameterType="java.lang.Long" resultType="int">
+        select count(1)
+        from knowledge_document
+        where knowledge_base_id = #{knowledgeBaseId}
+    </select>
+</mapper>

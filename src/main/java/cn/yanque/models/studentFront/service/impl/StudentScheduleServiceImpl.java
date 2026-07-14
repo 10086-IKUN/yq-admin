@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,6 +63,16 @@ public class StudentScheduleServiceImpl implements StudentScheduleService {
      */
     @Override
     public List<SchedulePageRes> list(Long studentId) {
+        return listByDate(studentId, null);
+    }
+
+    /**
+     * 获取当前登录学员指定日期的个人课表。
+     *
+     * <p>date 为空时查询全部课表，兼容原学生端课表页面；AI 工具调用会传入具体日期，只返回当天安排。</p>
+     */
+    @Override
+    public List<SchedulePageRes> listByDate(Long studentId, Date scheduleDate) {
         EduStudentEntity student = eduStudentMapper.selectById(studentId);
         if (student == null) {
             throw new BusinessException(404, "学员不存在");
@@ -71,7 +82,11 @@ public class StudentScheduleServiceImpl implements StudentScheduleService {
         }
 
         // 学员端只能查看自己绑定班级的课表，避免看到其他班级的安排。
-        List<EduClassScheduleEntity> scheduleList = eduClassScheduleMapper.selectPage(student.getClassId(), null, null, null);
+        List<EduClassScheduleEntity> scheduleList = eduClassScheduleMapper.selectPage(
+                student.getClassId(),
+                null,
+                scheduleDate,
+                scheduleDate);
         if (scheduleList.isEmpty()) {
             return List.of();
         }

@@ -1,5 +1,7 @@
 package cn.yanque.models.studentFront.ai.biz.impl;
 
+import cn.yanque.models.ai.knowledge.pojo.dto.KnowledgeChatRagContext;
+import cn.yanque.models.ai.knowledge.service.KnowledgeDocumentService;
 import cn.yanque.models.studentFront.ai.biz.StudentAiChatBiz;
 import cn.yanque.models.studentFront.ai.config.AiChatProperties;
 import cn.yanque.models.studentFront.ai.pojo.entity.AiChatMessageEntity;
@@ -10,6 +12,7 @@ import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatMessageRes;
 import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatSessionRes;
 import cn.yanque.models.studentFront.ai.service.AiChatPythonClient;
 import cn.yanque.models.studentFront.ai.service.StudentAiChatService;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +55,9 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
 
     @Autowired
     private AiChatProperties properties;
+
+    @Autowired
+    private KnowledgeDocumentService knowledgeDocumentService;
 
     @Override
     public List<AiChatSessionRes> listSessions(Long studentId) {
@@ -102,6 +108,8 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
                     session.getId(),
                     studentId,
                     properties.getHistoryLimit());
+            KnowledgeChatRagContext ragContext = knowledgeDocumentService.buildChatContext(question);
+            String modelQuestion = ragContext.isUsed() && ragContext.getPrompt() != null ? ragContext.getPrompt() : question;
 
             AiChatMessageEntity userMessage = buildMessage(session.getId(), studentId, "user", question, null, null, null);
             studentAiChatService.addMessage(userMessage);
@@ -113,7 +121,7 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
             AtomicReference<Integer> tokens = new AtomicReference<>(0);
             AtomicBoolean failed = new AtomicBoolean(false);
 
-            aiChatPythonClient.stream(studentId, session.getId(), question, history, (event, data) -> {
+            aiChatPythonClient.stream(studentId, session.getId(), modelQuestion, history, (event, data) -> {
                 if ("message_start".equals(event)) {
                     model.set(data.getString("model"));
                     sendEvent(emitter, "message_start", data);
@@ -152,9 +160,12 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
                         model.get(),
                         tokens.get(),
                         "stop");
+                if (ragContext.isUsed()) {
+                    assistantMessage.setSourceRefsJson(JSON.toJSONString(ragContext.getReferences()));
+                }
                 studentAiChatService.addMessage(assistantMessage);
                 studentAiChatService.refreshSessionStats(session.getId());
-                sendEvent(emitter, "done", buildDonePayload(session.getId(), studentId, assistantMessage));
+                sendEvent(emitter, "done", buildDonePayload(session.getId(), studentId, assistantMessage, ragContext));
             }
             emitter.complete();
         } catch (Exception ex) {
@@ -218,12 +229,17 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
      *
      * <p>前端收到该事件后会结束 loading 状态，并把本次助手消息补入本地消息列表。</p>
      */
-    private Map<String, Object> buildDonePayload(Long sessionId, Long studentId, AiChatMessageEntity assistantMessage) {
+    private Map<String, Object> buildDonePayload(Long sessionId,
+                                                 Long studentId,
+                                                 AiChatMessageEntity assistantMessage,
+                                                 KnowledgeChatRagContext ragContext) {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("session", toSessionRes(studentAiChatService.getSession(sessionId, studentId)));
         payload.put("messageId", assistantMessage.getId());
         payload.put("model", assistantMessage.getModelName());
         payload.put("tokens", assistantMessage.getTokenCount());
+        payload.put("knowledgeUsed", ragContext.isUsed());
+        payload.put("knowledgeReferences", ragContext.getReferences());
         return payload;
     }
 

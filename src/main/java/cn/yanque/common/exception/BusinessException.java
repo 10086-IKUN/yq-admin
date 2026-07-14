@@ -15,8 +15,11 @@ public class BusinessException extends RuntimeException {
     public static final BusinessException UserNotExist = new BusinessException(10002, "用户不存在");
     public static final BusinessException PermissionExist = new BusinessException(11001, "权限已存在");
     public static final BusinessException PermissionNotExist = new BusinessException(11002, "权限不存在");
+    public static final BusinessException ParamsError = new BusinessException(11005, "参数异常");
     public static final BusinessException PasswordError = new BusinessException(11003, "密码错误");
     public static final BusinessException DataError = new BusinessException(11003, "数据有误");
+    public static final BusinessException DateExist = new BusinessException(11006, "数据已存在");
+    public static final BusinessException DateError = new BusinessException(11004, "数据错误");
     public static final BusinessException RoleExist = new BusinessException(12001, "角色已存在");
     public static final BusinessException RoleNotExist = new BusinessException(12002, "角色不存在");
     public static final BusinessException ClassExist = new BusinessException(14001, "班级已存在");
@@ -27,6 +30,7 @@ public class BusinessException extends RuntimeException {
     public static final BusinessException StudentNotExist = new BusinessException(16002, "学员不存在");
     public static final BusinessException CourseExist = new BusinessException(17001, "课程已存在");
     public static final BusinessException CourseNotExist = new BusinessException(17002, "课程不存在");
+    public static final BusinessException RemoteError = new BusinessException(17003, "远程调用异常");
     public static final BusinessException CourseDetailExist = new BusinessException(18001, "课程详情已存在");
     public static final BusinessException CourseDetailNotExist = new BusinessException(18002, "课程详情不存在");
 

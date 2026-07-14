@@ -44,3 +44,21 @@ yanque:
     connect-timeout-seconds: 5
     response-timeout-seconds: 180
     history-limit: 20
+  ai-knowledge:
+    base-url: ${YANQUE_AI_KNOWLEDGE_BASE_URL:${YANQUE_AI_BASE_URL:http://localhost:8000}}
+    index-path: /api/knowledge/documents/index
+    search-path: /api/knowledge/search
+    chunks-path: /api/knowledge/documents/chunks
+    connect-timeout-seconds: 5
+    response-timeout-seconds: 180
+    chat-rag-enabled: ${YANQUE_AI_CHAT_RAG_ENABLED:true}
+    chat-knowledge-base-id: ${YANQUE_AI_CHAT_KNOWLEDGE_BASE_ID:course_all}
+    chat-top-k: ${YANQUE_AI_CHAT_KNOWLEDGE_TOP_K:5}
+    chat-max-chars-per-chunk: 900
+    chat-max-total-chars: 3000
+  ai-text-to-sql:
+    base-url: ${YANQUE_AI_TEXT_TO_SQL_BASE_URL:${YANQUE_AI_BASE_URL:http://localhost:8000}}
+    route-path: /api/text-to-sql/route
+    continue-path: /api/text-to-sql/continue
+    connect-timeout-seconds: 5
+    response-timeout-seconds: 180
