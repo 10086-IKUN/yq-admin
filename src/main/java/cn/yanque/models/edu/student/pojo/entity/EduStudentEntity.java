@@ -35,6 +35,22 @@ public class EduStudentEntity {
     private Long productId;
     /** 加入时间 */
     private Date joinTime;
+    /** 简历 OSS ObjectKey */
+    private String resumeObjectKey;
+    /** 简历文件名 */
+    private String resumeFileName;
+    /** 简历文件大小 */
+    private Long resumeFileSize;
+    /** 简历上传时间 */
+    private Date resumeUploadedAt;
+    /** 简历解析后的纯文本 */
+    private String resumeText;
+    /** 简历解析状态：PENDING/PROCESSING/SUCCESS/FAILED */
+    private String resumeParseStatus;
+    /** 简历解析失败原因 */
+    private String resumeParseErrorMessage;
+    /** 简历解析完成时间 */
+    private Date resumeParsedAt;
     /** 创建时间 */
     private Date createdAt;
     /** 更新时间 */

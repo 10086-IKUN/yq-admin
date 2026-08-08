@@ -13,6 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * 为每个请求分配唯一标识，便于日志追踪和问题排查。
@@ -20,6 +21,8 @@ import java.util.UUID;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestGuidFilter extends OncePerRequestFilter {
+
+    private static final Pattern VALID_GUID = Pattern.compile("[A-Za-z0-9_-]{1,128}");
 
     public static final String REQUEST_GUID_KEY = "guid";
     public static final String REQUEST_GUID_ATTR = "requestGuid";
@@ -42,7 +45,7 @@ public class RequestGuidFilter extends OncePerRequestFilter {
 
     private String resolveGuid(HttpServletRequest request) {
         String guid = request.getHeader(REQUEST_GUID_HEADER);
-        if (StringUtils.hasText(guid)) {
+        if (StringUtils.hasText(guid) && VALID_GUID.matcher(guid.trim()).matches()) {
             return guid.trim();
         }
         return UUID.randomUUID().toString().replace("-", "");

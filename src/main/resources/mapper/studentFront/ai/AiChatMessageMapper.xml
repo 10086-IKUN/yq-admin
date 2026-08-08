@@ -52,4 +52,23 @@
         order by id asc
     </select>
 
+    <select id="selectUncompressedHistory" resultMap="BaseResultMap">
+        select *
+        from ai_chat_message
+        where session_id = #{sessionId}
+          and student_id = #{studentId}
+          and role in ('user', 'assistant')
+          and compressed = 0
+        order by id asc
+    </select>
+
+    <update id="markCompressedThrough">
+        update ai_chat_message
+        set compressed = 1
+        where session_id = #{sessionId}
+          and student_id = #{studentId}
+          and compressed = 0
+          and id &lt;= #{messageId}
+    </update>
+
 </mapper>

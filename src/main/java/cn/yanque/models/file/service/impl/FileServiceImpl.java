@@ -42,7 +42,11 @@ public class FileServiceImpl implements FileService {
     // 这里控制允许上传的文件后缀。新增格式时，只改这个集合即可。
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
             "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx",
-            "md", "txt", "png", "jpg", "jpeg", "zip");
+            "md", "json", "txt", "png", "jpg", "jpeg", "zip",
+            "mp3", "wav", "m4a", "aac", "ogg", "flac", "mp4", "webm");
+
+    private static final Set<String> AUDIO_EXTENSIONS = Set.of(
+            "mp3", "wav", "m4a", "aac", "ogg", "flac", "mp4", "webm");
 
     @Autowired
     private OssProperties ossProperties;
@@ -151,11 +155,13 @@ public class FileServiceImpl implements FileService {
          * 前端限制只能提升体验，不能作为安全边界。
          * 所以后端必须再次校验大小和后缀。
          */
-        long maxBytes = ossProperties.getMaxFileSizeMb() * 1024L * 1024L;
-        if (file.getSize() > maxBytes) {
-            throw new BusinessException(400, "文件大小不能超过" + ossProperties.getMaxFileSizeMb() + "MB");
-        }
         String extension = getExtension(file.getOriginalFilename());
+        long maxMb = AUDIO_EXTENSIONS.contains(extension)
+                ? ossProperties.getMaxAudioFileSizeMb() : ossProperties.getMaxFileSizeMb();
+        long maxBytes = maxMb * 1024L * 1024L;
+        if (file.getSize() > maxBytes) {
+            throw new BusinessException(400, "文件大小不能超过" + maxMb + "MB");
+        }
         if (!ALLOWED_EXTENSIONS.contains(extension)) {
             throw new BusinessException(400, "不支持的文件格式");
         }
@@ -303,6 +309,12 @@ public class FileServiceImpl implements FileService {
             case "pdf" -> "application/pdf";
             case "png" -> "image/png";
             case "jpg", "jpeg" -> "image/jpeg";
+            case "mp3" -> "audio/mpeg";
+            case "wav" -> "audio/wav";
+            case "m4a", "aac", "mp4" -> "audio/mp4";
+            case "ogg" -> "audio/ogg";
+            case "flac" -> "audio/flac";
+            case "webm" -> "audio/webm";
             case "gif" -> "image/gif";
             case "svg" -> "image/svg+xml";
             default -> originalContentType != null ? originalContentType : "application/octet-stream";

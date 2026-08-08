@@ -29,4 +29,11 @@ public interface AiChatSessionMapper {
      * 重新统计会话消息数和最后消息时间。
      */
     int refreshStats(@Param("id") Long id);
+
+    int updateCompression(@Param("id") Long id,
+                          @Param("studentId") Long studentId,
+                          @Param("expectedCompressedUntilMessageId") Long expectedCompressedUntilMessageId,
+                          @Param("summary") String summary,
+                          @Param("summaryTokenCount") Integer summaryTokenCount,
+                          @Param("compressedUntilMessageId") Long compressedUntilMessageId);
 }

@@ -48,6 +48,24 @@ public class StudentDetailRes {
     @Schema(description = "加入时间")
     private Date joinTime;
 
+    @Schema(description = "简历文件名")
+    private String resumeFileName;
+
+    @Schema(description = "简历文件大小")
+    private Long resumeFileSize;
+
+    @Schema(description = "简历上传时间")
+    private Date resumeUploadedAt;
+
+    @Schema(description = "简历解析状态")
+    private String resumeParseStatus;
+
+    @Schema(description = "简历解析失败原因")
+    private String resumeParseErrorMessage;
+
+    @Schema(description = "简历解析完成时间")
+    private Date resumeParsedAt;
+
     @Schema(description = "创建时间")
     private Date createdAt;
 

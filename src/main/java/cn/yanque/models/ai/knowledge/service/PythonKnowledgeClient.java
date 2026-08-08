@@ -1,6 +1,7 @@
 package cn.yanque.models.ai.knowledge.service;
 
 import cn.yanque.common.exception.BusinessException;
+import cn.yanque.common.util.RequestGuidPropagation;
 import cn.yanque.models.ai.knowledge.config.AiKnowledgeProperties;
 import cn.yanque.models.ai.knowledge.pojo.dto.PythonKnowledgeChunksReq;
 import cn.yanque.models.ai.knowledge.pojo.dto.PythonKnowledgeChunksRes;
@@ -41,9 +42,12 @@ public class PythonKnowledgeClient {
     private <T> T post(String path, Object req, Class<T> responseType) {
         try {
             HttpClient client = HttpClient.newBuilder()
+                    // Uvicorn does not support the clear-text HTTP/2 upgrade attempted by Java HttpClient.
+                    // Force HTTP/1.1 so POST bodies are not retried as empty requests.
+                    .version(HttpClient.Version.HTTP_1_1)
                     .connectTimeout(Duration.ofSeconds(safeSeconds(properties.getConnectTimeoutSeconds(), 5)))
                     .build();
-            HttpRequest request = HttpRequest.newBuilder(buildUri(path))
+            HttpRequest request = RequestGuidPropagation.apply(HttpRequest.newBuilder(buildUri(path)))
                     .timeout(Duration.ofSeconds(safeSeconds(properties.getResponseTimeoutSeconds(), 180)))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(JSON.toJSONString(req), StandardCharsets.UTF_8))

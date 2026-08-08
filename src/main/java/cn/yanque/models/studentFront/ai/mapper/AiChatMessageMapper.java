@@ -24,6 +24,13 @@ public interface AiChatMessageMapper {
      * 查询最近的对话历史，供下一轮问答作为模型上下文。
      */
     List<AiChatMessageEntity> selectRecentHistory(@Param("sessionId") Long sessionId,
-                                                  @Param("studentId") Long studentId,
-                                                  @Param("limit") Integer limit);
+                                                   @Param("studentId") Long studentId,
+                                                   @Param("limit") Integer limit);
+
+    List<AiChatMessageEntity> selectUncompressedHistory(@Param("sessionId") Long sessionId,
+                                                        @Param("studentId") Long studentId);
+
+    int markCompressedThrough(@Param("sessionId") Long sessionId,
+                              @Param("studentId") Long studentId,
+                              @Param("messageId") Long messageId);
 }

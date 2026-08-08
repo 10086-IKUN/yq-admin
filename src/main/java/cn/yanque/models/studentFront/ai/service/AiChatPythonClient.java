@@ -1,5 +1,6 @@
 package cn.yanque.models.studentFront.ai.service;
 
+import cn.yanque.common.util.RequestGuidPropagation;
 import cn.yanque.models.studentFront.ai.config.AiChatProperties;
 import cn.yanque.models.studentFront.ai.pojo.entity.AiChatMessageEntity;
 import com.alibaba.fastjson2.JSON;
@@ -38,15 +39,19 @@ public class AiChatPythonClient {
     public void stream(Long studentId,
                        Long sessionId,
                        String message,
+                       String summary,
                        List<AiChatMessageEntity> history,
                        AiChatStreamListener listener) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(properties.getConnectTimeoutSeconds()))
+                .version(HttpClient.Version.HTTP_1_1)
                 .build();
-        HttpRequest request = HttpRequest.newBuilder(buildUri())
+        HttpRequest request = RequestGuidPropagation.apply(HttpRequest.newBuilder(buildUri(properties.getStreamPath())))
                 .timeout(Duration.ofSeconds(properties.getResponseTimeoutSeconds()))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(buildRequestBody(studentId, sessionId, message, history), StandardCharsets.UTF_8))
+                .POST(HttpRequest.BodyPublishers.ofString(
+                        buildRequestBody(studentId, sessionId, message, summary, history),
+                        StandardCharsets.UTF_8))
                 .build();
 
         HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
@@ -56,29 +61,73 @@ public class AiChatPythonClient {
         parseSse(response.body(), listener);
     }
 
+    public String summarize(Long studentId,
+                            Long sessionId,
+                            String oldSummary,
+                            List<AiChatMessageEntity> messages) throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(properties.getConnectTimeoutSeconds()))
+                .version(HttpClient.Version.HTTP_1_1)
+                .build();
+        HttpRequest request = RequestGuidPropagation.apply(HttpRequest.newBuilder(buildUri(properties.getSummarizePath())))
+                .timeout(Duration.ofSeconds(properties.getResponseTimeoutSeconds()))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(
+                        buildSummarizeRequestBody(studentId, sessionId, oldSummary, messages),
+                        StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+            throw new IOException("AI summarize service returned HTTP " + response.statusCode());
+        }
+        JSONObject payload = JSON.parseObject(response.body());
+        String summary = payload.getString("summary");
+        if (summary == null || summary.isBlank()) {
+            throw new IOException("AI summarize service returned empty summary");
+        }
+        return summary.trim();
+    }
+
     /**
      * 拼接 Python AI 服务的流式接口地址。
      *
      * <p>baseUrl 和 streamPath 分开配置，方便本地、测试和线上环境只替换主机地址。</p>
      */
-    private URI buildUri() {
+    private URI buildUri(String path) {
         String baseUrl = properties.getBaseUrl();
-        String streamPath = properties.getStreamPath();
-        if (baseUrl.endsWith("/") && streamPath.startsWith("/")) {
-            return URI.create(baseUrl.substring(0, baseUrl.length() - 1) + streamPath);
+        if (baseUrl.endsWith("/") && path.startsWith("/")) {
+            return URI.create(baseUrl.substring(0, baseUrl.length() - 1) + path);
         }
-        if (!baseUrl.endsWith("/") && !streamPath.startsWith("/")) {
-            return URI.create(baseUrl + "/" + streamPath);
+        if (!baseUrl.endsWith("/") && !path.startsWith("/")) {
+            return URI.create(baseUrl + "/" + path);
         }
-        return URI.create(baseUrl + streamPath);
+        return URI.create(baseUrl + path);
     }
 
-    private String buildRequestBody(Long studentId, Long sessionId, String message, List<AiChatMessageEntity> history) {
+    private String buildRequestBody(Long studentId,
+                                    Long sessionId,
+                                    String message,
+                                    String summary,
+                                    List<AiChatMessageEntity> history) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("studentId", studentId);
         body.put("sessionId", sessionId);
         body.put("message", message);
+        body.put("summary", summary);
         body.put("history", buildHistory(history));
+        return JSON.toJSONString(body);
+    }
+
+    private String buildSummarizeRequestBody(Long studentId,
+                                             Long sessionId,
+                                             String oldSummary,
+                                             List<AiChatMessageEntity> messages) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("studentId", studentId);
+        body.put("sessionId", sessionId);
+        body.put("oldSummary", oldSummary);
+        body.put("messages", buildHistory(messages));
         return JSON.toJSONString(body);
     }
 

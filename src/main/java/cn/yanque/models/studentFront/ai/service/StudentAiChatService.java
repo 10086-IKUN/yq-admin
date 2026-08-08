@@ -28,7 +28,16 @@ public interface StudentAiChatService {
      */
     List<AiChatMessageEntity> listRecentHistory(Long sessionId, Long studentId, Integer limit);
 
+    List<AiChatMessageEntity> listUncompressedHistory(Long sessionId, Long studentId);
+
     AiChatMessageEntity addMessage(AiChatMessageEntity entity);
 
     void refreshSessionStats(Long sessionId);
+
+    int applyCompression(Long sessionId,
+                         Long studentId,
+                         Long expectedCompressedUntilMessageId,
+                         String summary,
+                         Integer summaryTokenCount,
+                         Long compressedUntilMessageId);
 }

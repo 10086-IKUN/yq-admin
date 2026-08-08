@@ -29,4 +29,6 @@ public class OssProperties {
 
     /** 单个文件最大大小，单位：MB。 */
     private Long maxFileSizeMb = 50L;
+
+    private Long maxAudioFileSizeMb = 200L;
 }

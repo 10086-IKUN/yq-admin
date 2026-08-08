@@ -8,6 +8,7 @@ import cn.yanque.models.studentFront.ai.pojo.entity.AiChatMessageEntity;
 import cn.yanque.models.studentFront.ai.pojo.entity.AiChatSessionEntity;
 import cn.yanque.models.studentFront.ai.pojo.vo.req.AiChatCreateSessionReq;
 import cn.yanque.models.studentFront.ai.pojo.vo.req.AiChatSendReq;
+import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatCompressionRes;
 import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatMessageRes;
 import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatSessionRes;
 import cn.yanque.models.studentFront.ai.service.AiChatPythonClient;
@@ -28,9 +29,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -46,6 +49,7 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
     private static final String DEFAULT_ERROR_MESSAGE = "AI 服务暂时不可用，请稍后重试";
 
     private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final Set<Long> compressingSessions = ConcurrentHashMap.newKeySet();
 
     @Autowired
     private StudentAiChatService studentAiChatService;
@@ -87,6 +91,11 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
     }
 
     @Override
+    public AiChatCompressionRes compressSession(Long sessionId, Long studentId) {
+        return compressSessionInternal(sessionId, studentId, true);
+    }
+
+    @Override
     public SseEmitter stream(Long studentId, String studentCode, AiChatSendReq req) {
         long timeout = TimeUnit.SECONDS.toMillis(properties.getResponseTimeoutSeconds() + 30L);
         SseEmitter emitter = new SseEmitter(timeout);
@@ -121,7 +130,13 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
             AtomicReference<Integer> tokens = new AtomicReference<>(0);
             AtomicBoolean failed = new AtomicBoolean(false);
 
-            aiChatPythonClient.stream(studentId, session.getId(), modelQuestion, history, (event, data) -> {
+            aiChatPythonClient.stream(
+                    studentId,
+                    session.getId(),
+                    modelQuestion,
+                    session.getSummary(),
+                    history,
+                    (event, data) -> {
                 if ("message_start".equals(event)) {
                     model.set(data.getString("model"));
                     sendEvent(emitter, "message_start", data);
@@ -149,7 +164,7 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
                     String message = data.getString("message");
                     sendEvent(emitter, "error", Map.of("message", normalizeErrorMessage(message)));
                 }
-            });
+                    });
 
             if (!failed.get()) {
                 AiChatMessageEntity assistantMessage = buildMessage(
@@ -166,6 +181,7 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
                 studentAiChatService.addMessage(assistantMessage);
                 studentAiChatService.refreshSessionStats(session.getId());
                 sendEvent(emitter, "done", buildDonePayload(session.getId(), studentId, assistantMessage, ragContext));
+                triggerAutoCompression(session.getId(), studentId);
             }
             emitter.complete();
         } catch (Exception ex) {
@@ -181,6 +197,158 @@ public class StudentAiChatBizImpl implements StudentAiChatBiz {
             return studentAiChatService.getSession(req.getSessionId(), studentId);
         }
         return studentAiChatService.createSession(studentId, studentCode, buildTitle(question));
+    }
+
+    private void triggerAutoCompression(Long sessionId, Long studentId) {
+        if (!Boolean.TRUE.equals(properties.getCompressionEnabled())) {
+            return;
+        }
+        executorService.execute(() -> {
+            try {
+                AiChatCompressionRes result = compressSessionInternal(sessionId, studentId, false);
+                if (Boolean.TRUE.equals(result.getCompressed())) {
+                    log.info(
+                            "AI chat context compressed automatically, sessionId={}, studentId={}, compressedMessages={}, boundary={}",
+                            sessionId,
+                            studentId,
+                            result.getCompressedMessageCount(),
+                            result.getCompressedUntilMessageId());
+                }
+            } catch (Exception ex) {
+                log.warn(
+                        "AI chat automatic compression skipped, sessionId={}, studentId={}, reason={}",
+                        sessionId,
+                        studentId,
+                        ex.getMessage());
+            }
+        });
+    }
+
+    private AiChatCompressionRes compressSessionInternal(Long sessionId, Long studentId, boolean force) {
+        if (!compressingSessions.add(sessionId)) {
+            return compressionResult(false, 0, 0, null, 0, "该对话正在压缩，请稍后重试");
+        }
+        try {
+            AiChatSessionEntity session = studentAiChatService.getSession(sessionId, studentId);
+            List<AiChatMessageEntity> uncompressed = studentAiChatService.listUncompressedHistory(sessionId, studentId);
+            int keepRecent = safePositive(properties.getCompressionKeepRecentMessages(), 8);
+            if (uncompressed.size() <= keepRecent) {
+                return compressionResult(
+                        false,
+                        0,
+                        uncompressed.size(),
+                        session.getCompressedUntilMessageId(),
+                        safeInteger(session.getSummaryTokenCount()),
+                        "当前消息较少，无需压缩");
+            }
+
+            int totalChars = uncompressed.stream()
+                    .map(AiChatMessageEntity::getContent)
+                    .filter(content -> content != null)
+                    .mapToInt(String::length)
+                    .sum();
+            int triggerMessages = safePositive(properties.getCompressionTriggerMessageCount(), 20);
+            int triggerChars = safePositive(properties.getCompressionTriggerChars(), 12000);
+            if (!force && uncompressed.size() < triggerMessages && totalChars < triggerChars) {
+                return compressionResult(
+                        false,
+                        0,
+                        uncompressed.size(),
+                        session.getCompressedUntilMessageId(),
+                        safeInteger(session.getSummaryTokenCount()),
+                        "尚未达到自动压缩阈值");
+            }
+
+            int batchSize = safePositive(properties.getCompressionBatchSize(), 40);
+            int candidateCount = Math.min(uncompressed.size() - keepRecent, batchSize);
+            while (candidateCount > 0 && !isCompletedAssistant(uncompressed.get(candidateCount - 1))) {
+                candidateCount--;
+            }
+            if (candidateCount <= 0) {
+                return compressionResult(
+                        false,
+                        0,
+                        uncompressed.size(),
+                        session.getCompressedUntilMessageId(),
+                        safeInteger(session.getSummaryTokenCount()),
+                        "暂时没有可安全压缩的完整对话轮次");
+            }
+
+            List<AiChatMessageEntity> candidates = List.copyOf(uncompressed.subList(0, candidateCount));
+            Long boundary = candidates.get(candidates.size() - 1).getId();
+            String summary = aiChatPythonClient.summarize(
+                    studentId,
+                    sessionId,
+                    session.getSummary(),
+                    candidates);
+            int summaryTokens = estimateTokenCount(summary);
+            int compressedCount = studentAiChatService.applyCompression(
+                    sessionId,
+                    studentId,
+                    session.getCompressedUntilMessageId(),
+                    summary,
+                    summaryTokens,
+                    boundary);
+            if (compressedCount < 0) {
+                return compressionResult(
+                        false,
+                        0,
+                        uncompressed.size(),
+                        session.getCompressedUntilMessageId(),
+                        safeInteger(session.getSummaryTokenCount()),
+                        "对话内容已变化，本次压缩已取消");
+            }
+            return compressionResult(
+                    true,
+                    compressedCount,
+                    uncompressed.size() - compressedCount,
+                    boundary,
+                    summaryTokens,
+                    force ? "手动压缩完成" : "自动压缩完成");
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("压缩请求被中断", ex);
+        } catch (IOException ex) {
+            throw new IllegalStateException("AI 摘要服务暂时不可用", ex);
+        } finally {
+            compressingSessions.remove(sessionId);
+        }
+    }
+
+    private boolean isCompletedAssistant(AiChatMessageEntity message) {
+        return "assistant".equals(message.getRole())
+                && (message.getFinishReason() == null || "stop".equals(message.getFinishReason()));
+    }
+
+    private int estimateTokenCount(String text) {
+        if (text == null || text.isBlank()) {
+            return 0;
+        }
+        return Math.max(1, (text.length() + 1) / 2);
+    }
+
+    private int safePositive(Integer value, int fallback) {
+        return value == null || value <= 0 ? fallback : value;
+    }
+
+    private int safeInteger(Integer value) {
+        return value == null ? 0 : value;
+    }
+
+    private AiChatCompressionRes compressionResult(boolean compressed,
+                                                   int compressedMessageCount,
+                                                   int keptRecentMessageCount,
+                                                   Long compressedUntilMessageId,
+                                                   int summaryTokenCount,
+                                                   String message) {
+        AiChatCompressionRes result = new AiChatCompressionRes();
+        result.setCompressed(compressed);
+        result.setCompressedMessageCount(compressedMessageCount);
+        result.setKeptRecentMessageCount(keptRecentMessageCount);
+        result.setCompressedUntilMessageId(compressedUntilMessageId);
+        result.setSummaryTokenCount(summaryTokenCount);
+        result.setMessage(message);
+        return result;
     }
 
     /**

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.ai.texttosql.mapper.TextToSqlRunStepMapper">
+
+    <resultMap id="TextToSqlRunStepMap" type="cn.yanque.models.ai.texttosql.pojo.entity.TextToSqlRunStepEntity">
+        <id property="id" column="id"/>
+        <result property="runId" column="run_id"/>
+        <result property="conversationId" column="conversation_id"/>
+        <result property="stepIndex" column="step_index"/>
+        <result property="nodeName" column="node_name"/>
+        <result property="source" column="source"/>
+        <result property="langGraphStep" column="lang_graph_step"/>
+        <result property="nextNodes" column="next_nodes"/>
+        <result property="stateSnapshotJson" column="state_snapshot_json"/>
+        <result property="checkpointCreatedAt" column="checkpoint_created_at"/>
+        <result property="savedAt" column="saved_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, run_id, conversation_id, step_index, node_name, source, lang_graph_step,
+        next_nodes, state_snapshot_json, checkpoint_created_at, saved_at
+    </sql>
+
+    <insert id="insertBatch">
+        insert into text_to_sql_run_step
+            (run_id, conversation_id, step_index, node_name, source, lang_graph_step,
+             next_nodes, state_snapshot_json, checkpoint_created_at, saved_at)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.runId}, #{item.conversationId}, #{item.stepIndex}, #{item.nodeName}, #{item.source}, #{item.langGraphStep},
+             #{item.nextNodes}, #{item.stateSnapshotJson}, #{item.checkpointCreatedAt}, #{item.savedAt})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByRunId">
+        delete from text_to_sql_run_step where run_id = #{runId}
+    </delete>
+
+    <select id="selectByRunId" resultMap="TextToSqlRunStepMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_run_step
+        where run_id = #{runId}
+        order by step_index asc, id asc
+    </select>
+</mapper>
+

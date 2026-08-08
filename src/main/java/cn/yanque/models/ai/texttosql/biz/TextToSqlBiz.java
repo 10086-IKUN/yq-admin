@@ -1,12 +1,12 @@
 package cn.yanque.models.ai.texttosql.biz;
 
-import cn.yanque.models.ai.texttosql.pojo.vo.req.TextToSqlContinueReq;
-import cn.yanque.models.ai.texttosql.pojo.vo.req.TextToSqlRouteReq;
-import cn.yanque.models.ai.texttosql.pojo.vo.res.TextToSqlRes;
+import cn.yanque.models.ai.texttosql.pojo.dto.TextToSqlRouteDto;
 
 public interface TextToSqlBiz {
 
-    TextToSqlRes route(TextToSqlRouteReq req);
+    TextToSqlRouteDto.RouteRes route(TextToSqlRouteDto.RouteReq req, Long userId);
 
-    TextToSqlRes continueQuestion(TextToSqlContinueReq req);
+    TextToSqlRouteDto.RouteRes route(TextToSqlRouteDto.RouteReq req, Long userId, String sourceType);
+
+    TextToSqlRouteDto.RouteRes continueQuestion(TextToSqlRouteDto.ContinueReq req);
 }

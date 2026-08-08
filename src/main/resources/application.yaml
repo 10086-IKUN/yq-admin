@@ -4,13 +4,15 @@ server:
     context-path: /yq-admin
 
 spring:
+  config:
+    import: optional:file:.env[.properties],optional:file:YanQue-Admin/.env[.properties]
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
   servlet:
     multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: 200MB
+      max-request-size: 200MB
 
 
   data:
@@ -36,14 +38,22 @@ oss:
   dir-prefix: homework
   preview-expire-minutes: 10
   max-file-size-mb: 50
+  max-audio-file-size-mb: 200
 
 yanque:
+  ai-internal-token: ${YQ_AI_PROMPT_INTERNAL_TOKEN:}
   ai-chat:
     base-url: ${YANQUE_AI_BASE_URL:http://localhost:8000}
     stream-path: /api/ai-chat/stream
+    summarize-path: /api/ai-chat/summarize
     connect-timeout-seconds: 5
     response-timeout-seconds: 180
     history-limit: 20
+    compression-enabled: ${YANQUE_AI_CHAT_COMPRESSION_ENABLED:true}
+    compression-trigger-message-count: ${YANQUE_AI_CHAT_COMPRESSION_TRIGGER_MESSAGES:20}
+    compression-trigger-chars: ${YANQUE_AI_CHAT_COMPRESSION_TRIGGER_CHARS:12000}
+    compression-keep-recent-messages: ${YANQUE_AI_CHAT_COMPRESSION_KEEP_RECENT:8}
+    compression-batch-size: ${YANQUE_AI_CHAT_COMPRESSION_BATCH_SIZE:40}
   ai-knowledge:
     base-url: ${YANQUE_AI_KNOWLEDGE_BASE_URL:${YANQUE_AI_BASE_URL:http://localhost:8000}}
     index-path: /api/knowledge/documents/index
@@ -62,3 +72,88 @@ yanque:
     continue-path: /api/text-to-sql/continue
     connect-timeout-seconds: 5
     response-timeout-seconds: 180
+  ai-log-diagnosis:
+    base-url: ${YANQUE_AI_LOG_DIAGNOSIS_BASE_URL:${YANQUE_AI_BASE_URL:http://localhost:8000}}
+    context-path: /api/log-diagnosis/context
+    analyze-path: /api/log-diagnosis/analyze
+    connect-timeout-seconds: 5
+    response-timeout-seconds: 180
+  ai-interview:
+    base-url: ${YANQUE_AI_INTERVIEW_BASE_URL:${YANQUE_AI_BASE_URL:http://localhost:8000}}
+    polish-path: /api/interview-reviews/dialogue/polish
+    report-path: /api/interview-reviews/report/generate
+    question-extract-path: /api/interview-reviews/questions/extract
+    question-vector-search-path: /api/interview-reviews/questions/vector/search
+    question-vector-upsert-path: /api/interview-reviews/questions/vector/upsert
+    mock-interview-profile-generate-path: /api/interview-reviews/mock-interview/profile/generate
+    connect-timeout-seconds: 5
+    response-timeout-seconds: 180
+
+volcengine:
+  tls:
+    endpoint: ${VOLCENGINE_TLS_ENDPOINT:}
+    region: ${VOLCENGINE_TLS_REGION:cn-beijing}
+    access-key-id: ${VOLCENGINE_TLS_ACCESS_KEY_ID:}
+    access-key-secret: ${VOLCENGINE_TLS_ACCESS_KEY_SECRET:}
+    connect-timeout-ms: ${VOLCENGINE_TLS_CONNECT_TIMEOUT_MS:5000}
+    read-timeout-ms: ${VOLCENGINE_TLS_READ_TIMEOUT_MS:10000}
+
+doubao:
+  asr:
+    enabled: ${YQ_DOUBAO_ASR_ENABLED:true}
+    app-key: ${YQ_DOUBAO_ASR_APP_KEY:}
+    access-key: ${YQ_DOUBAO_ASR_ACCESS_KEY:}
+    api-key: ${YQ_DOUBAO_ASR_API_KEY:}
+    resource-id: ${YQ_DOUBAO_ASR_RESOURCE_ID:volc.bigasr.auc}
+    submit-url: ${YQ_DOUBAO_ASR_SUBMIT_URL:https://openspeech.bytedance.com/api/v3/auc/bigmodel/submit}
+    query-url: ${YQ_DOUBAO_ASR_QUERY_URL:https://openspeech.bytedance.com/api/v3/auc/bigmodel/query}
+    connect-timeout-seconds: ${YQ_DOUBAO_ASR_CONNECT_TIMEOUT_SECONDS:5}
+    request-timeout-seconds: 60
+    query-batch-size: 10
+    query-fixed-delay-ms: ${YQ_DOUBAO_ASR_QUERY_FIXED_DELAY_MS:60000}
+  realtime-voice:
+    enabled: ${YQ_DOUBAO_REALTIME_VOICE_ENABLED:true}
+    websocket-url: ${YQ_DOUBAO_REALTIME_VOICE_WEBSOCKET_URL:wss://openspeech.bytedance.com/api/v3/realtime/dialogue}
+    app-id: ${YQ_DOUBAO_REALTIME_VOICE_APP_ID:}
+    access-token: ${YQ_DOUBAO_REALTIME_VOICE_ACCESS_TOKEN:}
+    app-key: ${YQ_DOUBAO_REALTIME_VOICE_APP_KEY:PlgvMymc7f3tQnJ6}
+    resource-id: ${YQ_DOUBAO_REALTIME_VOICE_RESOURCE_ID:volc.speech.dialog}
+    input-audio-format: ${YQ_DOUBAO_REALTIME_VOICE_INPUT_AUDIO_FORMAT:pcm_s16le}
+    input-audio-sample-rate: ${YQ_DOUBAO_REALTIME_VOICE_INPUT_AUDIO_SAMPLE_RATE:16000}
+    input-audio-channel: ${YQ_DOUBAO_REALTIME_VOICE_INPUT_AUDIO_CHANNEL:1}
+    output-audio-format: ${YQ_DOUBAO_REALTIME_VOICE_OUTPUT_AUDIO_FORMAT:pcm_s16le}
+    output-audio-sample-rate: ${YQ_DOUBAO_REALTIME_VOICE_OUTPUT_AUDIO_SAMPLE_RATE:24000}
+    model-version: ${YQ_DOUBAO_REALTIME_VOICE_MODEL_VERSION:1.2.1.1}
+    input-mod: ${YQ_DOUBAO_REALTIME_VOICE_INPUT_MOD:push_to_talk}
+    hello-content: ${YQ_DOUBAO_REALTIME_VOICE_HELLO_CONTENT:你好，欢迎来参加今天的面试。先简单做个1分钟的自我介绍吧。}
+    speaker: ${YQ_DOUBAO_REALTIME_VOICE_SPEAKER:zh_female_vv_jupiter_bigtts}
+    connect-timeout-seconds: ${YQ_DOUBAO_REALTIME_VOICE_CONNECT_TIMEOUT_SECONDS:10}
+  streaming-asr:
+    enabled: ${YQ_DOUBAO_STREAMING_ASR_ENABLED:true}
+    websocket-url: ${YQ_DOUBAO_STREAMING_ASR_WEBSOCKET_URL:wss://openspeech.bytedance.com/api/v3/sauc/bigmodel_async}
+    api-key: ${YQ_DOUBAO_STREAMING_ASR_API_KEY:}
+    resource-id: ${YQ_DOUBAO_STREAMING_ASR_RESOURCE_ID:volc.seedasr.sauc.duration}
+    audio-format: ${YQ_DOUBAO_STREAMING_ASR_AUDIO_FORMAT:pcm}
+    audio-codec: ${YQ_DOUBAO_STREAMING_ASR_AUDIO_CODEC:raw}
+    audio-rate: ${YQ_DOUBAO_STREAMING_ASR_AUDIO_RATE:16000}
+    audio-bits: ${YQ_DOUBAO_STREAMING_ASR_AUDIO_BITS:16}
+    audio-channel: ${YQ_DOUBAO_STREAMING_ASR_AUDIO_CHANNEL:1}
+    language: ${YQ_DOUBAO_STREAMING_ASR_LANGUAGE:zh-CN}
+    model-name: ${YQ_DOUBAO_STREAMING_ASR_MODEL_NAME:bigmodel}
+    enable-itn: ${YQ_DOUBAO_STREAMING_ASR_ENABLE_ITN:true}
+    enable-punc: ${YQ_DOUBAO_STREAMING_ASR_ENABLE_PUNC:true}
+    enable-ddc: ${YQ_DOUBAO_STREAMING_ASR_ENABLE_DDC:false}
+    show-utterances: ${YQ_DOUBAO_STREAMING_ASR_SHOW_UTTERANCES:true}
+    connect-timeout-seconds: ${YQ_DOUBAO_STREAMING_ASR_CONNECT_TIMEOUT_SECONDS:10}
+  streaming-tts:
+    enabled: ${YQ_DOUBAO_STREAMING_TTS_ENABLED:true}
+    websocket-url: ${YQ_DOUBAO_STREAMING_TTS_WEBSOCKET_URL:wss://openspeech.bytedance.com/api/v3/tts/bidirection}
+    api-key: ${YQ_DOUBAO_STREAMING_TTS_API_KEY:}
+    app-id: ${YQ_DOUBAO_STREAMING_TTS_APP_ID:}
+    access-token: ${YQ_DOUBAO_STREAMING_TTS_ACCESS_TOKEN:}
+    resource-id: ${YQ_DOUBAO_STREAMING_TTS_RESOURCE_ID:seed-tts-2.0}
+    speaker: ${YQ_DOUBAO_STREAMING_TTS_SPEAKER:zh_female_vv_uranus_bigtts}
+    audio-format: ${YQ_DOUBAO_STREAMING_TTS_AUDIO_FORMAT:pcm}
+    audio-sample-rate: ${YQ_DOUBAO_STREAMING_TTS_AUDIO_SAMPLE_RATE:24000}
+    audio-channel: ${YQ_DOUBAO_STREAMING_TTS_AUDIO_CHANNEL:1}
+    connect-timeout-seconds: ${YQ_DOUBAO_STREAMING_TTS_CONNECT_TIMEOUT_SECONDS:10}

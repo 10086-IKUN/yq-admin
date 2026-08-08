@@ -14,13 +14,23 @@
         <result property="classId" column="class_id"/>
         <result property="productId" column="product_id"/>
         <result property="joinTime" column="join_time"/>
+        <result property="resumeObjectKey" column="resume_object_key"/>
+        <result property="resumeFileName" column="resume_file_name"/>
+        <result property="resumeFileSize" column="resume_file_size"/>
+        <result property="resumeUploadedAt" column="resume_uploaded_at"/>
+        <result property="resumeText" column="resume_text"/>
+        <result property="resumeParseStatus" column="resume_parse_status"/>
+        <result property="resumeParseErrorMessage" column="resume_parse_error_message"/>
+        <result property="resumeParsedAt" column="resume_parsed_at"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
     <sql id="BaseColumns">
         id, student_code, student_name, phone, graduation_session, school, education,
-        study_mode, class_id, product_id, join_time, created_at, updated_at
+        study_mode, class_id, product_id, join_time, resume_object_key, resume_file_name,
+        resume_file_size, resume_uploaded_at, resume_text, resume_parse_status,
+        resume_parse_error_message, resume_parsed_at, created_at, updated_at
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -92,5 +102,61 @@
         from edu_student
         order by id desc
     </select>
+
+    <update id="updateResume">
+        update edu_student
+        set resume_object_key = #{objectKey},
+            resume_file_name = #{fileName},
+            resume_file_size = #{fileSize},
+            resume_uploaded_at = now(),
+            resume_text = null,
+            resume_parse_status = 'PENDING',
+            resume_parse_error_message = null,
+            resume_parsed_at = null,
+            updated_at = now()
+        where id = #{id}
+    </update>
+
+    <update id="markResumeParsePending">
+        update edu_student
+        set resume_parse_status = 'PENDING',
+            resume_parse_error_message = null,
+            resume_parsed_at = null,
+            updated_at = now()
+        where id = #{id}
+          and resume_object_key is not null
+          and resume_object_key != ''
+    </update>
+
+    <update id="markResumeParseProcessing">
+        update edu_student
+        set resume_parse_status = 'PROCESSING',
+            resume_parse_error_message = null,
+            updated_at = #{now}
+        where id = #{id}
+          and resume_object_key = #{objectKey}
+          and resume_parse_status = 'PENDING'
+    </update>
+
+    <update id="markResumeParseSuccess">
+        update edu_student
+        set resume_parse_status = 'SUCCESS',
+            resume_text = #{resumeText},
+            resume_parse_error_message = null,
+            resume_parsed_at = #{now},
+            updated_at = #{now}
+        where id = #{id}
+          and resume_object_key = #{objectKey}
+    </update>
+
+    <update id="markResumeParseFailed">
+        update edu_student
+        set resume_parse_status = 'FAILED',
+            resume_parse_error_message = #{errorMessage},
+            resume_parsed_at = #{now},
+            updated_at = #{now}
+        where id = #{id}
+          and resume_object_key = #{objectKey}
+    </update>
 
 </mapper>

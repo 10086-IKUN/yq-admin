@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.interview.mapper.InterviewReviewRecordMapper">
+    <resultMap id="RecordMap" type="cn.yanque.models.interview.pojo.InterviewReviewRecordEntity">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/><result property="studentName" column="student_name"/>
+        <result property="studentCode" column="student_code"/><result property="companyName" column="company_name"/>
+        <result property="interviewRole" column="interview_role"/><result property="interviewTime" column="interview_time"/>
+        <result property="audioObjectKey" column="audio_object_key"/><result property="audioFileName" column="audio_file_name"/>
+        <result property="audioFileSize" column="audio_file_size"/><result property="resumeText" column="resume_text"/>
+        <result property="reviewRemark" column="review_remark"/><result property="status" column="status"/>
+        <result property="transcriptTaskId" column="transcript_task_id"/><result property="transcriptDialogueJson" column="transcript_dialogue_json"/>
+        <result property="reportJson" column="report_json"/><result property="errorMessage" column="error_message"/>
+        <result property="questionStatus" column="question_status"/><result property="questionExtractedCount" column="question_extracted_count"/>
+        <result property="questionCreatedCount" column="question_created_count"/><result property="questionMergedCount" column="question_merged_count"/>
+        <result property="questionFailReason" column="question_fail_reason"/>
+        <result property="startedAt" column="started_at"/><result property="completedAt" column="completed_at"/>
+        <result property="createdBy" column="created_by"/><result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    <sql id="Columns">r.id,r.student_id,s.student_name,s.student_code,r.company_name,r.interview_role,r.interview_time,
+        r.audio_object_key,r.audio_file_name,r.audio_file_size,r.resume_text,r.review_remark,r.status,r.transcript_task_id,
+        r.transcript_dialogue_json,r.report_json,r.error_message,r.question_status,r.question_extracted_count,
+        r.question_created_count,r.question_merged_count,r.question_fail_reason,r.started_at,r.completed_at,r.created_by,r.created_at,r.updated_at</sql>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into interview_review_record(student_id,company_name,interview_role,interview_time,audio_object_key,
+        audio_file_name,audio_file_size,resume_text,review_remark,status,created_by,created_at,updated_at)
+        values(#{studentId},#{companyName},#{interviewRole},#{interviewTime},#{audioObjectKey},#{audioFileName},
+        #{audioFileSize},#{resumeText},#{reviewRemark},#{status},#{createdBy},#{createdAt},#{updatedAt})
+    </insert>
+    <select id="selectById" resultMap="RecordMap">
+        select <include refid="Columns"/> from interview_review_record r left join edu_student s on s.id=r.student_id where r.id=#{id}
+    </select>
+    <select id="selectPage" resultMap="RecordMap">
+        select <include refid="Columns"/> from interview_review_record r left join edu_student s on s.id=r.student_id
+        <where>
+            <if test="studentId != null">and r.student_id=#{studentId}</if>
+            <if test="status != null and status != ''">and r.status=#{status}</if>
+            <if test="keyword != null and keyword != ''">and (s.student_name like concat('%',#{keyword},'%') or s.student_code like concat('%',#{keyword},'%') or r.company_name like concat('%',#{keyword},'%') or r.interview_role like concat('%',#{keyword},'%'))</if>
+        </where>
+        order by r.id desc
+    </select>
+    <select id="selectTranscribing" resultMap="RecordMap">
+        select <include refid="Columns"/> from interview_review_record r left join edu_student s on s.id=r.student_id
+        where r.status='TRANSCRIBING' order by r.started_at,r.id limit #{limit}
+    </select>
+    <update id="markTranscribing">update interview_review_record set status='TRANSCRIBING',transcript_task_id=#{taskId},error_message=null,started_at=#{now},completed_at=null,updated_at=#{now} where id=#{id}</update>
+    <update id="markAnalyzing">update interview_review_record set status='ANALYZING',transcript_dialogue_json=#{dialogueJson},error_message=null,updated_at=#{now} where id=#{id}</update>
+    <update id="markDone">update interview_review_record set status='DONE',transcript_dialogue_json=#{dialogueJson},report_json=#{reportJson},error_message=null,completed_at=#{now},updated_at=#{now} where id=#{id}</update>
+    <update id="markFailed">update interview_review_record set status='FAILED',error_message=#{errorMessage},completed_at=#{now},updated_at=#{now} where id=#{id}</update>
+    <update id="markQuestionProcessing">update interview_review_record set question_status='PROCESSING',question_fail_reason=null,updated_at=#{now} where id=#{id}</update>
+    <update id="markQuestionDone">update interview_review_record set question_status='DONE',question_extracted_count=#{extracted},question_created_count=#{created},question_merged_count=#{merged},question_fail_reason=null,updated_at=#{now} where id=#{id}</update>
+    <update id="markQuestionFailed">update interview_review_record set question_status='FAILED',question_fail_reason=#{reason},updated_at=#{now} where id=#{id}</update>
+</mapper>

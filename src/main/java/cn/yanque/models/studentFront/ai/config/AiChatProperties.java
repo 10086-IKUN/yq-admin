@@ -19,9 +19,21 @@ public class AiChatProperties {
 
     private String streamPath = "/api/ai-chat/stream";
 
+    private String summarizePath = "/api/ai-chat/summarize";
+
     private Integer connectTimeoutSeconds = 5;
 
     private Integer responseTimeoutSeconds = 180;
 
     private Integer historyLimit = 20;
+
+    private Boolean compressionEnabled = true;
+
+    private Integer compressionTriggerMessageCount = 20;
+
+    private Integer compressionTriggerChars = 12000;
+
+    private Integer compressionKeepRecentMessages = 8;
+
+    private Integer compressionBatchSize = 40;
 }

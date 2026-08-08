@@ -94,9 +94,10 @@ public class ControllerLogAspect {
             if (shouldIgnore(arg)) {
                 continue;
             }
+            String parameterName = parameterNames != null && i < parameterNames.length ? parameterNames[i] : "arg" + i;
             Map<String, Object> item = new LinkedHashMap<>();
-            item.put("name", parameterNames != null && i < parameterNames.length ? parameterNames[i] : "arg" + i);
-            item.put("value", sanitizeObject(arg));
+            item.put("name", parameterName);
+            item.put("value", isSensitiveField(parameterName) ? mask(String.valueOf(arg)) : sanitizeObject(arg));
             items.add(item);
         }
         return toJson(items);

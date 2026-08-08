@@ -3,6 +3,7 @@ package cn.yanque.models.studentFront.ai.biz;
 import cn.yanque.models.studentFront.ai.pojo.vo.req.AiChatCreateSessionReq;
 import cn.yanque.models.studentFront.ai.pojo.vo.req.AiChatSendReq;
 import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatMessageRes;
+import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatCompressionRes;
 import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatSessionRes;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -23,6 +24,8 @@ public interface StudentAiChatBiz {
     List<AiChatMessageRes> listMessages(Long sessionId, Long studentId);
 
     void deleteSession(Long sessionId, Long studentId);
+
+    AiChatCompressionRes compressSession(Long sessionId, Long studentId);
 
     /**
      * 发起一次流式问答。

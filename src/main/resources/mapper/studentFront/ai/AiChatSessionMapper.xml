@@ -81,4 +81,16 @@
         where id = #{id}
     </update>
 
+    <update id="updateCompression">
+        update ai_chat_session
+        set summary = #{summary},
+            summary_token_count = #{summaryTokenCount},
+            compressed_until_message_id = #{compressedUntilMessageId},
+            updated_at = now()
+        where id = #{id}
+          and student_id = #{studentId}
+          and status = 'ACTIVE'
+          and compressed_until_message_id &lt;=&gt; #{expectedCompressedUntilMessageId}
+    </update>
+
 </mapper>

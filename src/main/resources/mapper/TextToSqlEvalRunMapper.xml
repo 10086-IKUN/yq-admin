@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.ai.texttosql.mapper.TextToSqlEvalRunMapper">
+
+    <resultMap id="TextToSqlEvalRunMap" type="cn.yanque.models.ai.texttosql.pojo.entity.TextToSqlEvalRunEntity">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="status" column="status"/>
+        <result property="sampleCount" column="sample_count"/>
+        <result property="passCount" column="pass_count"/>
+        <result property="failCount" column="fail_count"/>
+        <result property="passRate" column="pass_rate"/>
+        <result property="scopeJson" column="scope_json"/>
+        <result property="summaryJson" column="summary_json"/>
+        <result property="errorMessage" column="error_message"/>
+        <result property="startedAt" column="started_at"/>
+        <result property="finishedAt" column="finished_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, name, status, sample_count, pass_count, fail_count, pass_rate, scope_json, summary_json,
+        error_message, started_at, finished_at, created_by, created_at, updated_at
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into text_to_sql_eval_run
+            (name, status, sample_count, pass_count, fail_count, pass_rate, scope_json, summary_json,
+             error_message, started_at, finished_at, created_by, created_at, updated_at)
+        values
+            (#{name}, #{status}, #{sampleCount}, #{passCount}, #{failCount}, #{passRate}, #{scopeJson}, #{summaryJson},
+             #{errorMessage}, #{startedAt}, #{finishedAt}, #{createdBy}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updateById">
+        update text_to_sql_eval_run
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sampleCount != null">sample_count = #{sampleCount},</if>
+            <if test="passCount != null">pass_count = #{passCount},</if>
+            <if test="failCount != null">fail_count = #{failCount},</if>
+            <if test="passRate != null">pass_rate = #{passRate},</if>
+            <if test="scopeJson != null">scope_json = #{scopeJson},</if>
+            <if test="summaryJson != null">summary_json = #{summaryJson},</if>
+            <if test="errorMessage != null">error_message = #{errorMessage},</if>
+            <if test="startedAt != null">started_at = #{startedAt},</if>
+            <if test="finishedAt != null">finished_at = #{finishedAt},</if>
+            updated_at = #{updatedAt}
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateSummaryById">
+        update text_to_sql_eval_run
+        set status = #{entity.status},
+            sample_count = #{entity.sampleCount},
+            pass_count = #{entity.passCount},
+            fail_count = #{entity.failCount},
+            pass_rate = #{entity.passRate},
+            summary_json = #{entity.summaryJson},
+            finished_at =
+                <choose>
+                    <when test="clearFinishedAt">null</when>
+                    <otherwise>#{entity.finishedAt}</otherwise>
+                </choose>,
+            updated_at = #{entity.updatedAt}
+        where id = #{entity.id}
+    </update>
+
+    <select id="selectById" resultMap="TextToSqlEvalRunMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_run
+        where id = #{id}
+        limit 1
+    </select>
+
+    <select id="selectPage" resultMap="TextToSqlEvalRunMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_run
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and name like concat('%', #{keyword}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by id desc
+    </select>
+</mapper>
+

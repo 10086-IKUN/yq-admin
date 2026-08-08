@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.mockinterview.mapper.MockInterviewSessionMapper">
+
+    <resultMap id="MockInterviewSessionMap" type="cn.yanque.models.mockinterview.pojo.entity.MockInterviewSessionEntity">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="resumeObjectKey" column="resume_object_key"/>
+        <result property="resumeFileName" column="resume_file_name"/>
+        <result property="resumeTextSnapshot" column="resume_text_snapshot"/>
+        <result property="profileJson" column="profile_json"/>
+        <result property="profileStatus" column="profile_status"/>
+        <result property="profileErrorMessage" column="profile_error_message"/>
+        <result property="profileGeneratedAt" column="profile_generated_at"/>
+        <result property="voiceSessionId" column="voice_session_id"/>
+        <result property="status" column="status"/>
+        <result property="startedAt" column="started_at"/>
+        <result property="finishedAt" column="finished_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, student_id, resume_object_key, resume_file_name, resume_text_snapshot,
+        profile_json, profile_status, profile_error_message, profile_generated_at,
+        voice_session_id, status, started_at, finished_at, created_at, updated_at
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into mock_interview_session (
+            student_id,
+            resume_object_key,
+            resume_file_name,
+            resume_text_snapshot,
+            profile_status,
+            status,
+            created_at,
+            updated_at
+        )
+        values (
+            #{studentId},
+            #{resumeObjectKey},
+            #{resumeFileName},
+            #{resumeTextSnapshot},
+            #{profileStatus},
+            #{status},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <select id="selectById" resultMap="MockInterviewSessionMap">
+        select <include refid="BaseColumns"/>
+        from mock_interview_session
+        where id = #{id}
+    </select>
+
+    <select id="selectLatestByStudentId" resultMap="MockInterviewSessionMap">
+        select <include refid="BaseColumns"/>
+        from mock_interview_session
+        where student_id = #{studentId}
+        order by id desc
+        limit 1
+    </select>
+
+    <update id="updateProfileSuccess">
+        update mock_interview_session
+        set profile_status = 'PROFILE_SUCCESS',
+            profile_json = #{profileJson},
+            profile_error_message = null,
+            profile_generated_at = #{now},
+            updated_at = #{now}
+        where id = #{id}
+    </update>
+
+    <update id="updateProfileFailed">
+        update mock_interview_session
+        set profile_status = 'PROFILE_FAILED',
+            profile_error_message = #{errorMessage},
+            profile_generated_at = #{now},
+            updated_at = #{now}
+        where id = #{id}
+    </update>
+
+    <update id="updateStarted">
+        update mock_interview_session
+        set voice_session_id = #{voiceSessionId},
+            status = 'IN_PROGRESS',
+            started_at = #{now},
+            updated_at = #{now}
+        where id = #{id}
+          and student_id = #{studentId}
+          and status = 'PROFILE_READY'
+    </update>
+
+    <update id="updateFinished">
+        update mock_interview_session
+        set status = 'FINISHED',
+            finished_at = #{now},
+            updated_at = #{now}
+        where id = #{id}
+          and student_id = #{studentId}
+          and status = 'IN_PROGRESS'
+    </update>
+</mapper>
+

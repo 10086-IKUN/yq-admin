@@ -1,0 +1,24 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-07-15 20:12:19.445 [background-preinit] INFO  org.hibernate.validator.internal.util.Version [guid=] - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-15 20:12:19.499 [main] INFO  cn.yanque.YanqueApplication [guid=] - Starting YanqueApplication v1.0-SNAPSHOT using Java 17.0.17 with PID 31828 (D:\Java\code\yq\YanQue-Admin\target\YanQue-Admin-1.0-SNAPSHOT.jar started by q1571 in D:\Java\code\yq\YanQue-Admin)
+2026-07-15 20:12:19.500 [main] INFO  cn.yanque.YanqueApplication [guid=] - The following 1 profile is active: "dev"
+2026-07-15 20:12:20.548 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate [guid=] - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-15 20:12:20.551 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate [guid=] - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-15 20:12:20.591 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate [guid=] - Finished Spring Data repository scanning in 18 ms. Found 0 Redis repository interfaces.
+2026-07-15 20:12:21.717 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer [guid=] - Tomcat initialized with port 8080 (http)
+2026-07-15 20:12:21.738 [main] INFO  org.apache.coyote.http11.Http11NioProtocol [guid=] - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-15 20:12:21.744 [main] INFO  org.apache.catalina.core.StandardService [guid=] - Starting service [Tomcat]
+2026-07-15 20:12:21.745 [main] INFO  org.apache.catalina.core.StandardEngine [guid=] - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-07-15 20:12:21.871 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/yq-admin] [guid=] - Initializing Spring embedded WebApplicationContext
+2026-07-15 20:12:21.873 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext [guid=] - Root WebApplicationContext: initialization completed in 2298 ms
+2026-07-15 20:12:24.880 [main] INFO  org.apache.coyote.http11.Http11NioProtocol [guid=] - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-15 20:12:24.921 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer [guid=] - Tomcat started on port 8080 (http) with context path '/yq-admin'
+2026-07-15 20:12:24.959 [main] INFO  cn.yanque.YanqueApplication [guid=] - Started YanqueApplication in 5.926 seconds (process running for 6.383)

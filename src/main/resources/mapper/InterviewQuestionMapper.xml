@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.interview.mapper.InterviewQuestionMapper">
+    <resultMap id="QuestionMap" type="cn.yanque.models.interview.pojo.InterviewQuestionBankEntity">
+        <id property="id" column="id"/>
+        <result property="normalizedQuestion" column="normalized_question"/>
+        <result property="category" column="category"/><result property="tags" column="tags"/>
+        <result property="standardAnswer" column="standard_answer"/><result property="shortAnswer" column="short_answer"/>
+        <result property="followUpQuestions" column="follow_up_questions"/><result property="pitfalls" column="pitfalls"/>
+        <result property="sourceCount" column="source_count"/><result property="auditStatus" column="audit_status"/>
+        <result property="vectorStatus" column="vector_status"/><result property="vectorId" column="vector_id"/>
+        <result property="confidence" column="confidence"/><result property="firstSeenAt" column="first_seen_at"/>
+        <result property="lastSeenAt" column="last_seen_at"/><result property="lastSourceTaskId" column="last_source_task_id"/>
+        <result property="lastSourceReviewId" column="last_source_review_id"/>
+        <result property="createdAt" column="created_at"/><result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    <sql id="QuestionColumns">id,normalized_question,category,tags,standard_answer,short_answer,follow_up_questions,pitfalls,
+        source_count,audit_status,vector_status,vector_id,confidence,first_seen_at,last_seen_at,last_source_task_id,
+        last_source_review_id,created_at,updated_at</sql>
+    <select id="selectById" resultMap="QuestionMap">select <include refid="QuestionColumns"/> from interview_question_bank where id=#{id}</select>
+    <select id="selectByNormalizedQuestion" resultMap="QuestionMap">select <include refid="QuestionColumns"/> from interview_question_bank where normalized_question=#{question} limit 1</select>
+    <select id="selectPage" resultMap="QuestionMap">
+        select <include refid="QuestionColumns"/> from interview_question_bank
+        <where>
+            <if test="keyword != null and keyword != ''">and (normalized_question like concat('%',#{keyword},'%') or tags like concat('%',#{keyword},'%'))</if>
+            <if test="category != null and category != ''">and category=#{category}</if>
+            <if test="auditStatus != null and auditStatus != ''">and audit_status=#{auditStatus}</if>
+            <if test="frequentOnly != null and frequentOnly">and source_count &gt;= 3</if>
+        </where>
+        order by source_count desc,last_seen_at desc,id desc
+    </select>
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id">
+        insert into interview_question_bank(normalized_question,category,tags,standard_answer,short_answer,follow_up_questions,
+        pitfalls,source_count,audit_status,vector_status,confidence,first_seen_at,last_seen_at,last_source_review_id,created_at,updated_at)
+        values(#{normalizedQuestion},#{category},#{tags},#{standardAnswer},#{shortAnswer},#{followUpQuestions},#{pitfalls},0,
+        #{auditStatus},#{vectorStatus},#{confidence},#{firstSeenAt},#{lastSeenAt},#{lastSourceReviewId},#{createdAt},#{updatedAt})
+    </insert>
+    <insert id="insertSource">
+        insert ignore into interview_question_source(question_id,task_id,review_record_id,original_question,answer_context,
+        student_answer_quality,student_answer_score,student_answer_analysis,improvement_suggestion,confidence,source_hash,created_at)
+        values(#{questionId},null,#{reviewRecordId},#{originalQuestion},#{answerContext},#{studentAnswerQuality},
+        #{studentAnswerScore},#{studentAnswerAnalysis},#{improvementSuggestion},#{confidence},#{sourceHash},#{createdAt})
+    </insert>
+    <update id="incrementSource">update interview_question_bank set source_count=source_count+1,last_source_review_id=#{reviewId},last_seen_at=#{now},updated_at=#{now} where id=#{id}</update>
+    <update id="markVector">update interview_question_bank set vector_status=#{status},vector_id=#{vectorId},updated_at=now() where id=#{id}</update>
+    <update id="updateAuditStatus">update interview_question_bank set audit_status=#{status},updated_at=now() where id=#{id}</update>
+    <select id="selectSources" resultType="cn.yanque.models.interview.pojo.InterviewQuestionSourceEntity">
+        select s.id,s.question_id as questionId,s.review_record_id as reviewRecordId,s.original_question as originalQuestion,
+        s.answer_context as answerContext,s.student_answer_quality as studentAnswerQuality,s.student_answer_score as studentAnswerScore,
+        s.student_answer_analysis as studentAnswerAnalysis,s.improvement_suggestion as improvementSuggestion,s.confidence,
+        r.company_name as companyName,r.interview_role as interviewRole,r.interview_time as interviewTime,s.created_at as createdAt
+        from interview_question_source s left join interview_review_record r on r.id=s.review_record_id
+        where s.question_id=#{questionId} order by s.id desc limit 100
+    </select>
+    <select id="selectPublishedCandidates" resultMap="QuestionMap">
+        select <include refid="QuestionColumns"/>
+        from interview_question_bank
+        where audit_status='PUBLISHED' and vector_status='INDEXED'
+        order by source_count desc,last_seen_at desc,id desc
+        limit #{limit}
+    </select>
+</mapper>

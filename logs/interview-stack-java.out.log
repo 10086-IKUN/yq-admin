@@ -1,0 +1,580 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-07-18 15:40:21.477 [background-preinit] INFO  org.hibernate.validator.internal.util.Version [guid=] - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-18 15:40:21.537 [main] INFO  cn.yanque.YanqueApplication [guid=] - Starting YanqueApplication v1.0-SNAPSHOT using Java 17.0.17 with PID 12032 (D:\Java\code\yq\YanQue-Admin\target\YanQue-Admin-1.0-SNAPSHOT.jar started by q1571 in D:\Java\code\yq\YanQue-Admin)
+2026-07-18 15:40:21.539 [main] INFO  cn.yanque.YanqueApplication [guid=] - The following 1 profile is active: "dev"
+2026-07-18 15:40:22.965 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate [guid=] - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-18 15:40:22.970 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate [guid=] - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-18 15:40:23.015 [main] INFO  o.s.d.r.config.RepositoryConfigurationDelegate [guid=] - Finished Spring Data repository scanning in 25 ms. Found 0 Redis repository interfaces.
+2026-07-18 15:40:24.240 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer [guid=] - Tomcat initialized with port 8080 (http)
+2026-07-18 15:40:24.251 [main] INFO  org.apache.coyote.http11.Http11NioProtocol [guid=] - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-18 15:40:24.253 [main] INFO  org.apache.catalina.core.StandardService [guid=] - Starting service [Tomcat]
+2026-07-18 15:40:24.254 [main] INFO  org.apache.catalina.core.StandardEngine [guid=] - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-07-18 15:40:24.312 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/yq-admin] [guid=] - Initializing Spring embedded WebApplicationContext
+2026-07-18 15:40:24.314 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext [guid=] - Root WebApplicationContext: initialization completed in 2685 ms
+2026-07-18 15:40:27.449 [main] INFO  org.apache.coyote.http11.Http11NioProtocol [guid=] - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-18 15:40:27.493 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer [guid=] - Tomcat started on port 8080 (http) with context path '/yq-admin'
+2026-07-18 15:40:27.574 [main] INFO  cn.yanque.YanqueApplication [guid=] - Started YanqueApplication in 6.55 seconds (process running for 7.169)
+2026-07-18 15:40:43.747 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/yq-admin] [guid=] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-18 15:40:45.352 [http-nio-8080-exec-2] INFO  org.springdoc.api.AbstractOpenApiResource [guid=758ee7856e994747a5a14b286b030a4a] - Init duration for springdoc-openapi is: 1531 ms
+2026-07-18 15:40:52.862 [http-nio-8080-exec-2] ERROR cn.yanque.common.exception.GlobalExceptionHandler [guid=453b6c6aca8a439f978e5bbcd18a00b8] - 业务异常: code=401, message=Token无效或已过期
+cn.yanque.common.exception.BusinessException: Token无效或已过期
+	at cn.yanque.models.auth.interceptor.JwtAuthInterceptor.preHandle(JwtAuthInterceptor.java:57)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:146)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1084)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.RequestGuidFilter.doFilterInternal(RequestGuidFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-07-18 15:40:52.862 [http-nio-8080-exec-7] ERROR cn.yanque.common.exception.GlobalExceptionHandler [guid=9e42affd1bf94bc3b35b1593ef0bd842] - 业务异常: code=401, message=Token无效或已过期
+cn.yanque.common.exception.BusinessException: Token无效或已过期
+	at cn.yanque.models.auth.interceptor.JwtAuthInterceptor.preHandle(JwtAuthInterceptor.java:57)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:146)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1084)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.RequestGuidFilter.doFilterInternal(RequestGuidFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-07-18 15:40:52.862 [http-nio-8080-exec-9] ERROR cn.yanque.common.exception.GlobalExceptionHandler [guid=2637af39b6e143be90a9ed4583c7eeef] - 业务异常: code=401, message=Token无效或已过期
+cn.yanque.common.exception.BusinessException: Token无效或已过期
+	at cn.yanque.models.auth.interceptor.JwtAuthInterceptor.preHandle(JwtAuthInterceptor.java:57)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:146)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1084)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.RequestGuidFilter.doFilterInternal(RequestGuidFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-07-18 15:40:52.861 [http-nio-8080-exec-6] ERROR cn.yanque.common.exception.GlobalExceptionHandler [guid=7a536aa0248c40378d828c8361c357e4] - 业务异常: code=401, message=Token无效或已过期
+cn.yanque.common.exception.BusinessException: Token无效或已过期
+	at cn.yanque.models.auth.interceptor.JwtAuthInterceptor.preHandle(JwtAuthInterceptor.java:57)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:146)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1084)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.RequestGuidFilter.doFilterInternal(RequestGuidFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-07-18 15:40:52.862 [http-nio-8080-exec-1] ERROR cn.yanque.common.exception.GlobalExceptionHandler [guid=6a5b262183c2426381beb7536676414e] - 业务异常: code=401, message=Token无效或已过期
+cn.yanque.common.exception.BusinessException: Token无效或已过期
+	at cn.yanque.models.auth.interceptor.JwtAuthInterceptor.preHandle(JwtAuthInterceptor.java:57)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:146)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1084)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.RequestGuidFilter.doFilterInternal(RequestGuidFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-07-18 15:40:52.861 [http-nio-8080-exec-8] ERROR cn.yanque.common.exception.GlobalExceptionHandler [guid=ad48a0aca38847eeb3a799dcf3e15d6a] - 业务异常: code=401, message=Token无效或已过期
+cn.yanque.common.exception.BusinessException: Token无效或已过期
+	at cn.yanque.models.auth.interceptor.JwtAuthInterceptor.preHandle(JwtAuthInterceptor.java:57)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:146)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1084)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.RequestGuidFilter.doFilterInternal(RequestGuidFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-07-18 15:40:52.884 [http-nio-8080-exec-10] ERROR cn.yanque.common.exception.GlobalExceptionHandler [guid=48713b0fcb4f43ca8c2ca56ae4739fa3] - 业务异常: code=401, message=Token无效或已过期
+cn.yanque.common.exception.BusinessException: Token无效或已过期
+	at cn.yanque.models.auth.interceptor.JwtAuthInterceptor.preHandle(JwtAuthInterceptor.java:57)
+	at org.springframework.web.servlet.HandlerExecutionChain.applyPreHandle(HandlerExecutionChain.java:146)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1084)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.RequestGuidFilter.doFilterInternal(RequestGuidFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-07-18 15:41:09.214 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=2d6e5b5118f04ac78b2e02cedaf41b41] - 接口开始: uri=/yq-admin/api/sysUser/login, httpMethod=POST, controller=SysUserController#login, args=[{"name":"req","value":{"username":"admin","password":"****"}}]
+2026-07-18 15:41:09.689 [http-nio-8080-exec-5] ERROR cn.yanque.common.exception.GlobalExceptionHandler [guid=2d6e5b5118f04ac78b2e02cedaf41b41] - 系统异常
+org.springframework.data.redis.RedisConnectionFailureException: Unable to connect to Redis
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.translateException(LettuceConnectionFactory.java:1805)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1736)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getNativeConnection(LettuceConnectionFactory.java:1538)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.lambda$getConnection$0(LettuceConnectionFactory.java:1518)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.doInLock(LettuceConnectionFactory.java:1478)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$SharedConnection.getConnection(LettuceConnectionFactory.java:1515)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getSharedConnection(LettuceConnectionFactory.java:1199)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory.getConnection(LettuceConnectionFactory.java:1006)
+	at org.springframework.data.redis.core.RedisConnectionUtils.fetchConnection(RedisConnectionUtils.java:194)
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:143)
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:104)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:393)
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:373)
+	at org.springframework.data.redis.core.AbstractOperations.execute(AbstractOperations.java:97)
+	at org.springframework.data.redis.core.DefaultValueOperations.set(DefaultValueOperations.java:253)
+	at cn.yanque.models.system.user.service.impl.SysUserServiceImpl.loginReq(SysUserServiceImpl.java:224)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:352)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:713)
+	at cn.yanque.models.system.user.service.impl.SysUserServiceImpl$$SpringCGLIB$$0.loginReq(<generated>)
+	at cn.yanque.models.system.user.controller.SysUserController.login(SysUserController.java:130)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:352)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at cn.yanque.common.aop.ControllerLogAspect.logController(ControllerLogAspect.java:57)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:637)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:627)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:71)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+	at cn.yanque.models.system.user.controller.SysUserController$$SpringCGLIB$$0.login(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:254)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:182)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at cn.yanque.config.RequestGuidFilter.doFilterInternal(RequestGuidFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:340)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.lettuce.core.RedisConnectionException: Unable to connect to localhost/<unresolved>:6379
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:78)
+	at io.lettuce.core.RedisConnectionException.create(RedisConnectionException.java:56)
+	at io.lettuce.core.AbstractRedisClient.getConnection(AbstractRedisClient.java:350)
+	at io.lettuce.core.RedisClient.connect(RedisClient.java:215)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.lambda$getConnection$1(StandaloneConnectionProvider.java:112)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at org.springframework.data.redis.connection.lettuce.StandaloneConnectionProvider.getConnection(StandaloneConnectionProvider.java:112)
+	at org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory$ExceptionTranslatingConnectionProvider.getConnection(LettuceConnectionFactory.java:1734)
+	... 100 common frames omitted
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection refused: getsockopt: localhost/127.0.0.1:6379
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:672)
+	at java.base/sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946)
+	at io.netty.channel.socket.nio.NioSocketChannel.doFinishConnect(NioSocketChannel.java:337)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.finishConnect(AbstractNioChannel.java:334)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:776)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-07-18 15:41:16.002 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=9f1d8d46679c4724b900a7604a2c3108] - 接口开始: uri=/yq-admin/api/sysUser/login, httpMethod=POST, controller=SysUserController#login, args=[{"name":"req","value":{"username":"admin","password":"****"}}]
+2026-07-18 15:41:16.121 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=9f1d8d46679c4724b900a7604a2c3108] - 接口结束: uri=/yq-admin/api/sysUser/login, controller=SysUserController#login, cost=116ms, result={"code":200,"message":"success","data":{"token":"ey****Xc","signSecret":"Sq****J8","userDetailRes":{"id":1,"username":"admin","nickname":"系统管理员","realName":"超级管理员","phone":"13800000000","email":"admin@yq.com","unionId":"on_8dc4e328a2870919088b018841458703","status":"ACTIVE","createdAt":"Thu Apr 09 20:50:39 CST 2026","updatedAt":"Wed Jun 10 20:14:33 CST 2026"},"roleDetailResList":[{"id":1,"roleCode":"SUPER_ADMIN","roleName":"超级管理员","description":"拥有全部后台权限","status":"ACTIVE","createdAt":"Thu Apr 09 20:50:38 CST 2026","updatedAt":"Wed Jun 10 20:13:59 CST 2026"}],"permissionDetailResList":[{"id":101,"parentId":0,"permissionName":"系统配置","permissionType":"MENU","permissionCode":"menu:system","sortNum":1,"status":"ACTIVE","description":"左侧导航中的系统配置父级菜单","createdAt":"Thu Apr 09 21:22:28 CST 2026","updatedAt":"Fri Jun 12 16:43:31 CST 2026"},{"id":106,"parentId":0,"permissionName":"教学管理","permissionType":"MENU","permissionCode":"menu:teaching","sortNum":2,"status":"ACTIVE","description":"左侧导航中的教学管理父级菜单","createdAt":"Sat Apr 11 15:49:16 CST 2026","updatedAt":"Thu Jun 11 19:21:10 CST 2026"},{"id":113,"parentId":0,"permissionName":"销售管理","permissionType":"MENU","permissionCode":"menu:sales","sortNum":3,"status":"ACTIVE","description":"左侧导航中的销售管理父级菜单","createdAt":"Sun Apr 12 14:19:04 CST 2026","updatedAt":"Thu Jun 11 19:21:13 CST 2026"},{"id":117,"parentId":0,"permissionName":"学员管理","permissionType":"MENU","permissionCode":"menu:student","sortNum":4,"status":"ACTIVE","description":"左侧导航中的学员管理父级菜单","createdAt":"Sun Apr 19 23:54:31 CST 2026","updatedAt":"Thu Jun 11 19:21:15 CST 2026"},{"id":321,"parentId":106,"permissionName":"考试管理","permissionType":"MENU","permissionCode":"menu:teaching:exam","sortNum":8,"status":"1","description":"教学管理下的考试管理菜单","createdAt":"Wed Jun 24 18:15:55 CST 2026","updatedAt":"Wed Jun 24 18:15:55 CST 2026"},{"id":322,"parentId":321,"permissionName":"查看考试","permissionType":"API","permissionCode":"exam:view","apiPath":"/api/exams/**","sortNum":1,"status":"1","description":"查看题库、试卷、考试与阅卷数据","createdAt":"Wed Jun 24 18:15:55 CST 2026","updatedAt":"Wed Jun 24 18:15:55 CST 2026"},{"id":323,"parentId":321,"permissionName":"管理考试","permissionType":"API","permissionCode":"exam:manage","apiPath":"/api/exams/**","sortNum":2,"status":"1","description":"维护题库、试卷、考试发布和阅卷","createdAt":"Wed Jun 24 18:15:55 CST 2026","updatedAt":"Wed Jun 24 18:15:55 CST 2026"},{"id":324,"parentId":321,"permissionName":"新增考试内容按钮","permissionType":"BUTTON","permissionCode":"button:exam:create","sortNum":1,"status":"1","description":"新增题目、试卷和考试按钮","createdAt":"Wed Jun 24 18:15:55 CST 2026","updatedAt":"Wed Jun 24 18:15:55 CST 2026"},{"id":325,"parentId":321,"permissionName":"编辑考试内容按钮","permissionType":"BUTTON","permissionCode":"button:exam:update","sortNum":2,"status":"1","description":"编辑题目、试卷和考试按钮","createdAt":"Wed Jun 24 18:15:55 CST 2026","updatedAt":"Wed Jun 24 18:15:55 CST 2026"},{"id":326,"parentId":321,"permissionName":"考试阅卷按钮","permissionType":"BUTTON","permissionCode":"button:exam:review","sortNum":3,"status":"1","description":"查看考试记录、批改主观题和发布答案","createdAt":"Wed Jun 24 18:15:55 CST 2026","updatedAt":"Wed Jun 24 18:15:55 CST 2026"},{"id":349,"parentId":0,"permissionName":"提示词管理","permissionType":"MENU","permissionCode":"menu:ai:prompt","apiPath":"/yq-admin/api/promptTemplates/**","sortNum":652,"status":"ACTIVE","description":"管理 AI 提示词及版本","createdAt":"Wed Jul 15 20:20:22 CST 2026","updatedAt":"Wed Jul 15 20:20:22 CST 2026"},{"id":350,"parentId":0,"permissionName":"面试复盘","permissionType":"MENU","permissionCode":"menu:interview-review","sortNum":450,"status":"ACTIVE","description":"面试录音与 AI 复盘管理","createdAt":"Sat Jul 18 15:30:46 CST 2026","updatedAt":"Sat Jul 18 15:30:46 CST 2026"},{"id":351,"parentId":350,"permissionName":"查看面试复盘","permissionType":"API","permissionCode":"interview-review:view","apiPath":"/api/interview-reviews","sortNum":1,"status":"ACTIVE","description":"分页和详情查询","createdAt":"Sat Jul 18 15:30:46 CST 2026","updatedAt":"Sat Jul 18 1...(truncated)
+2026-07-18 15:41:16.259 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=e9620c9ba09f45ccbb301ab9a67932db] - 接口开始: uri=/yq-admin/api/sysUser, httpMethod=GET, controller=SysUserController#pageUser, args=[{"name":"req","value":{"pageNum":1,"pageSize":10}}]
+2026-07-18 15:41:16.336 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=e9620c9ba09f45ccbb301ab9a67932db] - 接口结束: uri=/yq-admin/api/sysUser, controller=SysUserController#pageUser, cost=76ms, result={"code":200,"message":"success","data":{"total":6,"pageNum":1,"pageSize":10,"records":[{"id":6,"username":"haha","nickname":"哈哈哈","realName":"哈哈","phone":"15118191032","email":"913038933@qq.com","status":"ACTIVE","createdAt":"Fri Apr 17 15:54:46 CST 2026"},{"id":5,"username":"laoshi2","nickname":"老师2","realName":"老师2","phone":"13762922584","status":"ACTIVE","createdAt":"Sun Apr 12 01:48:55 CST 2026"},{"id":4,"username":"laoshi1","nickname":"老师1","realName":"老师1","phone":"13273576020","status":"ACTIVE","createdAt":"Sun Apr 12 01:48:37 CST 2026"},{"id":3,"username":"banzhuren","nickname":"班主任老师","realName":"班主任老师","phone":"15118191032","status":"ACTIVE","createdAt":"Sat Apr 11 17:06:53 CST 2026"},{"id":2,"username":"huangjin","nickname":"黄瑾","realName":"黄瑾","phone":"13273672819","email":"913038933@qq.com","status":"ACTIVE","createdAt":"Thu Apr 09 22:04:43 CST 2026"},{"id":1,"username":"admin","nickname":"系统管理员","realName":"超级管理员","phone":"13800000000","email":"admin@yq.com","status":"ACTIVE","createdAt":"Thu Apr 09 20:50:39 CST 2026"}]}}
+2026-07-18 15:41:23.473 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=d3f426abae8243fb8a02d92f3be27c39] - 接口开始: uri=/yq-admin/api/student/login, httpMethod=POST, controller=StudentFrontController#login, args=[{"name":"req","value":{"phone":"11111111111","password":"****"}}]
+2026-07-18 15:41:23.502 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=d3f426abae8243fb8a02d92f3be27c39] - 接口结束: uri=/yq-admin/api/student/login, controller=StudentFrontController#login, cost=28ms, result={"code":200,"message":"success","data":{"token":"ey****R4","signSecret":"CL****rU","studentInfo":{"id":12,"studentCode":"XS20260527544266","studentName":"去去去","phone":"11111111111","password":"****","graduationSession":2022,"school":"1","education":"22","studyMode":"ONLINE","classId":5,"productId":4,"joinTime":"Sat Jun 27 08:00:00 CST 2026","createdAt":"Sat Jun 27 22:05:40 CST 2026","updatedAt":"Sat Jun 27 22:05:40 CST 2026"},"permissions":[]}}
+2026-07-18 15:41:23.514 [http-nio-8080-exec-8] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=31263133b7154fdab5f748dc09857a53] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:23.518 [http-nio-8080-exec-8] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=31263133b7154fdab5f748dc09857a53] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=4ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:23.573 [http-nio-8080-exec-4] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=ea9c9e0210154aabb5dc3b2502df003c] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:23.573 [http-nio-8080-exec-2] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=1277f40c1cf54379bb98a7219fdb0e7a] - 接口开始: uri=/yq-admin/api/student/exams, httpMethod=GET, controller=StudentExamController#list, args=[]
+2026-07-18 15:41:23.573 [http-nio-8080-exec-10] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=00562d0c1db14253b8c65c1126646ea2] - 接口开始: uri=/yq-admin/api/student/schedule, httpMethod=GET, controller=StudentScheduleController#list, args=[]
+2026-07-18 15:41:23.574 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=16ca0e4f69964e8ab226246b9a3457c0] - 接口开始: uri=/yq-admin/api/student/score/overview, httpMethod=GET, controller=StudentScoreController#overview, args=[]
+2026-07-18 15:41:23.576 [http-nio-8080-exec-1] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=b5033b9209c44e71b77bc69537f36a7d] - 接口开始: uri=/yq-admin/api/student/homework, httpMethod=GET, controller=StudentHomeworkController#list, args=[{"name":"req","value":{"pageNum":1,"pageSize":6}}]
+2026-07-18 15:41:23.577 [http-nio-8080-exec-4] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=ea9c9e0210154aabb5dc3b2502df003c] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=4ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:23.613 [http-nio-8080-exec-2] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=1277f40c1cf54379bb98a7219fdb0e7a] - 接口结束: uri=/yq-admin/api/student/exams, controller=StudentExamController#list, cost=39ms, result={"code":200,"message":"success","data":[{"id":4,"paperId":1,"classId":5,"examName":"111","startTime":"2026-06-26T10:30","endTime":"2026-06-26T11:30","status":"PUBLISHED","answerPublished":false,"createdBy":1,"createdAt":"2026-06-26T11:11:12","updatedAt":"2026-06-26T11:11:41","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":3,"paperId":1,"classId":5,"examName":"11","startTime":"2026-06-26T10:00","endTime":"2026-06-26T11:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T11:12:13","createdBy":1,"createdAt":"2026-06-26T10:55:21","updatedAt":"2026-06-26T11:12:13","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":2,"paperId":1,"classId":5,"examName":"11","startTime":"2026-06-26T09:00","endTime":"2026-06-26T10:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T09:50:38","createdBy":1,"createdAt":"2026-06-26T09:50:03","updatedAt":"2026-06-26T09:50:38","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":1,"paperId":1,"classId":5,"examName":"Java 基础阶段测试","startTime":"2026-06-26T09:00","endTime":"2026-06-26T10:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T09:22:58","createdBy":1,"createdAt":"2026-06-26T09:15:16","updatedAt":"2026-06-26T09:27:32","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false}]}
+2026-07-18 15:41:23.614 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=16ca0e4f69964e8ab226246b9a3457c0] - 接口结束: uri=/yq-admin/api/student/score/overview, controller=StudentScoreController#overview, cost=39ms, result={"code":200,"message":"success","data":{"compositeScore":0.00,"homeworkAverageScore":0,"examAverageScore":0,"bestScore":0,"publishedScoreCount":0,"homeworkScores":[],"examScores":[]}}
+2026-07-18 15:41:23.620 [http-nio-8080-exec-10] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=00562d0c1db14253b8c65c1126646ea2] - 接口结束: uri=/yq-admin/api/student/schedule, controller=StudentScheduleController#list, cost=46ms, result={"code":200,"message":"success","data":[{"id":5111,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":219,"courseDayNum":1,"scheduleDate":"2026-07-07","scheduleType":"CLASS","courseContent":"集合框架","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5112,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":217,"courseDayNum":2,"scheduleDate":"2026-07-08","scheduleType":"CLASS","courseContent":"efa","stageName":"进阶","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5113,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-09","scheduleType":"SELF_STUDY","courseContent":"自习","createdAt":"2026-07-07 15:11:14.0"},{"id":5114,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":216,"courseDayNum":3,"scheduleDate":"2026-07-10","scheduleType":"CLASS","courseContent":"sefsf","stageName":"进阶","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5115,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":220,"courseDayNum":4,"scheduleDate":"2026-07-11","scheduleType":"CLASS","courseContent":"大宋","stageName":"spring","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5116,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-12","scheduleType":"REST","courseContent":"休息","createdAt":"2026-07-07 15:11:14.0"},{"id":5117,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":223,"courseDayNum":5,"scheduleDate":"2026-07-13","scheduleType":"CLASS","courseContent":"sdfs","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5118,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":221,"courseDayNum":6,"scheduleDate":"2026-07-14","scheduleType":"CLASS","courseContent":"飞书的","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5119,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":222,"courseDayNum":7,"scheduleDate":"2026-07-15","scheduleType":"CLASS","courseContent":"访问方法","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5120,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-16","scheduleType":"SELF_STUDY","courseContent":"自习","createdAt":"2026-07-07 15:11:14.0"},{"id":5121,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":224,"courseDayNum":8,"scheduleDate":"2026-07-17","scheduleType":"CLASS","courseContent":"都不会放过","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"}]}
+2026-07-18 15:41:23.627 [http-nio-8080-exec-1] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=b5033b9209c44e71b77bc69537f36a7d] - 接口结束: uri=/yq-admin/api/student/homework, controller=StudentHomeworkController#list, cost=51ms, result={"code":200,"message":"success","data":{"total":2,"pageNum":1,"pageSize":6,"records":[{"id":5,"title":"22","classId":5,"className":"第1期","classTerm":1,"homeworkDate":"2026-06-25","courseId":2,"courseName":"JAVA+AI","courseDetailId":219,"courseContentSnapshot":"集合框架","attachmentName":"homework_assignment_20260624_eaa7753d386d45a4b2d1b3ff8a0370f0fhagtb.md","attachmentUrl":"homework/assignment/2026/06/26/超级管理员/9422cc08-0143-4a57-9569-d322601afdce-homework_assignment_20260624_eaa7753d386d45a4b2d1b3ff8a0370f0fhagtb.md","attachmentType":"text/markdown","answerPublishStatus":"UNPUBLISHED","publishTeacherId":1,"publishTeacherName":"超级管理员","publishDate":"2026-06-26T17:12:58","deadline":"2026-06-25T06:00","status":"PUBLISHED","allowResubmit":false,"studentCountSnapshot":2,"createTime":"2026-06-26T17:12:58","updateTime":"2026-06-26T17:17:01","hasSubmitted":false,"submissionStatus":"EXPIRED"},{"id":4,"title":"21号作业","classId":5,"className":"第1期","classTerm":1,"homeworkDate":"2026-06-12","courseId":2,"courseName":"JAVA+AI","courseDetailId":220,"courseContentSnapshot":"大宋","attachmentName":"YanQue后台管理系统项目介绍.md","attachmentUrl":"homework/assignment/2026/06/17/超级管理员/0f180ff0-488e-43f0-bc37-bc2468610b2f-YanQue后台管理系统项目介绍.md","attachmentType":"text/markdown","answerAttachmentName":"ceshi.md","answerAttachmentUrl":"https://yqai-dev.tos-cn-shanghai.volces.com/homework/answer/20260422/41ddf1744fec4e9ca1c62b4a0bf40d11jpd9rl.md","answerAttachmentType":"text/markdown","answerPublishStatus":"PUBLISHED","answerPublishTime":"2026-04-22T21:05:49","answerPublishTeacherName":"超级管理员","publishTeacherId":1,"publishTeacherName":"超级管理员","publishDate":"2026-04-22T21:02:49","deadline":"2026-06-26T20:00","status":"PUBLISHED","allowResubmit":false,"studentCountSnapshot":0,"createTime":"2026-04-22T21:02:49","updateTime":"2026-06-26T17:46:32","hasSubmitted":false,"submissionStatus":"EXPIRED"}]}}
+2026-07-18 15:41:25.555 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=310810b4bda2494bafec749c6eb6f168] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:25.555 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=90c3558a1ffa4c3da4c2fb99f5837eee] - 接口开始: uri=/yq-admin/api/student/profile, httpMethod=GET, controller=StudentProfileController#getProfile, args=[]
+2026-07-18 15:41:25.559 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=310810b4bda2494bafec749c6eb6f168] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=4ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:25.561 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=90c3558a1ffa4c3da4c2fb99f5837eee] - 接口结束: uri=/yq-admin/api/student/profile, controller=StudentProfileController#getProfile, cost=6ms, result={"code":200,"message":"success","data":{"id":12,"studentCode":"XS20260527544266","studentName":"去去去","phone":"11111111111","school":"1","education":"22","studyMode":"ONLINE","classId":5,"classTerm":1,"className":"第1期","courseId":2,"courseName":"JAVA+AI","joinTime":"Sat Jun 27 08:00:00 CST 2026"}}
+2026-07-18 15:41:27.795 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=503f8aa2a2844c2b8941724611dd0e73] - 接口开始: uri=/yq-admin/api/student/exams, httpMethod=GET, controller=StudentExamController#list, args=[]
+2026-07-18 15:41:27.795 [http-nio-8080-exec-8] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=4fcf43a4bd7749928bc336e2436bd07f] - 接口开始: uri=/yq-admin/api/student/schedule, httpMethod=GET, controller=StudentScheduleController#list, args=[]
+2026-07-18 15:41:27.795 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=9b90ce2e01d9478198f5ad5c11da5aaf] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:27.795 [http-nio-8080-exec-4] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=7db1d1a1e92d4d6daad48ab0868d9982] - 接口开始: uri=/yq-admin/api/student/score/overview, httpMethod=GET, controller=StudentScoreController#overview, args=[]
+2026-07-18 15:41:27.797 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=74f5c679565543a98fb0a3c6ea66748b] - 接口开始: uri=/yq-admin/api/student/homework, httpMethod=GET, controller=StudentHomeworkController#list, args=[{"name":"req","value":{"pageNum":1,"pageSize":6}}]
+2026-07-18 15:41:27.799 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=9b90ce2e01d9478198f5ad5c11da5aaf] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=4ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:27.799 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=503f8aa2a2844c2b8941724611dd0e73] - 接口结束: uri=/yq-admin/api/student/exams, controller=StudentExamController#list, cost=4ms, result={"code":200,"message":"success","data":[{"id":4,"paperId":1,"classId":5,"examName":"111","startTime":"2026-06-26T10:30","endTime":"2026-06-26T11:30","status":"PUBLISHED","answerPublished":false,"createdBy":1,"createdAt":"2026-06-26T11:11:12","updatedAt":"2026-06-26T11:11:41","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":3,"paperId":1,"classId":5,"examName":"11","startTime":"2026-06-26T10:00","endTime":"2026-06-26T11:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T11:12:13","createdBy":1,"createdAt":"2026-06-26T10:55:21","updatedAt":"2026-06-26T11:12:13","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":2,"paperId":1,"classId":5,"examName":"11","startTime":"2026-06-26T09:00","endTime":"2026-06-26T10:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T09:50:38","createdBy":1,"createdAt":"2026-06-26T09:50:03","updatedAt":"2026-06-26T09:50:38","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":1,"paperId":1,"classId":5,"examName":"Java 基础阶段测试","startTime":"2026-06-26T09:00","endTime":"2026-06-26T10:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T09:22:58","createdBy":1,"createdAt":"2026-06-26T09:15:16","updatedAt":"2026-06-26T09:27:32","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false}]}
+2026-07-18 15:41:27.805 [http-nio-8080-exec-4] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=7db1d1a1e92d4d6daad48ab0868d9982] - 接口结束: uri=/yq-admin/api/student/score/overview, controller=StudentScoreController#overview, cost=10ms, result={"code":200,"message":"success","data":{"compositeScore":0.00,"homeworkAverageScore":0,"examAverageScore":0,"bestScore":0,"publishedScoreCount":0,"homeworkScores":[],"examScores":[]}}
+2026-07-18 15:41:27.807 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=74f5c679565543a98fb0a3c6ea66748b] - 接口结束: uri=/yq-admin/api/student/homework, controller=StudentHomeworkController#list, cost=10ms, result={"code":200,"message":"success","data":{"total":2,"pageNum":1,"pageSize":6,"records":[{"id":5,"title":"22","classId":5,"className":"第1期","classTerm":1,"homeworkDate":"2026-06-25","courseId":2,"courseName":"JAVA+AI","courseDetailId":219,"courseContentSnapshot":"集合框架","attachmentName":"homework_assignment_20260624_eaa7753d386d45a4b2d1b3ff8a0370f0fhagtb.md","attachmentUrl":"homework/assignment/2026/06/26/超级管理员/9422cc08-0143-4a57-9569-d322601afdce-homework_assignment_20260624_eaa7753d386d45a4b2d1b3ff8a0370f0fhagtb.md","attachmentType":"text/markdown","answerPublishStatus":"UNPUBLISHED","publishTeacherId":1,"publishTeacherName":"超级管理员","publishDate":"2026-06-26T17:12:58","deadline":"2026-06-25T06:00","status":"PUBLISHED","allowResubmit":false,"studentCountSnapshot":2,"createTime":"2026-06-26T17:12:58","updateTime":"2026-06-26T17:17:01","hasSubmitted":false,"submissionStatus":"EXPIRED"},{"id":4,"title":"21号作业","classId":5,"className":"第1期","classTerm":1,"homeworkDate":"2026-06-12","courseId":2,"courseName":"JAVA+AI","courseDetailId":220,"courseContentSnapshot":"大宋","attachmentName":"YanQue后台管理系统项目介绍.md","attachmentUrl":"homework/assignment/2026/06/17/超级管理员/0f180ff0-488e-43f0-bc37-bc2468610b2f-YanQue后台管理系统项目介绍.md","attachmentType":"text/markdown","answerAttachmentName":"ceshi.md","answerAttachmentUrl":"https://yqai-dev.tos-cn-shanghai.volces.com/homework/answer/20260422/41ddf1744fec4e9ca1c62b4a0bf40d11jpd9rl.md","answerAttachmentType":"text/markdown","answerPublishStatus":"PUBLISHED","answerPublishTime":"2026-04-22T21:05:49","answerPublishTeacherName":"超级管理员","publishTeacherId":1,"publishTeacherName":"超级管理员","publishDate":"2026-04-22T21:02:49","deadline":"2026-06-26T20:00","status":"PUBLISHED","allowResubmit":false,"studentCountSnapshot":0,"createTime":"2026-04-22T21:02:49","updateTime":"2026-06-26T17:46:32","hasSubmitted":false,"submissionStatus":"EXPIRED"}]}}
+2026-07-18 15:41:27.811 [http-nio-8080-exec-8] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=4fcf43a4bd7749928bc336e2436bd07f] - 接口结束: uri=/yq-admin/api/student/schedule, controller=StudentScheduleController#list, cost=16ms, result={"code":200,"message":"success","data":[{"id":5111,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":219,"courseDayNum":1,"scheduleDate":"2026-07-07","scheduleType":"CLASS","courseContent":"集合框架","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5112,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":217,"courseDayNum":2,"scheduleDate":"2026-07-08","scheduleType":"CLASS","courseContent":"efa","stageName":"进阶","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5113,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-09","scheduleType":"SELF_STUDY","courseContent":"自习","createdAt":"2026-07-07 15:11:14.0"},{"id":5114,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":216,"courseDayNum":3,"scheduleDate":"2026-07-10","scheduleType":"CLASS","courseContent":"sefsf","stageName":"进阶","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5115,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":220,"courseDayNum":4,"scheduleDate":"2026-07-11","scheduleType":"CLASS","courseContent":"大宋","stageName":"spring","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5116,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-12","scheduleType":"REST","courseContent":"休息","createdAt":"2026-07-07 15:11:14.0"},{"id":5117,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":223,"courseDayNum":5,"scheduleDate":"2026-07-13","scheduleType":"CLASS","courseContent":"sdfs","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5118,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":221,"courseDayNum":6,"scheduleDate":"2026-07-14","scheduleType":"CLASS","courseContent":"飞书的","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5119,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":222,"courseDayNum":7,"scheduleDate":"2026-07-15","scheduleType":"CLASS","courseContent":"访问方法","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5120,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-16","scheduleType":"SELF_STUDY","courseContent":"自习","createdAt":"2026-07-07 15:11:14.0"},{"id":5121,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":224,"courseDayNum":8,"scheduleDate":"2026-07-17","scheduleType":"CLASS","courseContent":"都不会放过","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"}]}
+2026-07-18 15:41:30.938 [http-nio-8080-exec-10] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=fe73417b98114f56b95fd17a3cb32895] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:30.938 [http-nio-8080-exec-2] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=dd95c681f57946d2b8902c28cb5e05b0] - 接口开始: uri=/yq-admin/api/student/homework, httpMethod=GET, controller=StudentHomeworkController#list, args=[{"name":"req","value":{"pageNum":1,"pageSize":20}}]
+2026-07-18 15:41:30.941 [http-nio-8080-exec-10] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=fe73417b98114f56b95fd17a3cb32895] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=3ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:30.949 [http-nio-8080-exec-2] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=dd95c681f57946d2b8902c28cb5e05b0] - 接口结束: uri=/yq-admin/api/student/homework, controller=StudentHomeworkController#list, cost=11ms, result={"code":200,"message":"success","data":{"total":2,"pageNum":1,"pageSize":20,"records":[{"id":5,"title":"22","classId":5,"className":"第1期","classTerm":1,"homeworkDate":"2026-06-25","courseId":2,"courseName":"JAVA+AI","courseDetailId":219,"courseContentSnapshot":"集合框架","attachmentName":"homework_assignment_20260624_eaa7753d386d45a4b2d1b3ff8a0370f0fhagtb.md","attachmentUrl":"homework/assignment/2026/06/26/超级管理员/9422cc08-0143-4a57-9569-d322601afdce-homework_assignment_20260624_eaa7753d386d45a4b2d1b3ff8a0370f0fhagtb.md","attachmentType":"text/markdown","answerPublishStatus":"UNPUBLISHED","publishTeacherId":1,"publishTeacherName":"超级管理员","publishDate":"2026-06-26T17:12:58","deadline":"2026-06-25T06:00","status":"PUBLISHED","allowResubmit":false,"studentCountSnapshot":2,"createTime":"2026-06-26T17:12:58","updateTime":"2026-06-26T17:17:01","hasSubmitted":false,"submissionStatus":"EXPIRED"},{"id":4,"title":"21号作业","classId":5,"className":"第1期","classTerm":1,"homeworkDate":"2026-06-12","courseId":2,"courseName":"JAVA+AI","courseDetailId":220,"courseContentSnapshot":"大宋","attachmentName":"YanQue后台管理系统项目介绍.md","attachmentUrl":"homework/assignment/2026/06/17/超级管理员/0f180ff0-488e-43f0-bc37-bc2468610b2f-YanQue后台管理系统项目介绍.md","attachmentType":"text/markdown","answerAttachmentName":"ceshi.md","answerAttachmentUrl":"https://yqai-dev.tos-cn-shanghai.volces.com/homework/answer/20260422/41ddf1744fec4e9ca1c62b4a0bf40d11jpd9rl.md","answerAttachmentType":"text/markdown","answerPublishStatus":"PUBLISHED","answerPublishTime":"2026-04-22T21:05:49","answerPublishTeacherName":"超级管理员","publishTeacherId":1,"publishTeacherName":"超级管理员","publishDate":"2026-04-22T21:02:49","deadline":"2026-06-26T20:00","status":"PUBLISHED","allowResubmit":false,"studentCountSnapshot":0,"createTime":"2026-04-22T21:02:49","updateTime":"2026-06-26T17:46:32","hasSubmitted":false,"submissionStatus":"EXPIRED"}]}}
+2026-07-18 15:41:31.757 [http-nio-8080-exec-1] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=e951f1bc5023496da4ec56e58444c17b] - 接口开始: uri=/yq-admin/api/student/exams, httpMethod=GET, controller=StudentExamController#list, args=[]
+2026-07-18 15:41:31.757 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=c9d1d6901b6d45efaddce0e56b797d99] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:31.759 [http-nio-8080-exec-1] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=e951f1bc5023496da4ec56e58444c17b] - 接口结束: uri=/yq-admin/api/student/exams, controller=StudentExamController#list, cost=2ms, result={"code":200,"message":"success","data":[{"id":4,"paperId":1,"classId":5,"examName":"111","startTime":"2026-06-26T10:30","endTime":"2026-06-26T11:30","status":"PUBLISHED","answerPublished":false,"createdBy":1,"createdAt":"2026-06-26T11:11:12","updatedAt":"2026-06-26T11:11:41","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":3,"paperId":1,"classId":5,"examName":"11","startTime":"2026-06-26T10:00","endTime":"2026-06-26T11:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T11:12:13","createdBy":1,"createdAt":"2026-06-26T10:55:21","updatedAt":"2026-06-26T11:12:13","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":2,"paperId":1,"classId":5,"examName":"11","startTime":"2026-06-26T09:00","endTime":"2026-06-26T10:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T09:50:38","createdBy":1,"createdAt":"2026-06-26T09:50:03","updatedAt":"2026-06-26T09:50:38","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false},{"id":1,"paperId":1,"classId":5,"examName":"Java 基础阶段测试","startTime":"2026-06-26T09:00","endTime":"2026-06-26T10:00","status":"PUBLISHED","answerPublished":true,"answerPublishTime":"2026-06-26T09:22:58","createdBy":1,"createdAt":"2026-06-26T09:15:16","updatedAt":"2026-06-26T09:27:32","paperName":"Java 基础测试卷","classTerm":1,"totalScore":100.00,"durationMinutes":60,"resultVisible":false}]}
+2026-07-18 15:41:31.759 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=c9d1d6901b6d45efaddce0e56b797d99] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=2ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:32.593 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=3bb9af30221945889110ff652675b819] - 接口开始: uri=/yq-admin/api/student/schedule, httpMethod=GET, controller=StudentScheduleController#list, args=[]
+2026-07-18 15:41:32.593 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=d5bd0abbb41945f490d46e1a2b829b94] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:32.596 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=d5bd0abbb41945f490d46e1a2b829b94] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=3ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:32.599 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=3bb9af30221945889110ff652675b819] - 接口结束: uri=/yq-admin/api/student/schedule, controller=StudentScheduleController#list, cost=6ms, result={"code":200,"message":"success","data":[{"id":5111,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":219,"courseDayNum":1,"scheduleDate":"2026-07-07","scheduleType":"CLASS","courseContent":"集合框架","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5112,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":217,"courseDayNum":2,"scheduleDate":"2026-07-08","scheduleType":"CLASS","courseContent":"efa","stageName":"进阶","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5113,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-09","scheduleType":"SELF_STUDY","courseContent":"自习","createdAt":"2026-07-07 15:11:14.0"},{"id":5114,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":216,"courseDayNum":3,"scheduleDate":"2026-07-10","scheduleType":"CLASS","courseContent":"sefsf","stageName":"进阶","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5115,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":220,"courseDayNum":4,"scheduleDate":"2026-07-11","scheduleType":"CLASS","courseContent":"大宋","stageName":"spring","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5116,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-12","scheduleType":"REST","courseContent":"休息","createdAt":"2026-07-07 15:11:14.0"},{"id":5117,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":223,"courseDayNum":5,"scheduleDate":"2026-07-13","scheduleType":"CLASS","courseContent":"sdfs","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5118,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":221,"courseDayNum":6,"scheduleDate":"2026-07-14","scheduleType":"CLASS","courseContent":"飞书的","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5119,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":222,"courseDayNum":7,"scheduleDate":"2026-07-15","scheduleType":"CLASS","courseContent":"访问方法","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"},{"id":5120,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","scheduleDate":"2026-07-16","scheduleType":"SELF_STUDY","courseContent":"自习","createdAt":"2026-07-07 15:11:14.0"},{"id":5121,"classId":5,"className":"第1期","courseId":2,"courseName":"JAVA+AI","courseDetailId":224,"courseDayNum":8,"scheduleDate":"2026-07-17","scheduleType":"CLASS","courseContent":"都不会放过","stageName":"基础","teacherId":6,"teacherName":"哈哈哈","createdAt":"2026-07-07 15:11:14.0"}]}
+2026-07-18 15:41:33.535 [http-nio-8080-exec-4] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=293c364bf32a4eb78c5593ddf8f048a5] - 接口开始: uri=/yq-admin/api/student/score/overview, httpMethod=GET, controller=StudentScoreController#overview, args=[]
+2026-07-18 15:41:33.535 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=0f870abe96aa437bb857b9a5f3a2e74e] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:33.539 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=0f870abe96aa437bb857b9a5f3a2e74e] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=3ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:33.540 [http-nio-8080-exec-4] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=293c364bf32a4eb78c5593ddf8f048a5] - 接口结束: uri=/yq-admin/api/student/score/overview, controller=StudentScoreController#overview, cost=4ms, result={"code":200,"message":"success","data":{"compositeScore":0.00,"homeworkAverageScore":0,"examAverageScore":0,"bestScore":0,"publishedScoreCount":0,"homeworkScores":[],"examScores":[]}}
+2026-07-18 15:41:34.475 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=825b7232ec1e47549b68f51a5def771e] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:34.475 [http-nio-8080-exec-8] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=3778af6f36654343bcdd67e853683fdb] - 接口开始: uri=/yq-admin/api/student/pay/products, httpMethod=GET, controller=StudentPayController#productList, args=[]
+2026-07-18 15:41:34.478 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=825b7232ec1e47549b68f51a5def771e] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=3ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:34.488 [http-nio-8080-exec-8] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=3778af6f36654343bcdd67e853683fdb] - 接口结束: uri=/yq-admin/api/student/pay/products, controller=StudentPayController#productList, cost=11ms, result={"code":200,"message":"success","data":[{"id":4,"productCode":"fcscs","productName":"sfse","studyMode":"ONLINE","productPrice":100.00,"createdAt":"2026-06-26T21:48:13","updatedAt":"2026-06-26T21:48:13"},{"id":3,"productCode":"PROD_03","productName":"AI零基础","studyMode":"ONLINE","productPrice":30000.00,"createdAt":"2026-04-24T22:18:40","updatedAt":"2026-04-24T22:18:40"},{"id":2,"productCode":"PROD_02","productName":"JAVA零基础","studyMode":"ONLINE","productPrice":20000.00,"createdAt":"2026-04-24T22:15:07","updatedAt":"2026-04-24T22:15:07"},{"id":1,"productCode":"PROD_01","productName":"JAVA零基础","studyMode":"OFFLINE","productPrice":18800.00,"createdAt":"2026-04-12T14:21:01","updatedAt":"2026-04-16T17:19:52"}]}
+2026-07-18 15:41:35.082 [http-nio-8080-exec-10] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=cfad1e9af21a461f99d6a9b4b6ea9781] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:35.082 [http-nio-8080-exec-2] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=de00b153e7fb4e759b4a40bff4596f06] - 接口开始: uri=/yq-admin/api/student/pay/orders, httpMethod=GET, controller=StudentPayController#myOrders, args=[]
+2026-07-18 15:41:35.085 [http-nio-8080-exec-10] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=cfad1e9af21a461f99d6a9b4b6ea9781] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=3ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:35.085 [http-nio-8080-exec-2] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=de00b153e7fb4e759b4a40bff4596f06] - 接口结束: uri=/yq-admin/api/student/pay/orders, controller=StudentPayController#myOrders, cost=3ms, result={"code":200,"message":"success","data":[{"id":24,"orderNo":"ORD2026062722054014b5bb","studentName":"去去去","phone":"11111111111","productId":4,"classId":5,"studentCode":"XS20260527544266","productAmount":100.00,"discountAmount":1.00,"receivableAmount":99.00,"paidAmount":99.00,"orderStatus":"PAID","orderSource":"ADMIN_CREATE","createdAt":"2026-06-27T22:05:40","updatedAt":"2026-07-01T20:41"}]}
+2026-07-18 15:41:36.040 [http-nio-8080-exec-1] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=5f1d48bfc6c24f5daa4bb390d3d93dfb] - 接口开始: uri=/yq-admin/api/student/ai-chat/sessions, httpMethod=GET, controller=StudentAiChatController#listSessions, args=[]
+2026-07-18 15:41:36.040 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=81b216514dda4400b09c09a525103d9e] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:36.042 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=81b216514dda4400b09c09a525103d9e] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=2ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:36.053 [http-nio-8080-exec-1] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=5f1d48bfc6c24f5daa4bb390d3d93dfb] - 接口结束: uri=/yq-admin/api/student/ai-chat/sessions, controller=StudentAiChatController#listSessions, cost=13ms, result={"code":200,"message":"success","data":[{"id":31,"title":"查一下我今天的课表","status":"ACTIVE","messageCount":4,"lastMessageAt":"2026-07-07T18:10:51","createdAt":"2026-07-07T18:03:33","updatedAt":"2026-07-07T18:10:50"},{"id":30,"title":"查看我明天的课表","status":"ACTIVE","messageCount":3,"lastMessageAt":"2026-07-07T17:49:41","createdAt":"2026-07-07T17:46:19","updatedAt":"2026-07-07T17:49:41"},{"id":29,"title":"看一下值班老师是谁","status":"ACTIVE","messageCount":5,"lastMessageAt":"2026-07-07T17:36:14","createdAt":"2026-07-07T17:30:48","updatedAt":"2026-07-07T17:36:14"},{"id":28,"title":"我想请假该怎么做？","status":"ACTIVE","messageCount":2,"lastMessageAt":"2026-07-07T15:36:24","createdAt":"2026-07-07T15:35:57","updatedAt":"2026-07-07T15:36:24"},{"id":27,"title":"我今天的值班老师谁？","status":"ACTIVE","messageCount":15,"lastMessageAt":"2026-07-07T15:32:17","createdAt":"2026-07-07T15:12:21","updatedAt":"2026-07-07T15:32:17"},{"id":26,"title":"今天的值班老师是谁？","status":"ACTIVE","messageCount":4,"lastMessageAt":"2026-07-07T15:11:49","createdAt":"2026-07-07T15:09:24","updatedAt":"2026-07-07T15:11:48"},{"id":25,"title":"我今天有什么课程？","status":"ACTIVE","messageCount":2,"lastMessageAt":"2026-07-07T14:52:42","createdAt":"2026-07-07T14:52:08","updatedAt":"2026-07-07T14:52:42"},{"id":24,"title":"我明天上什么课？","status":"ACTIVE","messageCount":2,"lastMessageAt":"2026-07-07T14:50:03","createdAt":"2026-07-07T14:48:30","updatedAt":"2026-07-07T14:50:02"},{"id":23,"title":"你好","status":"ACTIVE","messageCount":7,"lastMessageAt":"2026-07-01T21:17:59","createdAt":"2026-07-01T20:43:43","updatedAt":"2026-07-01T21:17:59"}]}
+2026-07-18 15:41:36.063 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=824c35a3b33a4fb4b4b577f584c70851] - 接口开始: uri=/yq-admin/api/student/ai-chat/sessions/31/messages, httpMethod=GET, controller=StudentAiChatController#listMessages, args=[{"name":"sessionId","value":31}]
+2026-07-18 15:41:36.077 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=824c35a3b33a4fb4b4b577f584c70851] - 接口结束: uri=/yq-admin/api/student/ai-chat/sessions/31/messages, controller=StudentAiChatController#listMessages, cost=14ms, result={"code":200,"message":"success","data":[{"id":160,"sessionId":31,"role":"user","content":"查一下我今天的课表","contentType":"markdown","tokenCount":"****","createdAt":"2026-07-07T18:03:38"},{"id":161,"sessionId":31,"role":"assistant","content":"系统查询超时，未能获取到 2026-07-07（今天）的课表数据。  \n建议稍后重试，或确认当前日期是否正确（如需查其他日期也可告诉我，我帮你尝试）。","contentType":"markdown","tokenCount":"****","modelName":"qwen-plus","finishReason":"stop","createdAt":"2026-07-07T18:06:27"},{"id":162,"sessionId":31,"role":"user","content":"再次查一下","contentType":"markdown","tokenCount":"****","createdAt":"2026-07-07T18:07:51"},{"id":163,"sessionId":31,"role":"assistant","content":"✅ 查询成功！你今天的课表如下（2026-07-07，星期二）：\n\n- 📅 课程：JAVA+AI（基础阶段）  \n- 👥 班级：第1期  \n- 📘 内容：集合框架  \n- 🧑‍🏫 授课老师：哈哈哈  \n- ⏰ 课时序号：第1节（系统中记录为 courseDayNum=1，按常规理解为当日第1节课）\n\n如需导出、查看详细时间安排（如具体上课时段），或想查其他日期的课表，欢迎随时告诉我！ 😊","contentType":"markdown","tokenCount":"****","modelName":"qwen-plus","finishReason":"stop","createdAt":"2026-07-07T18:10:51"}]}
+2026-07-18 15:41:37.951 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=2405e2c78c1d449a9c2d5ee5cf84ce52] - 接口开始: uri=/yq-admin/api/student/profile, httpMethod=GET, controller=StudentProfileController#getProfile, args=[]
+2026-07-18 15:41:37.951 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=1d942676580b4efc9ff630b87b03ee9e] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:37.953 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=1d942676580b4efc9ff630b87b03ee9e] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=2ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:37.954 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=2405e2c78c1d449a9c2d5ee5cf84ce52] - 接口结束: uri=/yq-admin/api/student/profile, controller=StudentProfileController#getProfile, cost=3ms, result={"code":200,"message":"success","data":{"id":12,"studentCode":"XS20260527544266","studentName":"去去去","phone":"11111111111","school":"1","education":"22","studyMode":"ONLINE","classId":5,"classTerm":1,"className":"第1期","courseId":2,"courseName":"JAVA+AI","joinTime":"Sat Jun 27 08:00:00 CST 2026"}}
+2026-07-18 15:41:38.809 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=63c127b2a8234569b5d4269c90f250fc] - 接口开始: uri=/yq-admin/api/student/pay/required-order, httpMethod=GET, controller=StudentPayController#requiredOrder, args=[]
+2026-07-18 15:41:38.810 [http-nio-8080-exec-4] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=d075ef89e40c4bed9fe1049ec6614e5b] - 接口开始: uri=/yq-admin/api/student/interview-reviews, httpMethod=GET, controller=StudentInterviewReviewController#page, args=[{"name":"req","value":{"pageNum":1,"pageSize":50}}]
+2026-07-18 15:41:38.812 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=63c127b2a8234569b5d4269c90f250fc] - 接口结束: uri=/yq-admin/api/student/pay/required-order, controller=StudentPayController#requiredOrder, cost=3ms, result={"code":200,"message":"success"}
+2026-07-18 15:41:38.814 [http-nio-8080-exec-4] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=d075ef89e40c4bed9fe1049ec6614e5b] - 接口结束: uri=/yq-admin/api/student/interview-reviews, controller=StudentInterviewReviewController#page, cost=4ms, result={"code":200,"message":"success","data":{"total":0,"pageNum":1,"pageSize":50,"records":[]}}
+2026-07-18 15:42:24.865 [http-nio-8080-exec-8] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=2a36077413ac47db8aa488eebafa2e9b] - 接口开始: uri=/yq-admin/api/file/upload, httpMethod=POST, controller=FileController#upload, args=[{"name":"bizType","value":"interview-review"}]
+2026-07-18 15:42:28.441 [http-nio-8080-exec-8] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=2a36077413ac47db8aa488eebafa2e9b] - 接口结束: uri=/yq-admin/api/file/upload, controller=FileController#upload, cost=3575ms, result={"code":200,"message":"success","data":{"name":"屏幕录制 2026-06-25 094231.mp4","url":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","type":"video/mp4","size":15460982,"previewUrl":"http://yq-homework.oss-cn-beijing.aliyuncs.com/homework/interview-review/2026/07/18/%E5%8E%BB%E5%8E%BB%E5%8E%BB/3091c79f-70d9-4537-835a-ee55df48c6c8-%E5%B1%8F%E5%B9%95%E5%BD%95%E5%88%B6%202026-06-25%20094231.mp4?Expires=1784361148&OSSAccessKeyId=LTAI5t7Pf4jSKFXSyZBmPgrT&Signature=8G8Umakc5xLK7MIPBAABX3pFHqU%3D&response-content-disposition=inline"}}
+2026-07-18 15:42:28.462 [http-nio-8080-exec-10] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=2d6e89afca614cf9b81e49cd2c22ef82] - 接口开始: uri=/yq-admin/api/student/interview-reviews, httpMethod=POST, controller=StudentInterviewReviewController#create, args=[{"name":"req","value":{"interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982}}]
+2026-07-18 15:42:29.171 [http-nio-8080-exec-10] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=2d6e89afca614cf9b81e49cd2c22ef82] - 接口结束: uri=/yq-admin/api/student/interview-reviews, controller=StudentInterviewReviewController#create, cost=709ms, result={"code":200,"message":"success","data":{"id":1,"studentId":12,"studentName":"去去去","studentCode":"XS20260527544266","interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982,"status":"TRANSCRIBING","startedAt":"Sat Jul 18 15:42:29 CST 2026","createdAt":"Sat Jul 18 15:42:28 CST 2026","updatedAt":"Sat Jul 18 15:42:29 CST 2026"}}
+2026-07-18 15:42:29.180 [http-nio-8080-exec-2] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=c7527f8f883945999df4f50482a62150] - 接口开始: uri=/yq-admin/api/student/interview-reviews, httpMethod=GET, controller=StudentInterviewReviewController#page, args=[{"name":"req","value":{"pageNum":1,"pageSize":50}}]
+2026-07-18 15:42:29.184 [http-nio-8080-exec-2] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=c7527f8f883945999df4f50482a62150] - 接口结束: uri=/yq-admin/api/student/interview-reviews, controller=StudentInterviewReviewController#page, cost=4ms, result={"code":200,"message":"success","data":{"total":1,"pageNum":1,"pageSize":50,"records":[{"id":1,"studentId":12,"studentName":"去去去","studentCode":"XS20260527544266","interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982,"status":"TRANSCRIBING","startedAt":"Sat Jul 18 15:42:29 CST 2026","createdAt":"Sat Jul 18 15:42:28 CST 2026","updatedAt":"Sat Jul 18 15:42:29 CST 2026"}]}}
+2026-07-18 15:42:37.218 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=79cb4eafea674a83924d1f98ab741880] - 接口开始: uri=/yq-admin/api/student/interview-reviews, httpMethod=GET, controller=StudentInterviewReviewController#page, args=[{"name":"req","value":{"pageNum":1,"pageSize":50}}]
+2026-07-18 15:42:37.223 [http-nio-8080-exec-9] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=79cb4eafea674a83924d1f98ab741880] - 接口结束: uri=/yq-admin/api/student/interview-reviews, controller=StudentInterviewReviewController#page, cost=4ms, result={"code":200,"message":"success","data":{"total":1,"pageNum":1,"pageSize":50,"records":[{"id":1,"studentId":12,"studentName":"去去去","studentCode":"XS20260527544266","interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982,"status":"TRANSCRIBING","startedAt":"Sat Jul 18 15:42:29 CST 2026","createdAt":"Sat Jul 18 15:42:28 CST 2026","updatedAt":"Sat Jul 18 15:42:29 CST 2026"}]}}
+2026-07-18 15:42:39.932 [http-nio-8080-exec-1] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=4b8caf394d2841219b6cdaaff90f019c] - 接口开始: uri=/yq-admin/api/student/interview-reviews/1, httpMethod=GET, controller=StudentInterviewReviewController#detail, args=[{"name":"id","value":1}]
+2026-07-18 15:42:39.934 [http-nio-8080-exec-1] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=4b8caf394d2841219b6cdaaff90f019c] - 接口结束: uri=/yq-admin/api/student/interview-reviews/1, controller=StudentInterviewReviewController#detail, cost=2ms, result={"code":200,"message":"success","data":{"id":1,"studentId":12,"studentName":"去去去","studentCode":"XS20260527544266","interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982,"status":"TRANSCRIBING","startedAt":"Sat Jul 18 15:42:29 CST 2026","createdAt":"Sat Jul 18 15:42:28 CST 2026","updatedAt":"Sat Jul 18 15:42:29 CST 2026"}}
+2026-07-18 15:42:45.209 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=5313f676521e4c1aa2a1bf2b57f1e82e] - 接口开始: uri=/yq-admin/api/student/interview-reviews, httpMethod=GET, controller=StudentInterviewReviewController#page, args=[{"name":"req","value":{"pageNum":1,"pageSize":50}}]
+2026-07-18 15:42:45.213 [http-nio-8080-exec-3] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=5313f676521e4c1aa2a1bf2b57f1e82e] - 接口结束: uri=/yq-admin/api/student/interview-reviews, controller=StudentInterviewReviewController#page, cost=4ms, result={"code":200,"message":"success","data":{"total":1,"pageNum":1,"pageSize":50,"records":[{"id":1,"studentId":12,"studentName":"去去去","studentCode":"XS20260527544266","interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982,"status":"TRANSCRIBING","startedAt":"Sat Jul 18 15:42:29 CST 2026","createdAt":"Sat Jul 18 15:42:28 CST 2026","updatedAt":"Sat Jul 18 15:42:29 CST 2026"}]}}
+2026-07-18 15:42:53.221 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=c90ca260437b40148e4c6f2ba2f32d4c] - 接口开始: uri=/yq-admin/api/student/interview-reviews, httpMethod=GET, controller=StudentInterviewReviewController#page, args=[{"name":"req","value":{"pageNum":1,"pageSize":50}}]
+2026-07-18 15:42:53.224 [http-nio-8080-exec-6] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=c90ca260437b40148e4c6f2ba2f32d4c] - 接口结束: uri=/yq-admin/api/student/interview-reviews, controller=StudentInterviewReviewController#page, cost=3ms, result={"code":200,"message":"success","data":{"total":1,"pageNum":1,"pageSize":50,"records":[{"id":1,"studentId":12,"studentName":"去去去","studentCode":"XS20260527544266","interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982,"status":"TRANSCRIBING","startedAt":"Sat Jul 18 15:42:29 CST 2026","createdAt":"Sat Jul 18 15:42:28 CST 2026","updatedAt":"Sat Jul 18 15:42:29 CST 2026"}]}}
+2026-07-18 15:43:01.218 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=0e5204316dcf4286b7412ba397595fde] - 接口开始: uri=/yq-admin/api/student/interview-reviews, httpMethod=GET, controller=StudentInterviewReviewController#page, args=[{"name":"req","value":{"pageNum":1,"pageSize":50}}]
+2026-07-18 15:43:01.223 [http-nio-8080-exec-5] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=0e5204316dcf4286b7412ba397595fde] - 接口结束: uri=/yq-admin/api/student/interview-reviews, controller=StudentInterviewReviewController#page, cost=4ms, result={"code":200,"message":"success","data":{"total":1,"pageNum":1,"pageSize":50,"records":[{"id":1,"studentId":12,"studentName":"去去去","studentCode":"XS20260527544266","interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982,"status":"FAILED","errorMessage":"[Normal silence audio] Handle response: no valid speech in audio","startedAt":"Sat Jul 18 15:42:29 CST 2026","completedAt":"Sat Jul 18 15:42:58 CST 2026","createdAt":"Sat Jul 18 15:42:28 CST 2026","updatedAt":"Sat Jul 18 15:42:58 CST 2026"}]}}
+2026-07-18 15:43:31.020 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=8c2aa62bd2004e0eb9ac265fea07610f] - 接口开始: uri=/yq-admin/api/student/interview-reviews/1, httpMethod=GET, controller=StudentInterviewReviewController#detail, args=[{"name":"id","value":1}]
+2026-07-18 15:43:31.022 [http-nio-8080-exec-7] INFO  cn.yanque.common.aop.ControllerLogAspect [guid=8c2aa62bd2004e0eb9ac265fea07610f] - 接口结束: uri=/yq-admin/api/student/interview-reviews/1, controller=StudentInterviewReviewController#detail, cost=2ms, result={"code":200,"message":"success","data":{"id":1,"studentId":12,"studentName":"去去去","studentCode":"XS20260527544266","interviewTime":"Sat Jul 18 15:41:40 CST 2026","audioObjectKey":"homework/interview-review/2026/07/18/去去去/3091c79f-70d9-4537-835a-ee55df48c6c8-屏幕录制 2026-06-25 094231.mp4","audioFileName":"屏幕录制 2026-06-25 094231.mp4","audioFileSize":15460982,"status":"FAILED","errorMessage":"[Normal silence audio] Handle response: no valid speech in audio","startedAt":"Sat Jul 18 15:42:29 CST 2026","completedAt":"Sat Jul 18 15:42:58 CST 2026","createdAt":"Sat Jul 18 15:42:28 CST 2026","updatedAt":"Sat Jul 18 15:42:58 CST 2026"}}

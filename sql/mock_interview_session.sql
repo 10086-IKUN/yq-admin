@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS mock_interview_session (
+  id BIGINT NOT NULL AUTO_INCREMENT COMMENT '会话ID',
+  student_id BIGINT NOT NULL COMMENT '学生ID',
+  resume_object_key VARCHAR(512) DEFAULT NULL,
+  resume_file_name VARCHAR(255) DEFAULT NULL,
+  resume_text_snapshot LONGTEXT,
+  profile_json LONGTEXT,
+  profile_status VARCHAR(32) NOT NULL DEFAULT 'PROFILE_PROCESSING',
+  profile_error_message VARCHAR(1000) DEFAULT NULL,
+  profile_generated_at DATETIME DEFAULT NULL,
+  voice_session_id VARCHAR(128) DEFAULT NULL,
+  status VARCHAR(32) NOT NULL DEFAULT 'PROFILE_READY',
+  started_at DATETIME DEFAULT NULL,
+  finished_at DATETIME DEFAULT NULL,
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_mock_interview_student_created (student_id, created_at),
+  KEY idx_mock_interview_voice_session (voice_session_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学生模拟面试会话';

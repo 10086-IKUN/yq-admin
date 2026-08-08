@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.ai.texttosql.mapper.TextToSqlEvalRunResultMapper">
+
+    <resultMap id="TextToSqlEvalRunResultMap" type="cn.yanque.models.ai.texttosql.pojo.entity.TextToSqlEvalRunResultEntity">
+        <id property="id" column="id"/>
+        <result property="evalRunId" column="eval_run_id"/>
+        <result property="evalQuestionId" column="eval_question_id"/>
+        <result property="question" column="question"/>
+        <result property="businessId" column="business_id"/>
+        <result property="evalTarget" column="eval_target"/>
+        <result property="sampleCategory" column="sample_category"/>
+        <result property="conversationId" column="conversation_id"/>
+        <result property="passed" column="passed"/>
+        <result property="failureType" column="failure_type"/>
+        <result property="failureReason" column="failure_reason"/>
+        <result property="actualStateJson" column="actual_state_json"/>
+        <result property="actualSql" column="actual_sql"/>
+        <result property="actualAnswer" column="actual_answer"/>
+        <result property="executionError" column="execution_error"/>
+        <result property="durationMs" column="duration_ms"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, eval_run_id, eval_question_id, question, business_id, eval_target, sample_category, conversation_id,
+        passed, failure_type, failure_reason, actual_state_json, actual_sql, actual_answer,
+        execution_error, duration_ms, created_at
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into text_to_sql_eval_run_result
+            (eval_run_id, eval_question_id, question, business_id, eval_target, sample_category, conversation_id,
+             passed, failure_type, failure_reason, actual_state_json, actual_sql, actual_answer,
+             execution_error, duration_ms, created_at)
+        values
+            (#{evalRunId}, #{evalQuestionId}, #{question}, #{businessId}, #{evalTarget}, #{sampleCategory}, #{conversationId},
+             #{passed}, #{failureType}, #{failureReason}, #{actualStateJson}, #{actualSql}, #{actualAnswer},
+             #{executionError}, #{durationMs}, #{createdAt})
+    </insert>
+
+    <update id="updateById">
+        update text_to_sql_eval_run_result
+        set conversation_id = #{conversationId},
+            passed = #{passed},
+            failure_type = #{failureType},
+            failure_reason = #{failureReason},
+            actual_state_json = #{actualStateJson},
+            actual_sql = #{actualSql},
+            actual_answer = #{actualAnswer},
+            execution_error = #{executionError},
+            duration_ms = #{durationMs}
+        where id = #{id}
+    </update>
+
+    <update id="markClarificationRunningById">
+        update text_to_sql_eval_run_result
+        set passed = false,
+            failure_type = #{failureType},
+            failure_reason = #{failureReason},
+            execution_error = null
+        where id = #{id}
+    </update>
+
+    <update id="markClarificationRunErrorById">
+        update text_to_sql_eval_run_result
+        set passed = false,
+            failure_type = #{failureType},
+            failure_reason = #{failureReason},
+            execution_error = #{executionError},
+            duration_ms = #{durationMs}
+        where id = #{id}
+    </update>
+
+    <select id="selectById" resultMap="TextToSqlEvalRunResultMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_run_result
+        where id = #{id}
+        limit 1
+    </select>
+
+    <select id="selectPage" resultMap="TextToSqlEvalRunResultMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_run_result
+        <where>
+            eval_run_id = #{evalRunId}
+            <if test="passed != null">
+                and passed = #{passed}
+            </if>
+            <if test="failureType != null and failureType != ''">
+                and failure_type = #{failureType}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                and (
+                    question like concat('%', #{keyword}, '%')
+                    or failure_reason like concat('%', #{keyword}, '%')
+                    or actual_answer like concat('%', #{keyword}, '%')
+                )
+            </if>
+        </where>
+        order by id asc
+    </select>
+
+    <select id="selectByEvalRunId" resultMap="TextToSqlEvalRunResultMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_run_result
+        where eval_run_id = #{evalRunId}
+        order by id asc
+    </select>
+</mapper>
+

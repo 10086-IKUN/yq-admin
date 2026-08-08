@@ -225,8 +225,8 @@ public class KnowledgeDocumentServiceImpl implements KnowledgeDocumentService {
             throw BusinessException.DateError.newInstance("文档名称不能为空");
         }
         String normalized = value.trim();
-        if (!normalized.toLowerCase().endsWith(".md")) {
-            throw BusinessException.DateError.newInstance("当前知识库文档只支持md格式");
+        if (!hasSupportedDocumentExtension(normalized)) {
+            throw BusinessException.DateError.newInstance("当前知识库文档只支持md和json格式");
         }
         return normalized;
     }
@@ -239,10 +239,15 @@ public class KnowledgeDocumentServiceImpl implements KnowledgeDocumentService {
         if (normalized.contains("..") || normalized.startsWith("/") || normalized.startsWith("http://") || normalized.startsWith("https://")) {
             throw BusinessException.DateError.newInstance("知识库文档对象Key不允许访问");
         }
-        if (!normalized.toLowerCase().endsWith(".md")) {
-            throw BusinessException.DateError.newInstance("当前知识库文档只支持md格式");
+        if (!hasSupportedDocumentExtension(normalized)) {
+            throw BusinessException.DateError.newInstance("当前知识库文档只支持md和json格式");
         }
         return normalized;
+    }
+
+    private boolean hasSupportedDocumentExtension(String value) {
+        String lowerCaseValue = value.toLowerCase();
+        return lowerCaseValue.endsWith(".md") || lowerCaseValue.endsWith(".json");
     }
 
     private String normalizeBlank(String value) {

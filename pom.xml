@@ -72,10 +72,14 @@
     </dependency>
 
     <!-- Spring Boot Web -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 
     <dependency>
       <groupId>org.springdoc</groupId>
@@ -111,6 +115,14 @@
       <artifactId>pagehelper-spring-boot-starter</artifactId>
       <version>2.0.0</version>
     </dependency>
+
+    <!-- Volcengine TLS log search SDK. Keep the version aligned with the reference service. -->
+    <dependency>
+      <groupId>com.volcengine</groupId>
+      <artifactId>volc-sdk-java</artifactId>
+      <version>1.0.267</version>
+    </dependency>
+
     <!-- Configuration Processor -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -123,6 +135,35 @@
       <groupId>com.alibaba</groupId>
       <artifactId>easyexcel</artifactId>
       <version>3.3.2</version>
+      <exclusions>
+        <!-- Keep Apache POI on the 5.2.5 line used by resume parsing. -->
+        <exclusion>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi-ooxml-schemas</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- 简历解析：PDF、DOCX、DOC -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>5.2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>5.2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-scratchpad</artifactId>
+      <version>5.2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>2.0.30</version>
     </dependency>
 
     <!-- Aliyun OSS -->

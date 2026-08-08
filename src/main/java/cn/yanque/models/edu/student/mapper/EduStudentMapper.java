@@ -3,6 +3,7 @@ package cn.yanque.models.edu.student.mapper;
 import cn.yanque.models.edu.student.pojo.entity.EduStudentEntity;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +58,27 @@ public interface EduStudentMapper {
      * @return 学员实体
      */
     EduStudentEntity selectByPhone(@Param("phone") String phone);
+
+    int updateResume(@Param("id") Long id,
+                     @Param("objectKey") String objectKey,
+                     @Param("fileName") String fileName,
+                     @Param("fileSize") Long fileSize);
+
+    int markResumeParsePending(@Param("id") Long id);
+
+    int markResumeParseProcessing(@Param("id") Long id,
+                                  @Param("objectKey") String objectKey,
+                                  @Param("now") Date now);
+
+    int markResumeParseSuccess(@Param("id") Long id,
+                               @Param("objectKey") String objectKey,
+                               @Param("resumeText") String resumeText,
+                               @Param("now") Date now);
+
+    int markResumeParseFailed(@Param("id") Long id,
+                              @Param("objectKey") String objectKey,
+                              @Param("errorMessage") String errorMessage,
+                              @Param("now") Date now);
 
     /**
      * 查询所有学员

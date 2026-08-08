@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.ai.texttosql.mapper.TextToSqlRunMapper">
+
+    <resultMap id="TextToSqlRunMap" type="cn.yanque.models.ai.texttosql.pojo.entity.TextToSqlRunEntity">
+        <id property="id" column="id"/>
+        <result property="conversationId" column="conversation_id"/>
+        <result property="parentRunId" column="parent_run_id"/>
+        <result property="sourceType" column="source_type"/>
+        <result property="originalQuestion" column="original_question"/>
+        <result property="finalQuestion" column="final_question"/>
+        <result property="questionType" column="question_type"/>
+        <result property="businessId" column="business_id"/>
+        <result property="businessName" column="business_name"/>
+        <result property="routeReason" column="route_reason"/>
+        <result property="status" column="status"/>
+        <result property="interrupted" column="interrupted"/>
+        <result property="sqlAction" column="sql_action"/>
+        <result property="generatedSql" column="generated_sql"/>
+        <result property="executedSql" column="executed_sql"/>
+        <result property="sqlGenerationReason" column="sql_generation_reason"/>
+        <result property="executionError" column="execution_error"/>
+        <result property="usedTables" column="used_tables"/>
+        <result property="usedFields" column="used_fields"/>
+        <result property="missingInfo" column="missing_info"/>
+        <result property="queryColumns" column="query_columns"/>
+        <result property="queryRowsSample" column="query_rows_sample"/>
+        <result property="queryRowCount" column="query_row_count"/>
+        <result property="analysisSummary" column="analysis_summary"/>
+        <result property="analysisJson" column="analysis_json"/>
+        <result property="finalAnswer" column="final_answer"/>
+        <result property="stateSnapshotJson" column="state_snapshot_json"/>
+        <result property="stateSnapshotText" column="state_snapshot_text"/>
+        <result property="feedbackResult" column="feedback_result"/>
+        <result property="feedbackErrorType" column="feedback_error_type"/>
+        <result property="feedbackComment" column="feedback_comment"/>
+        <result property="feedbackAt" column="feedback_at"/>
+        <result property="evalQuestionId" column="eval_question_id"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, conversation_id, parent_run_id, source_type, original_question, final_question, question_type,
+        business_id, business_name, route_reason, status, interrupted, sql_action, generated_sql,
+        executed_sql, sql_generation_reason, execution_error, used_tables, used_fields, missing_info,
+        query_columns, query_rows_sample, query_row_count, analysis_summary, analysis_json,
+        final_answer, state_snapshot_json, state_snapshot_text, feedback_result, feedback_error_type,
+        feedback_comment, feedback_at, null as eval_question_id, created_by, created_at, updated_at
+    </sql>
+
+    <sql id="PageColumns">
+        id, conversation_id, parent_run_id, source_type, original_question, final_question, question_type,
+        business_id, business_name, route_reason, status,
+        case
+            when interrupted = 1 then 1
+            when json_length(json_extract(state_snapshot_json, '$.clarification_history')) > 0 then 1
+            else 0
+        end as interrupted,
+        sql_action, generated_sql,
+        executed_sql, sql_generation_reason, execution_error, used_tables, used_fields, missing_info,
+        query_columns, query_rows_sample, query_row_count, analysis_summary, analysis_json,
+        final_answer, null as state_snapshot_json, null as state_snapshot_text, feedback_result,
+        feedback_error_type, feedback_comment, feedback_at,
+        (select q.id from text_to_sql_eval_question q where q.source_run_id = text_to_sql_run.id limit 1) as eval_question_id,
+        created_by, created_at, updated_at
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into text_to_sql_run
+            (conversation_id, parent_run_id, source_type, original_question, final_question, question_type,
+             business_id, business_name, route_reason, status, interrupted, sql_action, generated_sql,
+             executed_sql, sql_generation_reason, execution_error, used_tables, used_fields, missing_info,
+             query_columns, query_rows_sample, query_row_count, analysis_summary, analysis_json,
+             final_answer, state_snapshot_json, state_snapshot_text, feedback_result, feedback_error_type,
+             feedback_comment, feedback_at, created_by, created_at, updated_at)
+        values
+            (#{conversationId}, #{parentRunId}, #{sourceType}, #{originalQuestion}, #{finalQuestion}, #{questionType},
+             #{businessId}, #{businessName}, #{routeReason}, #{status}, #{interrupted}, #{sqlAction}, #{generatedSql},
+             #{executedSql}, #{sqlGenerationReason}, #{executionError}, #{usedTables}, #{usedFields}, #{missingInfo},
+             #{queryColumns}, #{queryRowsSample}, #{queryRowCount}, #{analysisSummary}, #{analysisJson},
+             #{finalAnswer}, #{stateSnapshotJson}, #{stateSnapshotText}, #{feedbackResult}, #{feedbackErrorType},
+             #{feedbackComment}, #{feedbackAt}, #{createdBy}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updateByConversationId">
+        update text_to_sql_run
+        set final_question = #{finalQuestion},
+            question_type = #{questionType},
+            business_id = #{businessId},
+            business_name = #{businessName},
+            route_reason = #{routeReason},
+            status = #{status},
+            interrupted = #{interrupted},
+            sql_action = #{sqlAction},
+            generated_sql = #{generatedSql},
+            executed_sql = #{executedSql},
+            sql_generation_reason = #{sqlGenerationReason},
+            execution_error = #{executionError},
+            used_tables = #{usedTables},
+            used_fields = #{usedFields},
+            missing_info = #{missingInfo},
+            query_columns = #{queryColumns},
+            query_rows_sample = #{queryRowsSample},
+            query_row_count = #{queryRowCount},
+            analysis_summary = #{analysisSummary},
+            analysis_json = #{analysisJson},
+            final_answer = #{finalAnswer},
+            state_snapshot_json = #{stateSnapshotJson},
+            state_snapshot_text = #{stateSnapshotText},
+            updated_at = #{updatedAt}
+        where conversation_id = #{conversationId}
+    </update>
+
+    <update id="updateStatusByConversationId">
+        update text_to_sql_run
+        set status = #{status},
+            updated_at = now()
+        where conversation_id = #{conversationId}
+    </update>
+
+    <update id="updateFeedbackById">
+        update text_to_sql_run
+        set feedback_result = #{feedbackResult},
+            feedback_error_type = #{feedbackErrorType},
+            feedback_comment = #{feedbackComment},
+            feedback_at = #{feedbackAt},
+            updated_at = now()
+        where id = #{id}
+    </update>
+
+    <select id="selectByConversationId" resultMap="TextToSqlRunMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_run
+        where conversation_id = #{conversationId}
+        limit 1
+    </select>
+
+    <select id="selectById" resultMap="TextToSqlRunMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_run
+        where id = #{id}
+        limit 1
+    </select>
+
+    <select id="selectPage" resultMap="TextToSqlRunMap">
+        select <include refid="PageColumns"/>
+        from text_to_sql_run
+        <where>
+            <if test="sourceType != null and sourceType != ''">
+                and source_type = #{sourceType}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                and (
+                    original_question like concat('%', #{keyword}, '%')
+                    or final_question like concat('%', #{keyword}, '%')
+                    or final_answer like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="conversationId != null and conversationId != ''">
+                and conversation_id like concat('%', #{conversationId}, '%')
+            </if>
+            <if test="questionType != null and questionType != ''">
+                and question_type = #{questionType}
+            </if>
+            <if test="businessId != null and businessId != ''">
+                and business_id = #{businessId}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+            <if test="sqlAction != null and sqlAction != ''">
+                and sql_action = #{sqlAction}
+            </if>
+            <if test="feedbackResult != null and feedbackResult != ''">
+                and feedback_result = #{feedbackResult}
+            </if>
+            <if test="interrupted != null">
+                and (
+                    case
+                        when interrupted = 1 then 1
+                        when json_length(json_extract(state_snapshot_json, '$.clarification_history')) > 0 then 1
+                        else 0
+                    end
+                ) = #{interrupted}
+            </if>
+        </where>
+        order by id desc
+    </select>
+</mapper>
+

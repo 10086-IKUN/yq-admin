@@ -6,6 +6,7 @@ import cn.yanque.models.edu.student.pojo.entity.EduStudentEntity;
 import cn.yanque.models.studentFront.ai.biz.StudentAiChatBiz;
 import cn.yanque.models.studentFront.ai.pojo.vo.req.AiChatCreateSessionReq;
 import cn.yanque.models.studentFront.ai.pojo.vo.req.AiChatSendReq;
+import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatCompressionRes;
 import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatMessageRes;
 import cn.yanque.models.studentFront.ai.pojo.vo.res.AiChatSessionRes;
 import cn.yanque.models.studentFront.util.StudentAuthUtil;
@@ -69,6 +70,14 @@ public class StudentAiChatController {
         Long studentId = StudentAuthUtil.getStudentId(request);
         studentAiChatBiz.deleteSession(sessionId, studentId);
         return ApiResponse.success();
+    }
+
+    @PostMapping("/sessions/{sessionId}/compress")
+    @Operation(description = "手动压缩 AI 对话上下文")
+    public ApiResponse<AiChatCompressionRes> compressSession(@PathVariable Long sessionId,
+                                                             HttpServletRequest request) {
+        Long studentId = StudentAuthUtil.getStudentId(request);
+        return ApiResponse.success(studentAiChatBiz.compressSession(sessionId, studentId));
     }
 
     @PostMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

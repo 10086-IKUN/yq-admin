@@ -8,6 +8,7 @@ import cn.yanque.models.studentFront.ai.pojo.entity.AiChatSessionEntity;
 import cn.yanque.models.studentFront.ai.service.StudentAiChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -81,6 +82,12 @@ public class StudentAiChatServiceImpl implements StudentAiChatService {
     }
 
     @Override
+    public List<AiChatMessageEntity> listUncompressedHistory(Long sessionId, Long studentId) {
+        getSession(sessionId, studentId);
+        return aiChatMessageMapper.selectUncompressedHistory(sessionId, studentId);
+    }
+
+    @Override
     public AiChatMessageEntity addMessage(AiChatMessageEntity entity) {
         // 入库前补齐默认值，和 ai_chat_message 表的默认约定保持一致。
         if (entity.getContentType() == null) {
@@ -102,6 +109,27 @@ public class StudentAiChatServiceImpl implements StudentAiChatService {
     @Override
     public void refreshSessionStats(Long sessionId) {
         aiChatSessionMapper.refreshStats(sessionId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int applyCompression(Long sessionId,
+                                Long studentId,
+                                Long expectedCompressedUntilMessageId,
+                                String summary,
+                                Integer summaryTokenCount,
+                                Long compressedUntilMessageId) {
+        int updated = aiChatSessionMapper.updateCompression(
+                sessionId,
+                studentId,
+                expectedCompressedUntilMessageId,
+                summary,
+                summaryTokenCount,
+                compressedUntilMessageId);
+        if (updated == 0) {
+            return -1;
+        }
+        return aiChatMessageMapper.markCompressedThrough(sessionId, studentId, compressedUntilMessageId);
     }
 
     private String normalizeTitle(String title) {

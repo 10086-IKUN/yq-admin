@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yanque.models.ai.texttosql.mapper.TextToSqlEvalQuestionMapper">
+
+    <resultMap id="TextToSqlEvalQuestionMap" type="cn.yanque.models.ai.texttosql.pojo.entity.TextToSqlEvalQuestionEntity">
+        <id property="id" column="id"/>
+        <result property="question" column="question"/>
+        <result property="businessId" column="business_id"/>
+        <result property="businessName" column="business_name"/>
+        <result property="evalTarget" column="eval_target"/>
+        <result property="sampleCategory" column="sample_category"/>
+        <result property="sourceType" column="source_type"/>
+        <result property="sourceRunId" column="source_run_id"/>
+        <result property="sourceConversationId" column="source_conversation_id"/>
+        <result property="generatedSql" column="generated_sql"/>
+        <result property="executedSql" column="executed_sql"/>
+        <result property="finalAnswer" column="final_answer"/>
+        <result property="feedbackResult" column="feedback_result"/>
+        <result property="feedbackErrorType" column="feedback_error_type"/>
+        <result property="feedbackComment" column="feedback_comment"/>
+        <result property="judgeNote" column="judge_note"/>
+        <result property="remark" column="remark"/>
+        <result property="status" column="status"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="BaseColumns">
+        id, question, business_id, business_name, eval_target, sample_category, source_type, source_run_id,
+        source_conversation_id, generated_sql, executed_sql, final_answer, feedback_result,
+        feedback_error_type, feedback_comment, judge_note,
+        remark, status, created_by, created_at, updated_at
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into text_to_sql_eval_question
+            (question, business_id, business_name, eval_target, sample_category, source_type, source_run_id,
+             source_conversation_id, generated_sql, executed_sql, final_answer, feedback_result,
+             feedback_error_type, feedback_comment, judge_note,
+             remark, status, created_by, created_at, updated_at)
+        values
+            (#{question}, #{businessId}, #{businessName}, #{evalTarget}, #{sampleCategory}, #{sourceType}, #{sourceRunId},
+             #{sourceConversationId}, #{generatedSql}, #{executedSql}, #{finalAnswer}, #{feedbackResult},
+             #{feedbackErrorType}, #{feedbackComment}, #{judgeNote},
+             #{remark}, #{status}, #{createdBy}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updateById">
+        update text_to_sql_eval_question
+        set question = #{question},
+            business_id = #{businessId},
+            business_name = #{businessName},
+            eval_target = #{evalTarget},
+            sample_category = #{sampleCategory},
+            judge_note = #{judgeNote},
+            remark = #{remark},
+            status = #{status},
+            updated_at = #{updatedAt}
+        where id = #{id}
+    </update>
+
+    <select id="selectById" resultMap="TextToSqlEvalQuestionMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_question
+        where id = #{id}
+        limit 1
+    </select>
+
+    <select id="selectBySourceRunId" resultMap="TextToSqlEvalQuestionMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_question
+        where source_run_id = #{sourceRunId}
+        limit 1
+    </select>
+
+    <select id="selectPage" resultMap="TextToSqlEvalQuestionMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_question
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (
+                    question like concat('%', #{keyword}, '%')
+                    or final_answer like concat('%', #{keyword}, '%')
+                    or feedback_comment like concat('%', #{keyword}, '%')
+                    or remark like concat('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="businessId != null and businessId != ''">
+                and business_id = #{businessId}
+            </if>
+            <if test="evalTarget != null and evalTarget != ''">
+                and eval_target = #{evalTarget}
+            </if>
+            <if test="sampleCategory != null and sampleCategory != ''">
+                and sample_category = #{sampleCategory}
+            </if>
+            <if test="sourceType != null and sourceType != ''">
+                and source_type = #{sourceType}
+            </if>
+            <if test="feedbackResult != null and feedbackResult != ''">
+                and feedback_result = #{feedbackResult}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectActiveByIds" resultMap="TextToSqlEvalQuestionMap">
+        select <include refid="BaseColumns"/>
+        from text_to_sql_eval_question
+        where status = 'ACTIVE'
+        <if test="ids != null and ids.size() > 0">
+            and id in
+            <foreach collection="ids" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        order by id asc
+    </select>
+</mapper>
+
